@@ -26,4 +26,5 @@ abstract class Routes {
   static const FAVORITES = '/favorites';
   static const HELP = '/help';
   static const PRIVACY = '/privacy';
+  static const UPLOAD = '/upload';
 }
