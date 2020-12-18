@@ -1,6 +1,7 @@
 class Contractor {
   String name,
       phone_number,
+      user_role,
       contractor_type,
       gender,
       email,
@@ -12,6 +13,7 @@ class Contractor {
 
   Contractor({
     this.name,
+    this.user_role = "contractor",
     this.phone_number,
     this.contractor_type = "individual",
     this.gender = "male",
@@ -25,7 +27,7 @@ class Contractor {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = Map<String, dynamic>();
-    data['user_role'] = 'contractor';
+    data['user_role'] = user_role;
     data['contractor_name'] = name;
     data['contractor_phone_number'] = phone_number;
     data['contractor_email'] = email;

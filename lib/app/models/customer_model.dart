@@ -1,5 +1,6 @@
 class Customer {
   String name,
+      user_role,
       phone_number,
       customer_type = "legal_entity",
       email,
@@ -11,6 +12,7 @@ class Customer {
 
   Customer({
     this.name,
+    this.user_role = "customer",
     this.phone_number,
     this.customer_type,
     this.email,
@@ -22,7 +24,7 @@ class Customer {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = Map<String, dynamic>();
-    data['user_role'] = 'customer';
+    data['user_role'] = user_role;
     data['customer_name'] = this.name;
     data['customer_phone_number'] = this.phone_number;
     data['customer_email'] = this.email;
