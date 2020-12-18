@@ -31,10 +31,10 @@ class RootView extends GetView<RootController> {
               icon: Icons.assignment_outlined,
               label: "Bookings".tr,
             ),
-            CustomBottomNavigationItem(
-              icon: Icons.chat_outlined,
-              label: "Chats".tr,
-            ),
+            // CustomBottomNavigationItem(
+            //   icon: Icons.chat_outlined,
+            //   label: "Chats".tr,
+            // ),
             CustomBottomNavigationItem(
               icon: Icons.person_outline,
               label: "Account".tr,

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../common/ui.dart';
@@ -7,7 +9,10 @@ import '../../../services/auth_service.dart';
 
 class ProfileController extends GetxController {
   var user = new User().obs;
+  final agree = false.obs;
   final hidePassword = true.obs;
+  final birthday = DateTime.now().toString().obs;
+  final avatar = "".obs;
 
   @override
   void onInit() {
@@ -19,9 +24,11 @@ class ProfileController extends GetxController {
     if (profileForm.currentState.validate()) {
       profileForm.currentState.save();
       user.refresh();
-      Get.showSnackbar(Ui.SuccessSnackBar(message: "Profile saved successfully".tr));
+      Get.showSnackbar(
+          Ui.SuccessSnackBar(message: "Profile saved successfully".tr));
     } else {
-      Get.showSnackbar(Ui.ErrorSnackBar(message: "There are errors in some fields please correct them!".tr));
+      Get.showSnackbar(Ui.ErrorSnackBar(
+          message: "There are errors in some fields please correct them!".tr));
     }
   }
 

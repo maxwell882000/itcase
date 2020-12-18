@@ -1,4 +1,3 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
@@ -15,7 +14,6 @@ void initServices() async {
   await Get.putAsync(() => GlobalService().init());
   await Get.putAsync(() => AuthService().init());
   await Get.putAsync(() => SettingsService().init());
-  Firebase.initializeApp();
   Get.log('All services started...');
 }
 
@@ -36,7 +34,8 @@ void main() async {
       debugShowCheckedModeBanner: false,
       defaultTransition: Transition.cupertino,
       themeMode: Get.find<SettingsService>().getThemeMode(),
-      theme: Get.find<SettingsService>().getLightTheme(), //Get.find<SettingsService>().getLightTheme.value,
+      theme: Get.find<SettingsService>()
+          .getLightTheme(), //Get.find<SettingsService>().getLightTheme.value,
       darkTheme: Get.find<SettingsService>().getDarkTheme(),
     ),
   );

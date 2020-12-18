@@ -19,9 +19,9 @@ class RootBinding extends Bindings {
     Get.lazyPut<TasksController>(
       () => TasksController(),
     );
-    Get.lazyPut<MessagesController>(
-      () => MessagesController(),
-    );
+    // Get.lazyPut<MessagesController>(
+    //   () => MessagesController(),
+    // );
     Get.lazyPut<AccountController>(
       () => AccountController(),
     );

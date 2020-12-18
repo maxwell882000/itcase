@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'package:itcase/app/models/parents/model.dart';
 
 import 'user_model.dart';
@@ -29,7 +27,7 @@ class Message extends Model {
     readByUsers = [];
   }
 
-  Message.fromDocumentSnapshot(DocumentSnapshot jsonMap) {
+  Message.fromDocumentSnapshot(jsonMap) {
     try {
       id = jsonMap.id;
       name = jsonMap.get('name') != null ? jsonMap.get('name').toString() : '';

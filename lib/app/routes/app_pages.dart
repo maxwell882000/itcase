@@ -47,7 +47,7 @@ class AppPages {
         name: Routes.RATING,
         page: () => RatingView(),
         binding: RatingBinding()),
-    GetPage(name: Routes.CHAT, page: () => ChatsView()),
+    // GetPage(name: Routes.CHAT, page: () => ChatsView()),
     GetPage(
         name: Routes.SETTINGS,
         page: () => SettingsView(),

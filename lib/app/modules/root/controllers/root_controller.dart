@@ -27,7 +27,7 @@ class RootController extends GetxController {
   List<Widget> pages = [
     Home2View(),
     TasksView(),
-    MessagesView(),
+    // MessagesView(),
     AccountView(),
   ];
 
