@@ -6,7 +6,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_holo_date_picker/flutter_holo_date_picker.dart';
 import 'package:get/get.dart';
-import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../global_widgets/text_field_widget.dart';
 
@@ -27,7 +26,7 @@ class ProfileView extends GetView<ProfileController> {
         source: ImageSource.camera, imageQuality: 70);
     final img = image.readAsBytesSync();
     controller.user.value.image = "data:image/jpeg;base64," + base64Encode(img);
-
+    controller.avatar.value = base64Encode(img);
     // Get.showSnackbar(Ui.SuccessSnackBar(message: "Image selected.".tr));
   }
 
@@ -35,21 +34,11 @@ class ProfileView extends GetView<ProfileController> {
     // ignore: deprecated_member_use
     image = await ImagePicker.pickImage(
         source: ImageSource.gallery, imageQuality: 70);
-    // controller.avatar = image;
-    _cropImage(image);
-
-    // Get.showSnackbar(Ui.SuccessSnackBar(message: "Image selected.".tr));
-  }
-
-  _cropImage(filePath) async {
-    File croppedImage = await ImageCropper.cropImage(
-      sourcePath: filePath,
-      maxWidth: 1080,
-      maxHeight: 1080,
-    );
-    final img = croppedImage.readAsBytesSync();
+    final img = image.readAsBytesSync();
     controller.user.value.image = "data:image/jpeg;base64," + base64Encode(img);
     controller.avatar.value = base64Encode(img);
+
+    // Get.showSnackbar(Ui.SuccessSnackBar(message: "Image selected.".tr));
   }
 
   void showPicker(context) {

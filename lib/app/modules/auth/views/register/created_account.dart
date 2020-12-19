@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:itcase/app/modules/account/controllers/account_controller.dart';
-import '../../../global_widgets/main_drawer_widget.dart';
-import "../../root/controllers/root_controller.dart";
+import 'package:itcase/app/global_widgets/block_button_widget.dart';
+import 'package:itcase/app/global_widgets/main_drawer_widget.dart';
+import 'package:itcase/app/modules/auth/controllers/auth_controller.dart';
+import 'package:itcase/app/modules/root/controllers/root_controller.dart';
 
-import '../../../global_widgets/block_button_widget.dart';
-
-class AccountCreatedView extends GetView<AccountController> {
+class CreatedAccount extends GetView<AuthController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

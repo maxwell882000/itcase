@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:itcase/app/modules/auth/controllers/auth_controller.dart';
 import '../../search/controllers/search_controller.dart';
 
 import '../../account/controllers/account_controller.dart';
@@ -22,6 +23,10 @@ class RootBinding extends Bindings {
     // Get.lazyPut<MessagesController>(
     //   () => MessagesController(),
     // );
+    // );
+    Get.lazyPut<AuthController>(
+      () => AuthController(),
+    );
     Get.lazyPut<AccountController>(
       () => AccountController(),
     );

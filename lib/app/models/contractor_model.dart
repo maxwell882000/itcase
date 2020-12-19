@@ -34,7 +34,7 @@ class Contractor {
     if (gender != null) data['contractor_gender'] = gender;
     data['contractor_about_myself'] = about_myself;
     data['contractor_type'] = contractor_type;
-    if (birthday != null) data['contractor_birtday_date'] = birthday;
+    if (birthday != null) data['contractor_birthday_date'] = birthday;
     data['image'] = image;
     data['agree_personal_data_processing'] = agree_personal_data;
     return data;

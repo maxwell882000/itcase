@@ -1,28 +1,14 @@
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:itcase/app/services/auth_service.dart';
 
 class API {
-  final String _url = 'http://192.168.1.111:8000/api/';
+  final String _url = 'https://itcasetest.vid.uz/api/';
   var token;
-
+  final currentUser = Get.find<AuthService>().user;
   _getToken() async {
-    // token = ls.getString('token');
-  }
-
-  checkAuth() async {
-    _getToken();
-    if (token != null) {
-      return true;
-    } else
-      return false;
-  }
-
-  getUser() async {
-    var user;
-    if (checkAuth()) {
-      // user = ls.getString('user');
-      return user;
-    } else
-      return null;
+    token = currentUser.value.token;
+    print(token);
   }
 
   post(data, apiUrl) async {
@@ -75,6 +61,9 @@ class API {
     return res;
   }
 
-  _setHeaders() =>
-      {'Accept': 'application/json', 'Authorization': 'Bearer $token'};
+  _setHeaders() => {
+        'Content-type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token'
+      };
 }
