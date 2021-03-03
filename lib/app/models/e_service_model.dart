@@ -1,3 +1,5 @@
+import 'package:itcase/app/models/subcategory_model.dart';
+
 import 'category_model.dart';
 import 'e_provider_model.dart';
 import 'parents/media_list_model.dart';
@@ -12,7 +14,7 @@ class EService extends MediaListModel {
   int totalReviews;
   double duration;
   List<Category> categories;
-  List<Category> subCategories;
+  List<SubCategory> subCategories;
   EProvider eProvider;
   EProvider eCompany;
 
@@ -47,13 +49,17 @@ class EService extends MediaListModel {
         });
       }
       if (json['sub_categories'] != null) {
-        subCategories = List<Category>();
+        subCategories = List<SubCategory>();
         json['sub_categories'].forEach((v) {
-          subCategories.add(Category.fromJson(v));
+          subCategories.add(SubCategory.fromJson(v));
         });
       }
-      eProvider = json['e_provider'] != null ? EProvider.fromJson(json['e_provider']) : null;
-      eCompany = json['e_company'] != null ? EProvider.fromJson(json['e_company']) : null;
+      eProvider = json['e_provider'] != null
+          ? EProvider.fromJson(json['e_provider'])
+          : null;
+      eCompany = json['e_company'] != null
+          ? EProvider.fromJson(json['e_company'])
+          : null;
       super.fromJson(json);
     } catch (e) {
       print(e);
@@ -76,7 +82,8 @@ class EService extends MediaListModel {
       data['categories'] = this.categories.map((v) => v.toJson()).toList();
     }
     if (this.subCategories != null) {
-      data['sub_categories'] = this.subCategories.map((v) => v.toJson()).toList();
+      data['sub_categories'] =
+          this.subCategories.map((v) => v.toJson()).toList();
     }
     if (this.media != null) {
       data['media'] = this.media.map((v) => v.toJson()).toList();
@@ -108,5 +115,11 @@ class EService extends MediaListModel {
           eCompany == other.eCompany;
 
   @override
-  int get hashCode => super.hashCode ^ title.hashCode ^ description.hashCode ^ rate.hashCode ^ eProvider.hashCode ^ eCompany.hashCode;
+  int get hashCode =>
+      super.hashCode ^
+      title.hashCode ^
+      description.hashCode ^
+      rate.hashCode ^
+      eProvider.hashCode ^
+      eCompany.hashCode;
 }

@@ -12,7 +12,7 @@ class CategoryView extends GetView<CategoryController> {
     return Scaffold(
         appBar: AppBar(
           title: Text(
-            controller.category.value.name,
+            controller.category.value.ru_title,
             style: Get.textTheme.headline6,
           ),
           centerTitle: true,
@@ -39,7 +39,8 @@ class CategoryView extends GetView<CategoryController> {
                     primary: false,
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
-                    children: List.generate(CategoryFilter.values.length, (index) {
+                    children:
+                        List.generate(CategoryFilter.values.length, (index) {
                       var _filter = CategoryFilter.values.elementAt(index);
                       return Obx(() {
                         return Padding(
@@ -47,24 +48,31 @@ class CategoryView extends GetView<CategoryController> {
                           child: RawChip(
                             elevation: 0,
                             label: Text(_filter.toString().tr),
-                            labelStyle: controller.isSelected(_filter) ? Get.textTheme.bodyText2.merge(TextStyle(color: Get.theme.primaryColor)) : Get.textTheme.bodyText2,
-                            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 15),
-                            backgroundColor: Theme.of(context).focusColor.withOpacity(0.1),
+                            labelStyle: controller.isSelected(_filter)
+                                ? Get.textTheme.bodyText2.merge(
+                                    TextStyle(color: Get.theme.primaryColor))
+                                : Get.textTheme.bodyText2,
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 15),
+                            backgroundColor:
+                                Theme.of(context).focusColor.withOpacity(0.1),
                             selectedColor: Theme.of(context).accentColor,
                             selected: controller.isSelected(_filter),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
                             showCheckmark: true,
                             checkmarkColor: Get.theme.primaryColor,
                             onSelected: (bool value) {
                               controller.toggleSelected(_filter);
-                              controller.getEServicesOfCategory(filter: controller.selected.value);
+                              controller.getEServicesOfCategory(
+                                  filter: controller.selected.value);
                             },
                           ),
                         );
                       });
                     })),
               ),
-              ServicesListWidget(services: controller.eServices)
+              // ServicesListWidget(services: controller.eServices)
             ],
           ),
         ));

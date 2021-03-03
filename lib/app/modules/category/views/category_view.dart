@@ -29,13 +29,15 @@ class CategoryView extends GetView<CategoryController> {
               floating: true,
               iconTheme: IconThemeData(color: Get.theme.primaryColor),
               title: Text(
-                controller.category.value.name,
-                style: Get.textTheme.headline6.merge(TextStyle(color: Get.theme.primaryColor)),
+                controller.category.value.ru_title,
+                style: Get.textTheme.headline6
+                    .merge(TextStyle(color: Get.theme.primaryColor)),
               ),
               centerTitle: true,
               automaticallyImplyLeading: false,
               leading: new IconButton(
-                icon: new Icon(Icons.arrow_back_ios, color: Get.theme.primaryColor),
+                icon: new Icon(Icons.arrow_back_ios,
+                    color: Get.theme.primaryColor),
                 onPressed: () => {Get.back()},
               ),
               bottom: HomeSearchBarWidget(),
@@ -48,19 +50,16 @@ class CategoryView extends GetView<CategoryController> {
                         width: double.infinity,
                         padding: EdgeInsets.only(top: 75, bottom: 115),
                         decoration: new BoxDecoration(
-                          gradient: new LinearGradient(
-                              colors: [controller.category.value.color.withOpacity(1), controller.category.value.color.withOpacity(0.2)],
-                              begin: AlignmentDirectional.topStart,
-                              //const FractionalOffset(1, 0),
-                              end: AlignmentDirectional.bottomEnd,
-                              stops: [0.1, 0.9],
-                              tileMode: TileMode.clamp),
-                          borderRadius: BorderRadius.only(topLeft: Radius.circular(5), topRight: Radius.circular(5)),
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(5),
+                              topRight: Radius.circular(5)),
                         ),
-                        child: (controller.category.value.image.toLowerCase().endsWith('.svg')
+                        child: (controller.category.value.image
+                                .toLowerCase()
+                                .endsWith('.svg')
                             ? SvgPicture.network(
                                 controller.category.value.image,
-                                color: controller.category.value.color,
+                                // color: controller.category.value.color,
                               )
                             : CachedNetworkImage(
                                 fit: BoxFit.cover,
@@ -69,7 +68,8 @@ class CategoryView extends GetView<CategoryController> {
                                   'assets/img/loading.gif',
                                   fit: BoxFit.cover,
                                 ),
-                                errorWidget: (context, url, error) => Icon(Icons.error_outline),
+                                errorWidget: (context, url, error) =>
+                                    Icon(Icons.error_outline),
                               )),
                       ),
                       AddressWidget().paddingOnly(bottom: 75),
@@ -85,32 +85,42 @@ class CategoryView extends GetView<CategoryController> {
                         primary: false,
                         shrinkWrap: true,
                         scrollDirection: Axis.horizontal,
-                        children: List.generate(CategoryFilter.values.length, (index) {
+                        children: List.generate(CategoryFilter.values.length,
+                            (index) {
                           var _filter = CategoryFilter.values.elementAt(index);
                           return Obx(() {
                             return Padding(
-                              padding: const EdgeInsetsDirectional.only(start: 20),
+                              padding:
+                                  const EdgeInsetsDirectional.only(start: 20),
                               child: RawChip(
                                 elevation: 0,
                                 label: Text(_filter.toString().tr),
-                                labelStyle: controller.isSelected(_filter) ? Get.textTheme.bodyText2.merge(TextStyle(color: Get.theme.primaryColor)) : Get.textTheme.bodyText2,
-                                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 15),
-                                backgroundColor: Theme.of(context).focusColor.withOpacity(0.1),
-                                selectedColor: controller.category.value.color,
+                                labelStyle: controller.isSelected(_filter)
+                                    ? Get.textTheme.bodyText2.merge(TextStyle(
+                                        color: Get.theme.primaryColor))
+                                    : Get.textTheme.bodyText2,
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 12, vertical: 15),
+                                backgroundColor: Theme.of(context)
+                                    .focusColor
+                                    .withOpacity(0.1),
+                                // selectedColor: controller.category.value.color,
                                 selected: controller.isSelected(_filter),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)),
                                 showCheckmark: true,
                                 checkmarkColor: Get.theme.primaryColor,
                                 onSelected: (bool value) {
                                   controller.toggleSelected(_filter);
-                                  controller.getEServicesOfCategory(filter: controller.selected.value);
+                                  controller.getEServicesOfCategory(
+                                      filter: controller.selected.value);
                                 },
                               ),
                             );
                           });
                         })),
                   ),
-                  ServicesListWidget(services: controller.eServices),
+                  // ServicesListWidget(services: controller.eServices),
                 ],
               ),
             ),

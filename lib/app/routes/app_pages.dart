@@ -86,11 +86,11 @@ class AppPages {
         name: Routes.PHONE_VERIFICATION,
         page: () => PhoneVerificationView(),
         binding: AuthBinding()),
-    GetPage(
-        name: Routes.E_SERVICE,
-        page: () => EServiceView(),
-        binding: EServiceBinding(),
-        transition: Transition.downToUp),
+    // GetPage(
+    //     name: Routes.E_SERVICE,
+    //     page: () => EServiceView(),
+    //     binding: EServiceBinding(),
+    //     transition: Transition.downToUp),
     GetPage(
         name: Routes.BOOK_E_SERVICE,
         page: () => BookEServiceView(),
@@ -103,19 +103,19 @@ class AppPages {
         name: Routes.CONFIRMATION,
         page: () => ConfirmationView(),
         binding: CheckoutBinding()),
-    GetPage(
-        name: Routes.SEARCH,
-        page: () => SearchView(),
-        binding: RootBinding(),
-        transition: Transition.downToUp),
+    // GetPage(
+    //     name: Routes.SEARCH,
+    //     page: () => SearchView(),
+    //     binding: RootBinding(),
+    //     transition: Transition.downToUp),
     GetPage(
         name: Routes.NOTIFICATIONS,
         page: () => NotificationsView(),
         binding: NotificationsBinding()),
-    GetPage(
-        name: Routes.FAVORITES,
-        page: () => FavoritesView(),
-        binding: FavoritesBinding()),
+    // GetPage(
+    //     name: Routes.FAVORITES,
+    //     page: () => FavoritesView(),
+    //     binding: FavoritesBinding()),
     GetPage(
         name: Routes.PRIVACY,
         page: () => PrivacyView(),

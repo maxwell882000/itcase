@@ -11,7 +11,8 @@ class CategoryGridItemWidget extends StatelessWidget {
   final Category category;
   final String heroTag;
 
-  CategoryGridItemWidget({Key key, this.category, this.heroTag}) : super(key: key);
+  CategoryGridItemWidget({Key key, this.category, this.heroTag})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,18 +31,12 @@ class CategoryGridItemWidget extends StatelessWidget {
               width: double.infinity,
               padding: EdgeInsets.symmetric(vertical: 10),
               decoration: new BoxDecoration(
-                gradient: new LinearGradient(
-                    colors: [category.color.withOpacity(1), category.color.withOpacity(0.1)],
-                    begin: AlignmentDirectional.topStart, //const FractionalOffset(1, 0),
-                    end: AlignmentDirectional.bottomEnd,
-                    stops: [0.1, 0.9],
-                    tileMode: TileMode.clamp),
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(5), topRight: Radius.circular(5)),
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(5), topRight: Radius.circular(5)),
               ),
               child: (category.image.toLowerCase().endsWith('.svg')
                   ? SvgPicture.network(
                       category.image,
-                      color: category.color,
                       height: 100,
                     )
                   : CachedNetworkImage(
@@ -51,7 +46,8 @@ class CategoryGridItemWidget extends StatelessWidget {
                         'assets/img/loading.gif',
                         fit: BoxFit.cover,
                       ),
-                      errorWidget: (context, url, error) => Icon(Icons.error_outline),
+                      errorWidget: (context, url, error) =>
+                          Icon(Icons.error_outline),
                     )),
             ),
             Padding(
@@ -60,7 +56,8 @@ class CategoryGridItemWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   Text(
-                    category.name ?? '',
+                    // category.name ?? '',
+                    "Cat name",
                     style: Theme.of(context).textTheme.bodyText2,
                     softWrap: false,
                     maxLines: 3,
