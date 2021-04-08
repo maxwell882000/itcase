@@ -13,7 +13,7 @@ import 'package:itcase/app/providers/api.dart';
 import 'package:itcase/app/routes/app_pages.dart';
 import 'package:itcase/app/services/auth_service.dart';
 import 'package:itcase/common/ui.dart';
-
+import 'package:intl/intl.dart';
 class AuthController extends GetxController {
   String confirm;
   GetStorage _box;

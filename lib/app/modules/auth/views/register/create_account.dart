@@ -12,7 +12,7 @@ import 'package:itcase/app/global_widgets/text_field_widget.dart';
 
 import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
 import 'package:itcase/app/modules/auth/controllers/auth_controller.dart';
-
+import 'package:intl/intl.dart';
 // ignore: must_be_immutable
 class CreateAccount extends GetView<AuthController> {
   // final _currentUser = Get.find<AuthService>().user;
