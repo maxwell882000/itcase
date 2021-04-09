@@ -7,6 +7,7 @@ class API {
   var token;
   final currentUser = Get.find<AuthService>().user;
   _getToken() async {
+
     token = currentUser.value.token;
     print(token);
   }
@@ -24,7 +25,7 @@ class API {
   login(data) async {
     var fullUrl = _url + 'login';
     return await http.post(fullUrl, body: data, headers: {
-      "Accept": 'application/json'
+      // "Accept": 'application/json'
     }).timeout(Duration(seconds: 5), onTimeout: () {
       return null;
     });

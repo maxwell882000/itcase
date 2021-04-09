@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:itcase/app/modules/tasks/controllers/tender_controller.dart';
 
 import '../controllers/tasks_controller.dart';
 import '../widgets/tasks_carousel_widget.dart';
 import '../widgets/tasks_list_widget.dart';
 
-class TasksView extends GetView<TasksController> {
+class TasksView extends GetView<TenderController> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(

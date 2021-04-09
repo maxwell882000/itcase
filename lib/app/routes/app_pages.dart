@@ -1,4 +1,5 @@
-import 'package:get/get.dart' show GetPage, Transition;
+  import 'package:get/get.dart' show GetPage, Transition;
+import 'package:itcase/app/modules/tasks/views/task_create.dart';
 import '../modules/favorites/bindings/favorites_binding.dart';
 import '../modules/favorites/views/favorites_view.dart';
 import '../modules/help_privacy/bindings/help_privacy_binding.dart';
@@ -35,6 +36,7 @@ import '../modules/settings/bindings/settings_binding.dart';
 import '../modules/settings/views/language_view.dart';
 import '../modules/settings/views/settings_view.dart';
 import '../modules/settings/views/theme_mode_view.dart';
+import '../modules/tasks/views/task_intro.dart';
 
 part 'app_routes.dart';
 
@@ -125,5 +127,7 @@ class AppPages {
         page: () => HelpView(),
         binding: HelpPrivacyBinding()),
     GetPage(name: Routes.UPLOAD, page: () => ImageUpload()),
+    GetPage(name: Routes.TASKS, page: () => TaskIntro()),
+    GetPage(name: Routes.CREATE_TASK, page: () => TaskCreate()),
   ];
 }

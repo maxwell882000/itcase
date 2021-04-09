@@ -1,6 +1,7 @@
+import 'package:itcase/app/models/pivot.dart';
+
 class SubCategory {
-  String id,
-      ru_title,
+  String ru_title,
       en_title,
       uz_title,
       ru_slug,
@@ -24,37 +25,42 @@ class SubCategory {
       uz_description,
       tender_meta_title_prefix;
 
+  String title, description;
+
+  int id;
+
   SubCategory(
       {this.id,
-      this.ru_title,
-      this.en_title,
-      this.uz_title,
-      this.ru_slug,
-      this.en_slug,
-      this.uz_slug,
-      this.image,
-      this.position,
-      this.color,
-      this.lft,
-      this.rgt,
-      this.parent_id,
-      this.created_at,
-      this.updated_at,
-      this.favorite,
-      this.meta_title,
-      this.meta_description,
-      this.meta_keywords,
-      this.template,
-      this.ru_description,
-      this.en_description,
-      this.uz_description,
-      this.tender_meta_title_prefix});
+        this.ru_title,
+        this.en_title,
+        this.uz_title,
+        this.ru_slug,
+        this.en_slug,
+        this.uz_slug,
+        this.image,
+        this.position,
+        this.color,
+        this.lft,
+        this.rgt,
+        this.parent_id,
+        this.created_at,
+        this.updated_at,
+        this.favorite,
+        this.meta_title,
+        this.meta_description,
+        this.meta_keywords,
+        this.template,
+        this.ru_description,
+        this.en_description,
+        this.uz_description,
+        this.tender_meta_title_prefix});
 
   SubCategory.fromJson(Map<String, dynamic> json) {
-    this.id = json['id'].toString();
+    this.id = json['id'];
     this.ru_title = json['ru_title'];
     this.en_title = json['en_title'];
     this.uz_title = json['uz_title'];
+    this.title = this.ru_title;
     this.ru_slug = json['ru_slug'];
     this.en_slug = json['en_slug'];
     this.uz_slug = json['uz_slug'];
@@ -74,7 +80,9 @@ class SubCategory {
     this.ru_description = json['ru_description'];
     this.en_description = json['en_description'];
     this.uz_description = json['uz_description'];
+    this.description = this.ru_description;
     this.tender_meta_title_prefix = json['tender_meta_title_prefix'];
+
   }
 
   Map<String, dynamic> toJson() {

@@ -11,8 +11,7 @@ class CategoryGridItemWidget extends StatelessWidget {
   final Category category;
   final String heroTag;
 
-  CategoryGridItemWidget({Key key, this.category, this.heroTag})
-      : super(key: key);
+  CategoryGridItemWidget({Key key, this.category, this.heroTag}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,24 +30,29 @@ class CategoryGridItemWidget extends StatelessWidget {
               width: double.infinity,
               padding: EdgeInsets.symmetric(vertical: 10),
               decoration: new BoxDecoration(
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(5), topRight: Radius.circular(5)),
+                gradient: new LinearGradient(
+                    colors: [category.color.withOpacity(1), category.color.withOpacity(0.1)],
+                    begin: AlignmentDirectional.topStart, //const FractionalOffset(1, 0),
+                    end: AlignmentDirectional.bottomEnd,
+                    stops: [0.1, 0.9],
+                    tileMode: TileMode.clamp),
+                borderRadius: BorderRadius.only(topLeft: Radius.circular(5), topRight: Radius.circular(5)),
               ),
               child: (category.image.toLowerCase().endsWith('.svg')
                   ? SvgPicture.network(
-                      category.image,
-                      height: 100,
-                    )
+                category.image,
+                color: category.color,
+                height: 100,
+              )
                   : CachedNetworkImage(
-                      fit: BoxFit.cover,
-                      imageUrl: category.image,
-                      placeholder: (context, url) => Image.asset(
-                        'assets/img/loading.gif',
-                        fit: BoxFit.cover,
-                      ),
-                      errorWidget: (context, url, error) =>
-                          Icon(Icons.error_outline),
-                    )),
+                fit: BoxFit.cover,
+                imageUrl: category.image,
+                placeholder: (context, url) => Image.asset(
+                  'assets/img/loading.gif',
+                  fit: BoxFit.cover,
+                ),
+                errorWidget: (context, url, error) => Icon(Icons.error_outline),
+              )),
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 12, vertical: 15),
@@ -56,8 +60,7 @@ class CategoryGridItemWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   Text(
-                    // category.name ?? '',
-                    "Cat name",
+                    category.title ?? '',
                     style: Theme.of(context).textTheme.bodyText2,
                     softWrap: false,
                     maxLines: 3,

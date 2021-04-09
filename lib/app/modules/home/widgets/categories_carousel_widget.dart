@@ -28,10 +28,15 @@ class CategoriesCarouselWidget extends GetWidget<HomeController> {
                 child: Container(
                   width: 100,
                   height: 100,
-                  margin: EdgeInsetsDirectional.only(
-                      end: 20, start: index == 0 ? 20 : 0),
+                  margin: EdgeInsetsDirectional.only(end: 20, start: index == 0 ? 20 : 0),
                   padding: EdgeInsets.symmetric(vertical: 10),
                   decoration: new BoxDecoration(
+                    gradient: new LinearGradient(
+                        colors: [_category.color.withOpacity(1), _category.color.withOpacity(0.1)],
+                        begin: AlignmentDirectional.topStart, //const FractionalOffset(1, 0),
+                        end: AlignmentDirectional.bottomEnd,
+                        stops: [0.1, 0.9],
+                        tileMode: TileMode.clamp),
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                   ),
                   child: Stack(
@@ -43,29 +48,26 @@ class CategoriesCarouselWidget extends GetWidget<HomeController> {
                           borderRadius: BorderRadius.all(Radius.circular(10)),
                           child: (_category.image.toLowerCase().endsWith('.svg')
                               ? SvgPicture.network(
-                                  _category.image,
-                                )
+                            _category.image,
+                            color: _category.color,
+                          )
                               : CachedNetworkImage(
-                                  fit: BoxFit.cover,
-                                  imageUrl: _category.image,
-                                  placeholder: (context, url) => Image.asset(
-                                    'assets/img/loading.gif',
-                                    fit: BoxFit.cover,
-                                  ),
-                                  errorWidget: (context, url, error) =>
-                                      Icon(Icons.error_outline),
-                                )),
+                            fit: BoxFit.cover,
+                            imageUrl: _category.image,
+                            placeholder: (context, url) => Image.asset(
+                              'assets/img/loading.gif',
+                              fit: BoxFit.cover,
+                            ),
+                            errorWidget: (context, url, error) => Icon(Icons.error_outline),
+                          )),
                         ),
                       ),
                       Padding(
-                        padding:
-                            const EdgeInsetsDirectional.only(start: 10, top: 0),
+                        padding: const EdgeInsetsDirectional.only(start: 10, top: 0),
                         child: Text(
-                          // _category.,
-                          "NAME",
+                          _category.title,
                           maxLines: 2,
-                          style: Get.textTheme.bodyText2
-                              .merge(TextStyle(color: Get.theme.primaryColor)),
+                          style: Get.textTheme.bodyText2.merge(TextStyle(color: Get.theme.primaryColor)),
                         ),
                       ),
                     ],

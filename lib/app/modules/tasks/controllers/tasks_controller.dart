@@ -1,4 +1,7 @@
 import 'package:get/get.dart';
+import 'package:itcase/app/models/category_model.dart';
+import 'package:itcase/app/modules/category/controllers/categories_controller.dart';
+import 'package:itcase/app/repositories/category_repository.dart';
 import '../../../models/e_service_model.dart';
 import '../../../models/task_model.dart';
 import '../../../repositories/task_repository.dart';
@@ -10,6 +13,7 @@ class TasksController extends GetxController {
   var ongoingTasks = List<Task>().obs;
   var completedTasks = List<Task>().obs;
   var archivedTasks = List<Task>().obs;
+  final task = new Task().obs;
 
   // final selectedOngoingTask = Task().obs;
   // final selectedCompletedTask = Task().obs;
@@ -20,6 +24,7 @@ class TasksController extends GetxController {
     _taskRepository = new TaskRepository();
     await getOngoingTasks();
     super.onInit();
+    Get.lazyPut(() => TasksController());
   }
 
   Future refreshTasks({bool showMessage = false}) async {
@@ -27,14 +32,16 @@ class TasksController extends GetxController {
     await getCompletedTasks();
     await getArchivedTasks();
     if (showMessage) {
-      Get.showSnackbar(Ui.SuccessSnackBar(message: "Task page refreshed successfully".tr));
+      Get.showSnackbar(
+          Ui.SuccessSnackBar(message: "Task page refreshed successfully".tr));
     }
   }
 
   Future<void> getOngoingTasks({bool showMessage = false}) async {
     ongoingTasks.value = await _taskRepository.getOngoingTasks();
     if (showMessage) {
-      Get.showSnackbar(Ui.SuccessSnackBar(message: "Task page refreshed successfully".tr));
+      Get.showSnackbar(
+          Ui.SuccessSnackBar(message: "Task page refreshed successfully".tr));
     }
     //selectedOngoingTask.value = ongoingTasks.isNotEmpty ? ongoingTasks.first : new Task();
   }
@@ -42,7 +49,8 @@ class TasksController extends GetxController {
   Future<void> getCompletedTasks({bool showMessage = false}) async {
     completedTasks.value = await _taskRepository.getCompletedTasks();
     if (showMessage) {
-      Get.showSnackbar(Ui.SuccessSnackBar(message: "Task page refreshed successfully".tr));
+      Get.showSnackbar(
+          Ui.SuccessSnackBar(message: "Task page refreshed successfully".tr));
     }
     //selectedCompletedTask.value = completedTasks.isNotEmpty ? completedTasks.first : new Task();
   }
@@ -50,10 +58,12 @@ class TasksController extends GetxController {
   Future<void> getArchivedTasks({bool showMessage = false}) async {
     archivedTasks.value = await _taskRepository.getArchivedTasks();
     if (showMessage) {
-      Get.showSnackbar(Ui.SuccessSnackBar(message: "Task page refreshed successfully".tr));
+      Get.showSnackbar(
+          Ui.SuccessSnackBar(message: "Task page refreshed successfully".tr));
     }
     //selectedArchivedTask.value = archivedTasks.isNotEmpty ? archivedTasks.first : new Task();
   }
 
-  List<EService> get ongoingServices => ongoingTasks.map((e) => e.eService).toList();
+  List<EService> get ongoingServices =>
+      ongoingTasks.map((e) => e.eService).toList();
 }

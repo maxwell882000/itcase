@@ -7,6 +7,7 @@ import 'user_model.dart';
 class Task extends Model {
   String id;
   DateTime dateTime;
+  String title;
   String description;
   String status;
   String progress;
@@ -18,12 +19,25 @@ class Task extends Model {
   Address address;
   PaymentMethod paymentMethod;
 
-  Task({this.id, this.dateTime, this.description, this.status, this.progress, this.total, this.tax, this.rate, this.user, this.eService, this.address, this.paymentMethod});
+  Task(
+      {this.id,
+      this.dateTime,
+      this.title,
+      this.description,
+      this.status,
+      this.progress,
+      this.total,
+      this.tax,
+      this.rate,
+      this.user,
+      this.eService,
+      this.address,
+      this.paymentMethod});
 
   Task.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
+    id = json['id'].toString();
     dateTime = DateTime.parse(json['date_time']);
-    ;
+    title = json['title'];
     description = json['description'];
     status = json['status'];
     progress = json['progress'];
@@ -31,15 +45,20 @@ class Task extends Model {
     rate = json['rate']?.toDouble();
     tax = json['tax']?.toDouble();
     user = json['user'] != null ? User.fromJson(json['user']) : null;
-    paymentMethod = json['payment_method'] != null ? PaymentMethod.fromJson(json['payment_method']) : null;
-    eService = json['e_service'] != null ? EService.fromJson(json['e_service']) : null;
-    address = json['address'] != null ? Address.fromJson(json['address']) : null;
+    paymentMethod = json['payment_method'] != null
+        ? PaymentMethod.fromJson(json['payment_method'])
+        : null;
+    eService =
+        json['e_service'] != null ? EService.fromJson(json['e_service']) : null;
+    address =
+        json['address'] != null ? Address.fromJson(json['address']) : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = Map<String, dynamic>();
     data['id'] = this.id;
     data['date_time'] = this.dateTime;
+    data['title'] = this.title;
     data['description'] = this.description;
     data['status'] = this.status;
     data['progress'] = this.progress;

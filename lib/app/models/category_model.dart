@@ -1,8 +1,12 @@
+import 'package:flutter/material.dart';
+import 'package:html/parser.dart';
+import 'package:itcase/app/models/pivot.dart';
 import 'package:itcase/app/models/subcategory_model.dart';
 
+import '../../common/ui.dart';
+
 class Category {
-  String id,
-      ru_title,
+  String ru_title,
       en_title,
       uz_title,
       ru_slug,
@@ -10,7 +14,6 @@ class Category {
       uz_slug,
       image,
       position,
-      color,
       lft,
       rgt,
       parent_id,
@@ -25,47 +28,53 @@ class Category {
       en_description,
       uz_description,
       tender_meta_title_prefix;
-
+  String title, description;
   List<SubCategory> categories;
+  Color color;
+  int id;
+  Pivot pivot;
 
   Category(
       {this.id,
-      this.ru_title,
-      this.en_title,
-      this.uz_title,
-      this.ru_slug,
-      this.en_slug,
-      this.uz_slug,
-      this.image,
-      this.position,
-      this.color,
-      this.lft,
-      this.rgt,
-      this.parent_id,
-      this.created_at,
-      this.updated_at,
-      this.favorite,
-      this.meta_title,
-      this.meta_description,
-      this.meta_keywords,
-      this.template,
-      this.ru_description,
-      this.en_description,
-      this.uz_description,
-      this.tender_meta_title_prefix,
-      this.categories});
+        this.ru_title,
+        this.en_title,
+        this.uz_title,
+        this.ru_slug,
+        this.en_slug,
+        this.uz_slug,
+        this.image,
+        this.position,
+        this.color,
+        this.lft,
+        this.rgt,
+        this.parent_id,
+        this.created_at,
+        this.updated_at,
+        this.favorite,
+        this.meta_title,
+        this.meta_description,
+        this.meta_keywords,
+        this.template,
+        this.ru_description,
+        this.en_description,
+        this.uz_description,
+        this.tender_meta_title_prefix,
+        this.categories});
 
   Category.fromJson(Map<String, dynamic> json) {
-    id = json['id'].toString();
+    id = json['id'];
+
     ru_title = json['ru_title'];
     en_title = json['en_title'];
     uz_title = json['uz_title'];
+    title = ru_title;
     ru_slug = json['ru_slug'];
     en_slug = json['en_slug'];
     uz_slug = json['uz_slug'];
-    image = json['image'];
+    image =
+    "http://handyman.smartersvision.com/mock/categories/media/nurse.svg";
     position = json['position'].toString();
-    color = json['color'];
+    color = Ui.parseColor("#0abde3").withOpacity(1);
     lft = json['lft'].toString();
     rgt = json['rgt'].toString();
     parent_id = json['parent_id'].toString();
@@ -76,16 +85,27 @@ class Category {
     meta_description = json['meta_description'];
     meta_keywords = json['meta_keywords'];
     template = json['template'];
-    ru_description = json['ru_description'];
-    en_description = json['en_description'];
-    uz_description = json['uz_description'];
+    ru_description = parseHtmlString(json['ru_description']?? "");
+    en_description = parseHtmlString(json['en_description']?? "");
+    uz_description =parseHtmlString(json['uz_description']?? "");
+    description = ru_description;
     tender_meta_title_prefix = json['tender_meta_title_prefix'];
-    categories = List<SubCategory>();
-    json['categories'].forEach((v) {
-      categories.add(SubCategory.fromJson(v));
-    });
+    categories = [];
+    if (json.containsKey("pivot")) {
+      pivot = new Pivot.fromJson(json);
+    }
+    if (json.containsKey("categories")) {
+      json['categories'].forEach((v) {
+        categories.add(SubCategory.fromJson(v));
+      });
+    }
   }
+  static String parseHtmlString(String htmlString) {
+    final document = parse(htmlString);
+    final String parsedString = parse(document.body.text).documentElement.text;
 
+    return parsedString;
+  }
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = Map<String, dynamic>();
     data['id'] = this.id.toString();

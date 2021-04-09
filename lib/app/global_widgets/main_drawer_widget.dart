@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:itcase/app/modules/auth/views/register/create_account.dart';
+
 
 import '../modules/root/controllers/root_controller.dart' show RootController;
 import '../routes/app_pages.dart';
@@ -117,7 +117,9 @@ class MainDrawerWidget extends StatelessWidget {
             },
           ),
           DrawerLinkWidget(
-            icon: Icons.table_chart,
+
+            icon: Icons.favorite_outline,
+
             text: "My tasks",
             onTap: (e) {
               // Get.offAndToNamed(Routes.FAVORITES);
@@ -133,10 +135,12 @@ class MainDrawerWidget extends StatelessWidget {
             },
           ),
           DrawerLinkWidget(
-            icon: Icons.check,
-            text: "Be Performer",
+
+            icon: Icons.toggle_on,
+            text: "Become a performer",
             onTap: (e) {
-              Get.to(CreateAccount());
+              Get.offAndToNamed(Routes.FAVORITES);
+
             },
           ),
           ListTile(

@@ -9,7 +9,7 @@ enum CategoriesLayout { GRID, LIST }
 class CategoriesController extends GetxController {
   CategoryRepository _categoryRepository;
 
-  final categories = List<Category>(0).obs;
+  final categories = [].obs;
   final layout = CategoriesLayout.LIST.obs;
 
   CategoriesController() {
@@ -29,10 +29,22 @@ class CategoriesController extends GetxController {
           message: "List of categories refreshed successfully".tr));
     }
   }
+  Future searchCategory({String keywords}) async {
+    try {
+      categories.assignAll(await _categoryRepository.getAll());
+      if (keywords != null && keywords.isNotEmpty) {
+        categories.assignAll( categories.where((_categories) {
+          return _categories.title.toLowerCase().contains(keywords.toLowerCase());
+        }).toList());
+      }
+    } catch (e) {
+      Get.showSnackbar(Ui.ErrorSnackBar(message: e.toString()));
+    }
+  }
 
   Future getCategories() async {
     try {
-      categories.value = await _categoryRepository.getCats();
+      categories.assignAll(await _categoryRepository.getAll());
     } catch (e) {
       Get.showSnackbar(Ui.ErrorSnackBar(message: e.toString()));
     }

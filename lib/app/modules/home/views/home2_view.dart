@@ -163,9 +163,11 @@ class Home2View extends GetView<HomeController> {
                       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                       child: Row(
                         children: [
-                          Expanded(child: Text("Recommended for you".tr, style: Get.textTheme.headline5)),
+                          Expanded(child: Text("Задания".tr, style: Get.textTheme.headline5)),
                           FlatButton(
-                            onPressed: () {},
+                            onPressed: () {
+
+                            },
                             shape: StadiumBorder(),
                             color: Get.theme.accentColor.withOpacity(0.1),
                             child: Text("View All".tr, style: Get.textTheme.subtitle1),
@@ -174,7 +176,7 @@ class Home2View extends GetView<HomeController> {
                       ),
                     ),
                     RecommendedCarouselWidget(),
-                    FeaturedCategoriesWidget(),
+                   // FeaturedCategoriesWidget(),
                   ],
                 ),
               ),

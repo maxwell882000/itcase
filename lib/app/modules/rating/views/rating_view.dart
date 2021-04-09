@@ -65,7 +65,7 @@ class RatingView extends GetView<RatingController> {
                         height: 70,
                         width: 70,
                         fit: BoxFit.cover,
-                        imageUrl: controller.task.value.eService.firstMediaUrl,
+                        imageUrl: controller.task.value.eService.images,
                         placeholder: (context, url) => Image.asset(
                           'assets/img/loading.gif',
                           fit: BoxFit.cover,
