@@ -1,5 +1,7 @@
   import 'package:get/get.dart' show GetPage, Transition;
+import 'package:itcase/app/modules/tasks/bindings/task_binding.dart';
 import 'package:itcase/app/modules/tasks/views/task_create.dart';
+import 'package:itcase/app/modules/tasks/views/tasks_view.dart';
 import '../modules/favorites/bindings/favorites_binding.dart';
 import '../modules/favorites/views/favorites_view.dart';
 import '../modules/help_privacy/bindings/help_privacy_binding.dart';
@@ -45,6 +47,7 @@ class AppPages {
 
   static final routes = [
     GetPage(name: Routes.ROOT, page: () => RootView(), binding: RootBinding()),
+    GetPage(name: Routes.TINDERS_VIEW, page: () => TasksView(), binding: TaskBindings()),
     GetPage(
         name: Routes.RATING,
         page: () => RatingView(),

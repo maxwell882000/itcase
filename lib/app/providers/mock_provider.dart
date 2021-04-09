@@ -246,7 +246,7 @@ class MockApiClient {
     await httpClient.get(itcase_url + "tenders", options: _options);
     if (response.statusCode == 200) {
       return response.data['tenders']['data']
-          .map<Task>((obj) => Task.fromJson(obj))
+          .map<Tenders>((obj) => Tenders.fromJson(obj))
           .toList();
     } else {
       throw new Exception(response.statusMessage);

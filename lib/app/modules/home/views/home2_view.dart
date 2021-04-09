@@ -14,7 +14,7 @@ import '../controllers/home_controller.dart';
 import '../widgets/address_widget.dart';
 import '../widgets/categories_carousel_widget.dart';
 import '../widgets/featured_categories_widget.dart';
-import '../widgets/recommended_carousel_widget.dart';
+import '../widgets/tinders_carousel_widget.dart';
 
 class Home2View extends GetView<HomeController> {
   @override
@@ -152,7 +152,7 @@ class Home2View extends GetView<HomeController> {
                             },
                             shape: StadiumBorder(),
                             color: Get.theme.accentColor.withOpacity(0.1),
-                            child: Text("View All".tr, style: Get.textTheme.subtitle1),
+                            child: Text("Посмотреть все".tr, style: Get.textTheme.subtitle1),
                           ),
                         ],
                       ),
@@ -166,11 +166,11 @@ class Home2View extends GetView<HomeController> {
                           Expanded(child: Text("Задания".tr, style: Get.textTheme.headline5)),
                           FlatButton(
                             onPressed: () {
-
+                              Get.toNamed(Routes.TINDERS_VIEW);
                             },
                             shape: StadiumBorder(),
                             color: Get.theme.accentColor.withOpacity(0.1),
-                            child: Text("View All".tr, style: Get.textTheme.subtitle1),
+                            child: Text("Посмотреть все".tr, style: Get.textTheme.subtitle1),
                           ),
                         ],
                       ),

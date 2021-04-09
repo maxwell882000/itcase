@@ -29,4 +29,5 @@ abstract class Routes {
   static const UPLOAD = '/upload';
   static const TASKS = '/tasks';
   static const CREATE_TASK = '/create-task';
+  static const TINDERS_VIEW = '/tinder-view';
 }

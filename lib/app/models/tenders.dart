@@ -1,10 +1,11 @@
 import 'dart:convert';
-
+import 'package:intl/intl.dart';
 import 'package:itcase/app/providers/api.dart';
 
 class Tenders {
   int id, owner_id, need_id, contractor_id;
-  bool opened, published;
+  int  published;
+  int opened;
   String client_name,
       client_type,
       client_email,
@@ -73,7 +74,7 @@ class Tenders {
     client_site_url = json['client_site_url'];
     title = json['title'];
     description = json['description'];
-    budget = json['budget'];
+    budget = json['budget'].toString();
     deadline = json['deadline'];
     target_audience = json['target_audience'];
     links = json['links'];
@@ -84,8 +85,8 @@ class Tenders {
     slug = json['slug'];
     opened = json['opened'];
     need_id = json['need_id'];
-    created_at = json['created_at'];
-    updated_at = json['updated_at'];
+    created_at = formatedStr(json['created_at']);
+    updated_at = formatedStr(json['updated_at']);
     owner_id = json['owned_id'];
     contractor_id = json['contractor_id'];
     status = json['status'];
@@ -99,7 +100,9 @@ class Tenders {
     work_start_at= json['work_start_at'];
     work_end_at= json['work_end_at'];
   }
-
+  String formatedStr(String date){
+    return DateFormat('yyyy-MM-dd').format(DateTime.parse(date));
+  }
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = Map<String, dynamic>();
 
