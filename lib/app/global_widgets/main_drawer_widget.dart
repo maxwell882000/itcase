@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 
+import '../modules/auth/controllers/auth_controller.dart';
+import '../modules/auth/views/register/create_account.dart';
 import '../modules/root/controllers/root_controller.dart' show RootController;
 import '../routes/app_pages.dart';
 import '../services/settings_service.dart';
@@ -135,12 +137,11 @@ class MainDrawerWidget extends StatelessWidget {
             },
           ),
           DrawerLinkWidget(
-
-            icon: Icons.toggle_on,
-            text: "Become a performer",
+            icon: Icons.check,
+            text: "Be Performer",
             onTap: (e) {
-              Get.offAndToNamed(Routes.FAVORITES);
-
+              Get.put(AuthController());
+              Get.to(CreateAccount());
             },
           ),
           ListTile(

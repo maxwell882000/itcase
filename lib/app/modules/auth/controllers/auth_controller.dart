@@ -1,30 +1,22 @@
 import 'dart:convert';
 
+import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:itcase/app/models/category_model.dart';
+
+
 import 'package:itcase/app/models/user_model.dart';
-import 'package:itcase/app/modules/auth/views/register_3step.dart';
-import 'package:itcase/app/modules/tasks/views/task_intro.dart';
+import 'package:itcase/app/modules/auth/views/register/create_account.dart';
+import 'package:itcase/app/modules/auth/views/register/created_account.dart';
 import 'package:itcase/app/providers/api.dart';
 import 'package:itcase/app/routes/app_pages.dart';
 import 'package:itcase/app/services/auth_service.dart';
 import 'package:itcase/common/ui.dart';
-import 'package:itcase/app/modules/auth/views/register_2step.dart';
-// import 'package:itcase/app/modules/auth/views/signup/step1.dart';
-
+import 'package:intl/intl.dart';
 class AuthController extends GetxController {
   String confirm;
   GetStorage _box;
-
-  @override
-  void onInit() {
-    // if (Get.find<AuthService>().isAuth) Get.toNamed(Routes.ROOT);
-
-    super.onInit();
-  }
-
   final currentUser = Get.find<AuthService>().user;
 
   final Map<String, dynamic> data = Map<String, dynamic>();
@@ -37,6 +29,14 @@ class AuthController extends GetxController {
   final gender = "male".obs;
   final type = "individual".obs;
   final role = "contractor".obs;
+  final avatar = "noavatar".obs;
+  final birthday = DateFormat('dd.MM.yyyy').format(DateTime.now()).obs;
+
+  @override
+  void onInit() {
+    // if (Get.find<AuthService>().isAuth) Get.toNamed(Routes.ROOT);
+    super.onInit();
+  }
 
   login(GlobalKey<FormState> loginForm) async {
     if (loginForm.currentState.validate()) {
@@ -50,8 +50,8 @@ class AuthController extends GetxController {
         currentUser.value.auth = true;
         currentUser.value.token = body['token'];
 
-        var res = await API().getData('accout');
-        print(res.body);
+        // var res = await API().getData('accout');
+        // print(res.body);
 
         _box.write('current_user', jsonEncode(user));
         Get.toNamed(Routes.ROOT);
@@ -68,24 +68,17 @@ class AuthController extends GetxController {
   }
 
   step2(GlobalKey<FormState> signupForm) async {
-    // Get.to(Register2View());
-    Get.to(TaskIntro());
-
-/*
     if (signupForm.currentState.validate()) {
       signupForm.currentState.save();
-      var response = await API().post(user.value.toJsonSingup(), "register");
+      var response =
+          await API().post(jsonEncode(user.value.toJsonSingup()), "register");
       print(response.body);
       print(response.statusCode);
-
       if (response.statusCode == 200) {
         var body = jsonDecode(response.body);
         currentUser.value.auth = true;
         currentUser.value.token = body['token'];
-        // Get.to(TaskIntro());
-        Get.to(Register2View());
-
-        // Get.to(Step1());
+        Get.to(CreateAccount());
       } else {
         Get.showSnackbar(
             Ui.ErrorSnackBar(message: jsonEncode(jsonDecode(response.body))));
@@ -94,12 +87,9 @@ class AuthController extends GetxController {
       Get.showSnackbar(Ui.ErrorSnackBar(
           message: "There are errors in some fields please correct them!".tr));
     }
-    */
   }
 
   signup(GlobalKey<FormState> signupForm, role) async {
-    Get.to(Register3View());
-    /*
     if (signupForm.currentState.validate()) {
       signupForm.currentState.save();
       var data;
@@ -108,16 +98,28 @@ class AuthController extends GetxController {
       } else {
         data = jsonEncode(customer.value.toJson());
       }
-
+      if (!agree.value) {
+        Get.showSnackbar(Ui.ErrorSnackBar(
+            title: "Error", message: "Please agree with your personal data."));
+      }
+      if (avatar.value == null && contractor.value.image == null) {
+        Get.showSnackbar(Ui.ErrorSnackBar(
+            title: "Error", message: "Please choose avatar picture."));
+      }
+      print(jsonEncode(contractor.value.toJson()));
       var response = await API().post(data, 'account/create');
-      print(response.statusCode);
-
-      print(jsonEncode(jsonDecode(response.body)));
-
+      print(response.body);
+      // print(response.statusCode);
+      // print(jsonEncode(jsonDecode(response.body)));
       if (response.statusCode == 200) {
         var body = jsonDecode(response.body);
-        if (body['message'] != null) {}
+        if (body['message'] != null) {
+          _box = new GetStorage();
+          print(role);
+          _box.write('user_role', role);
+          Get.to(CreatedAccount());
+        }
       }
-    }*/
+    }
   }
 }

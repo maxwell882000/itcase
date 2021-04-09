@@ -70,7 +70,7 @@ class RegisterView extends GetView<AuthController> {
                     decoration: BoxDecoration(
                       color: Get.theme.accentColor,
                       borderRadius:
-                      BorderRadius.vertical(bottom: Radius.circular(10)),
+                          BorderRadius.vertical(bottom: Radius.circular(10)),
                       boxShadow: [
                         BoxShadow(
                             color: Get.theme.focusColor.withOpacity(0.2),
@@ -90,7 +90,7 @@ class RegisterView extends GetView<AuthController> {
                           ),
                           SizedBox(height: 5),
                           Text(
-                            "Registration step 1 of 3".tr,
+                            "Registration step 1 of 2".tr,
                             style: Get.textTheme.caption.merge(
                                 TextStyle(color: Get.theme.primaryColor)),
                             textAlign: TextAlign.center,
@@ -108,7 +108,7 @@ class RegisterView extends GetView<AuthController> {
                 initialValue: controller.user.value.name,
                 onSaved: (val) => controller.user.value.name = val,
                 validator: (val) =>
-                val.length == 0 ? "Fullname error".tr : null,
+                    val.length == 0 ? "Fullname error".tr : null,
                 iconData: Icons.people_alt,
                 isLast: false,
               ),
@@ -119,10 +119,8 @@ class RegisterView extends GetView<AuthController> {
                 keyboardType: TextInputType.phone,
                 initialValue: controller.user.value.phone_number,
                 onSaved: (val) => controller.user.value.phone_number = val,
-                /*validator: (val) =>
-                  RegExp(r'(^(?:[+])?[0-9]{10,15}$)').hasMatch(val)
-                      ? null
-                      : "Phone error".tr,*/
+                validator: (val) =>
+                    val.startsWith("+") ? null : "Phone error".tr,
               ),
               TextFieldWidget(
                 labelText: "Email Address".tr,
@@ -131,10 +129,10 @@ class RegisterView extends GetView<AuthController> {
                 iconData: Icons.alternate_email,
                 onSaved: (val) => controller.user.value.email = val,
                 validator: (val) =>
-                RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                    .hasMatch(val)
-                    ? null
-                    : "Email error".tr,
+                    RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                            .hasMatch(val)
+                        ? null
+                        : "Email error".tr,
                 isFirst: true,
                 isLast: false,
               ),
@@ -151,7 +149,7 @@ class RegisterView extends GetView<AuthController> {
                   suffixIcon: IconButton(
                     onPressed: () {
                       controller.hidePassword.value =
-                      !controller.hidePassword.value;
+                          !controller.hidePassword.value;
                     },
                     color: Theme.of(context).focusColor,
                     icon: Icon(controller.hidePassword.value
@@ -174,9 +172,7 @@ class RegisterView extends GetView<AuthController> {
                   width: Get.width,
                   child: BlockButtonWidget(
                     onPressed: () {
-                      // Get.offAllNamed(Routes.PHONE_VERIFICATION);
                       controller.step2(signupForm);
-                      print("OK");
                     },
                     color: Get.theme.accentColor,
                     text: Text(
