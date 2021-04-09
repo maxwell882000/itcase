@@ -86,9 +86,7 @@ class TasksView extends GetView<TenderController> {
                 onRefresh: () async {
                   await controller.getOngoingTasks(showMessage: true);
                 },
-                child: SingleChildScrollView(
-                  child: TasksCarouselWidget(tasks: controller.ongoingTasks),
-                ),
+                child: TasksListWidget(tasks: controller.ongoingTasks),
               ),
               RefreshIndicator(
                 onRefresh: () async {

@@ -91,11 +91,11 @@ class AppPages {
         name: Routes.PHONE_VERIFICATION,
         page: () => PhoneVerificationView(),
         binding: AuthBinding()),
-    // GetPage(
-    //     name: Routes.E_SERVICE,
-    //     page: () => EServiceView(),
-    //     binding: EServiceBinding(),
-    //     transition: Transition.downToUp),
+    GetPage(
+        name: Routes.E_SERVICE,
+        page: () => EServiceView(),
+        binding: EServiceBinding(),
+        transition: Transition.downToUp),
     GetPage(
         name: Routes.BOOK_E_SERVICE,
         page: () => BookEServiceView(),
