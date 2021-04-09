@@ -25,7 +25,6 @@ class EService {
     try {
 
       pivot = new Pivot.fromJson(json['pivot']);
-
       title = json['name'];
       this.id = json['id'].toString();
       this.images =  MockApiClient.url + "uploads/users/" +  json['image'];
