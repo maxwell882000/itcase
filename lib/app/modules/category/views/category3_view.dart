@@ -12,7 +12,7 @@ class CategoryView extends GetView<CategoryController> {
     return Scaffold(
         appBar: AppBar(
           title: Text(
-            controller.category.value.ru_title,
+            controller.category.value.title,
             style: Get.textTheme.headline6,
           ),
           centerTitle: true,
@@ -39,33 +39,25 @@ class CategoryView extends GetView<CategoryController> {
                     primary: false,
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
-                    children:
-                        List.generate(CategoryFilter.values.length, (index) {
-                      var _filter = CategoryFilter.values.elementAt(index);
+                    children: List.generate(controller.caregoryFilter.value.choices.length, (index) {
+                      var _filter = controller.caregoryFilter.value.choices[index];
                       return Obx(() {
                         return Padding(
                           padding: const EdgeInsetsDirectional.only(start: 20),
                           child: RawChip(
                             elevation: 0,
-                            label: Text(_filter.toString().tr),
-                            labelStyle: controller.isSelected(_filter)
-                                ? Get.textTheme.bodyText2.merge(
-                                    TextStyle(color: Get.theme.primaryColor))
-                                : Get.textTheme.bodyText2,
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 12, vertical: 15),
-                            backgroundColor:
-                                Theme.of(context).focusColor.withOpacity(0.1),
+                            label: Text(_filter[1]),
+                            labelStyle: controller.isSelected(_filter[0]) ? Get.textTheme.bodyText2.merge(TextStyle(color: Get.theme.primaryColor)) : Get.textTheme.bodyText2,
+                            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 15),
+                            backgroundColor: Theme.of(context).focusColor.withOpacity(0.1),
                             selectedColor: Theme.of(context).accentColor,
                             selected: controller.isSelected(_filter),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                             showCheckmark: true,
                             checkmarkColor: Get.theme.primaryColor,
                             onSelected: (bool value) {
-                              controller.toggleSelected(_filter);
-                              controller.getEServicesOfCategory(
-                                  filter: controller.selected.value);
+                              controller.toggleSelected(_filter[0]);
+                              controller.getEServicesOfCategory(filter: controller.selected.value);
                             },
                           ),
                         );

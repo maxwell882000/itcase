@@ -1,16 +1,19 @@
+import '../../providers/mock_provider.dart';
 import '../media_model.dart';
 import 'model.dart';
 
 abstract class MediaListModel extends Model {
-  List<Media> media;
-
+    List<Media> media;
+    String image;
   void fromJson(Map<String, dynamic> json) {
-    try {
-      super.fromJson(json);
-      media = json['media'] != null && (json['media'] as List).length > 0 ? List.from(json['media']).map((element) => Media.fromJson(element)).toSet().toList() : [];
-    } catch (e) {
-      print(e);
-    }
+    super.fromJson(json);
+
+    // try {
+    //   super.fromJson(json);
+    //   media = json['image'] != null && (json['image'] as List).length > 0 ? List.from(json['media']).map((element) => Media.fromJson(element)).toSet().toList() : [];
+    // } catch (e) {
+    //   print(e);
+    // }
   }
 
   String get firstMediaUrl {

@@ -35,7 +35,7 @@ class PaymentDetailsWidget extends StatelessWidget {
                   height: 80,
                   width: 80,
                   fit: BoxFit.cover,
-                  imageUrl: _task.eService.firstMediaUrl,
+                  imageUrl: _task.eService.images,
                   placeholder: (context, url) => Image.asset(
                     'assets/img/loading.gif',
                     fit: BoxFit.cover,
@@ -45,7 +45,7 @@ class PaymentDetailsWidget extends StatelessWidget {
                   errorWidget: (context, url, error) => Icon(Icons.error_outline),
                 ),
               ),
-              if (_task.eService.eProvider.available)
+              // if (_task.eService.eProvider.available)
                 Container(
                   width: 80,
                   child: Text("Available".tr,
@@ -62,7 +62,7 @@ class PaymentDetailsWidget extends StatelessWidget {
                   ),
                   padding: EdgeInsets.symmetric(horizontal: 5, vertical: 6),
                 ),
-              if (!_task.eService.eProvider.available)
+              // if (!_task.eService.eProvider.available)
                 Container(
                   width: 80,
                   child: Text("Offline".tr,
@@ -102,14 +102,14 @@ class PaymentDetailsWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text("Service Payment".tr),
-                    Ui.getPrice(_task.eService.minPrice, style: Get.textTheme.subtitle2),
+                    Ui.getPrice(_task.eService.pivot.priceFrom.toDouble(), style: Get.textTheme.subtitle2),
                   ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text("Tax".tr),
-                    Ui.getPrice(_task.eService.minPrice, style: Get.textTheme.subtitle2),
+                    Ui.getPrice(_task.eService.pivot.priceFrom.toDouble(), style: Get.textTheme.subtitle2),
                   ],
                 ),
                 Divider(height: 8, thickness: 1),
@@ -117,7 +117,7 @@ class PaymentDetailsWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text("Total".tr),
-                    Ui.getPrice(_task.eService.minPrice, style: Get.textTheme.headline6),
+                    Ui.getPrice(_task.eService.pivot.priceFrom.toDouble(), style: Get.textTheme.headline6),
                   ],
                 ),
               ],

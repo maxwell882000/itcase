@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 
 import '../models/e_service_model.dart';
+import '../models/e_service_model.dart';
 import '../models/review_model.dart';
 import '../providers/mock_provider.dart';
 
@@ -10,8 +11,14 @@ class EServiceRepository {
   EServiceRepository() {
     this._apiClient = MockApiClient(httpClient: Dio());
   }
-  Future<List<EService>> getAll() {
-    return _apiClient.getAllEServices();
+  Future<List<EService>> getAll(String id) {
+    return _apiClient.getAllEServices(id);
+  }
+  Future<List<EService>> getAllCategories(String id) {
+    return _apiClient.getAllEServices(id);
+  }
+  Future<EService> get(String id){
+    return _apiClient.getEService(id);
   }
 
   Future<List<EService>> getFavorites() {
@@ -38,9 +45,6 @@ class EServiceRepository {
     return _apiClient.getAvailableEServices();
   }
 
-  Future<EService> get(String id) {
-    return _apiClient.getEService(id);
-  }
 
   Future<List<Review>> getReviews(String eServiceId) {
     return _apiClient.getEServiceReviews(eServiceId);

@@ -3,13 +3,27 @@ import 'package:get/get.dart';
 import '../../../../common/ui.dart';
 import '../../../models/category_model.dart';
 import '../../../models/e_service_model.dart';
+import '../../../models/e_service_model.dart';
+import '../../../models/subcategory_model.dart';
 import '../../../repositories/e_service_repository.dart';
 
-enum CategoryFilter { ALL, AVAILABILITY, RATING, FEATURED, POPULAR }
+class CategoryFilter {
+
+  List choices;
+
+  CategoryFilter() {
+    choices = [];
+  }
+
+  void setChoices(List additional) {
+    choices.add(additional);
+  }
+}
 
 class CategoryController extends GetxController {
   final category = new Category().obs;
-  final selected = Rx<CategoryFilter>();
+  var selected  =  0.obs;
+  final caregoryFilter = new CategoryFilter().obs;
   final eServices = List<EService>().obs;
   EServiceRepository _eServiceRepository;
 
@@ -20,7 +34,18 @@ class CategoryController extends GetxController {
   @override
   Future<void> onInit() async {
     category.value = Get.arguments as Category;
-    selected.value = CategoryFilter.ALL;
+    selected.value = category.value.id;
+    caregoryFilter.value.setChoices([
+       category.value.id,
+      "Все пользователи"
+    ]);
+
+    category.value.categories.forEach((e) => caregoryFilter.value.setChoices([
+          e.id,
+          e.title,
+        ]));
+
+    print(caregoryFilter.value.choices);
     await refreshEServices();
     super.onInit();
   }
@@ -28,42 +53,28 @@ class CategoryController extends GetxController {
   Future refreshEServices({bool showMessage}) async {
     await getEServicesOfCategory(filter: selected.value);
     if (showMessage == true) {
-      Get.showSnackbar(Ui.SuccessSnackBar(message: "List of services refreshed successfully".tr));
+      Get.showSnackbar(Ui.SuccessSnackBar(
+          message: "List of services refreshed successfully".tr));
     }
   }
 
-  bool isSelected(CategoryFilter filter) => selected == filter;
+  bool isSelected(int filter) => selected.value == filter;
 
-  void toggleSelected(CategoryFilter filter) {
-    if (isSelected(filter)) {
-      selected.value = CategoryFilter.ALL;
-    } else {
-      selected.value = filter;
-    }
+  void toggleSelected(int filter) {
+    selected.value = filter;
+
+    // if (isSelected(filter)) {
+    //   selected.value.selected = 0;
+    // } else {
+    //
+    // }
   }
 
-  Future getEServicesOfCategory({CategoryFilter filter}) async {
+  Future getEServicesOfCategory({int filter}) async {
     try {
-      eServices.value = [];
-      switch (filter) {
-        case CategoryFilter.ALL:
-          eServices.value = await _eServiceRepository.getAll();
-          break;
-        case CategoryFilter.FEATURED:
-          eServices.value = await _eServiceRepository.getFeatured();
-          break;
-        case CategoryFilter.POPULAR:
-          eServices.value = await _eServiceRepository.getPopular();
-          break;
-        case CategoryFilter.RATING:
-          eServices.value = await _eServiceRepository.getMostRated();
-          break;
-        case CategoryFilter.AVAILABILITY:
-          eServices.value = await _eServiceRepository.getAvailable();
-          break;
-        default:
-          eServices.value = await _eServiceRepository.getAll();
-      }
+      eServices.assignAll([]);
+      eServices.assignAll(await _eServiceRepository.getAllCategories(filter.toString()));
+      print(eServices.first.id);
     } catch (e) {
       Get.showSnackbar(Ui.ErrorSnackBar(message: e.toString()));
     }

@@ -25,7 +25,7 @@ class EProviderItemWidget extends StatelessWidget {
                   height: 65,
                   width: 65,
                   fit: BoxFit.cover,
-                  imageUrl: provider.firstMediaThumb,
+                  imageUrl: "",
                   placeholder: (context, url) => Image.asset(
                     'assets/img/loading.gif',
                     fit: BoxFit.cover,

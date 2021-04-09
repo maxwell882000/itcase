@@ -1,69 +1,38 @@
+import 'package:itcase/app/models/pivot.dart';
 import 'package:itcase/app/models/subcategory_model.dart';
-
+import 'package:html/parser.dart';
+import 'package:itcase/app/providers/mock_provider.dart';
 import 'category_model.dart';
 import 'e_provider_model.dart';
 import 'parents/media_list_model.dart';
 
-class EService extends MediaListModel {
+class EService {
+  String id;
   String title;
   String description;
-  double minPrice;
-  double maxPrice;
-  String pricing;
-  double rate;
-  int totalReviews;
-  double duration;
-  List<Category> categories;
-  List<SubCategory> subCategories;
-  EProvider eProvider;
-  EProvider eCompany;
-
+  List<Category> category = [];
+  Pivot pivot;
+  String images;
   EService(
       {this.title,
       this.description,
-      this.minPrice,
-      this.maxPrice,
-      this.pricing,
-      this.rate,
-      this.totalReviews,
-      this.duration,
-      this.categories,
-      this.subCategories,
-      this.eProvider,
-      this.eCompany});
+      this.pivot,
+      this.category,
+      this.images,
+     });
 
   EService.fromJson(Map<String, dynamic> json) {
     try {
-      title = json['title'];
-      description = json['description'];
-      minPrice = json['min_price']?.toDouble();
-      maxPrice = json['max_price']?.toDouble();
-      pricing = json['pricing'];
-      rate = json['rate']?.toDouble();
-      totalReviews = json['total_reviews'];
-      duration = json['duration']?.toDouble();
-      if (json['categories'] != null) {
-        categories = List<Category>();
-        json['categories'].forEach((v) {
-          categories.add(Category.fromJson(v));
-        });
-      }
-      if (json['sub_categories'] != null) {
-        subCategories = List<SubCategory>();
-        json['sub_categories'].forEach((v) {
-          subCategories.add(SubCategory.fromJson(v));
-        });
-      }
-      eProvider = json['e_provider'] != null
-          ? EProvider.fromJson(json['e_provider'])
-          : null;
-      eCompany = json['e_company'] != null
-          ? EProvider.fromJson(json['e_company'])
-          : null;
-      super.fromJson(json);
+
+      pivot = new Pivot.fromJson(json['pivot']);
+
+      title = json['name'];
+      this.id = json['id'].toString();
+      this.images =  MockApiClient.url + "uploads/users/" +  json['image'];
+      description = Category.parseHtmlString(json['about_myself']);
+      json['categories'].forEach((e) =>  category.add(new Category.fromJson(e)));
     } catch (e) {
       print(e);
-      print(json['id']);
     }
   }
 
@@ -72,28 +41,8 @@ class EService extends MediaListModel {
     data['id'] = this.id;
     data['title'] = this.title;
     data['description'] = this.description;
-    data['min_price'] = this.minPrice;
-    data['max_price'] = this.maxPrice;
-    data['pricing'] = this.pricing;
-    data['rate'] = this.rate;
-    data['total_reviews'] = this.totalReviews;
-    data['duration'] = this.duration;
-    if (this.categories != null) {
-      data['categories'] = this.categories.map((v) => v.toJson()).toList();
-    }
-    if (this.subCategories != null) {
-      data['sub_categories'] =
-          this.subCategories.map((v) => v.toJson()).toList();
-    }
-    if (this.media != null) {
-      data['media'] = this.media.map((v) => v.toJson()).toList();
-    }
-    if (this.eProvider != null) {
-      data['e_provider'] = this.eProvider.toJson();
-    }
-    if (this.eCompany != null) {
-      data['e_company'] = this.eCompany.toJson();
-    }
+
+
     return data;
   }
 
@@ -109,17 +58,11 @@ class EService extends MediaListModel {
           other is EService &&
           runtimeType == other.runtimeType &&
           title == other.title &&
-          description == other.description &&
-          rate == other.rate &&
-          eProvider == other.eProvider &&
-          eCompany == other.eCompany;
+          description == other.description;
 
   @override
   int get hashCode =>
       super.hashCode ^
       title.hashCode ^
-      description.hashCode ^
-      rate.hashCode ^
-      eProvider.hashCode ^
-      eCompany.hashCode;
+      description.hashCode;
 }

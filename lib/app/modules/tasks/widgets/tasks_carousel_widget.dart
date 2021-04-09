@@ -60,7 +60,7 @@ class TasksCarouselWidget extends StatelessWidget {
                                 height: 100,
                                 width: double.infinity,
                                 fit: BoxFit.cover,
-                                imageUrl: _service.firstMediaUrl,
+                                imageUrl: _service.images,
                                 placeholder: (context, url) => Image.asset(
                                   'assets/img/loading.gif',
                                   fit: BoxFit.cover,
@@ -136,7 +136,7 @@ class TasksCarouselWidget extends StatelessWidget {
                         height: 70,
                         width: 70,
                         fit: BoxFit.cover,
-                        imageUrl: selectedTask.value.eService.firstMediaThumb,
+                        imageUrl: selectedTask.value.eService.images,
                         placeholder: (context, url) => Image.asset(
                           'assets/img/loading.gif',
                           fit: BoxFit.cover,

@@ -37,62 +37,53 @@ class SearchServicesListItemWidget extends StatelessWidget {
                 Hero(
                   tag: _service.id,
                   child: ClipRRect(
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(10),
-                        topRight: Radius.circular(10)),
+                    borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
                     child: CachedNetworkImage(
                       height: 80,
                       width: 80,
                       fit: BoxFit.cover,
-                      imageUrl: _service.firstMediaUrl,
+                      imageUrl: _service.images,
                       placeholder: (context, url) => Image.asset(
                         'assets/img/loading.gif',
                         fit: BoxFit.cover,
                         width: double.infinity,
                         height: 80,
                       ),
-                      errorWidget: (context, url, error) =>
-                          Icon(Icons.error_outline),
+                      errorWidget: (context, url, error) => Icon(Icons.error_outline),
                     ),
                   ),
                 ),
-                if (_service.eProvider.available)
+                // if (_service.eProvider.available)
                   Container(
                     width: 80,
                     child: Text("Available".tr,
                         maxLines: 1,
                         style: Get.textTheme.bodyText2.merge(
-                          TextStyle(
-                              color: Colors.green, height: 1.4, fontSize: 10),
+                          TextStyle(color: Colors.green, height: 1.4, fontSize: 10),
                         ),
                         softWrap: false,
                         textAlign: TextAlign.center,
                         overflow: TextOverflow.fade),
                     decoration: BoxDecoration(
                       color: Colors.green.withOpacity(0.2),
-                      borderRadius: BorderRadius.only(
-                          bottomRight: Radius.circular(10),
-                          bottomLeft: Radius.circular(10)),
+                      borderRadius: BorderRadius.only(bottomRight: Radius.circular(10), bottomLeft: Radius.circular(10)),
                     ),
                     padding: EdgeInsets.symmetric(horizontal: 5, vertical: 6),
                   ),
-                if (!_service.eProvider.available)
+                // if (!_service.eProvider.available)
                   Container(
                     width: 80,
                     child: Text("Offline".tr,
                         maxLines: 1,
                         style: Get.textTheme.bodyText2.merge(
-                          TextStyle(
-                              color: Colors.grey, height: 1.4, fontSize: 10),
+                          TextStyle(color: Colors.grey, height: 1.4, fontSize: 10),
                         ),
                         softWrap: false,
                         textAlign: TextAlign.center,
                         overflow: TextOverflow.fade),
                     decoration: BoxDecoration(
                       color: Colors.grey.withOpacity(0.2),
-                      borderRadius: BorderRadius.only(
-                          bottomRight: Radius.circular(10),
-                          bottomLeft: Radius.circular(10)),
+                      borderRadius: BorderRadius.only(bottomRight: Radius.circular(10), bottomLeft: Radius.circular(10)),
                     ),
                     padding: EdgeInsets.symmetric(horizontal: 5, vertical: 6),
                   ),
@@ -134,27 +125,20 @@ class SearchServicesListItemWidget extends StatelessWidget {
                                     color: Get.theme.accentColor,
                                     size: 18,
                                   ),
-                                  Text(_service.rate.toString(),
-                                      style: Get.textTheme.bodyText2.merge(
-                                          TextStyle(
-                                              color: Get.theme.accentColor,
-                                              height: 1.4))),
+                                  Text('SOME RATE', style: Get.textTheme.bodyText2.merge(TextStyle(color: Get.theme.accentColor, height: 1.4))),
                                 ],
                               ),
-                              backgroundColor:
-                                  Get.theme.accentColor.withOpacity(0.15),
+                              backgroundColor: Get.theme.accentColor.withOpacity(0.15),
                               shape: StadiumBorder(),
                             ),
                           ),
                           Text(
-                            "From (%s)"
-                                .trArgs([_service.totalReviews.toString()]),
+                            "From (%s)".trArgs(["THERE IS FROM "]),
                             style: Get.textTheme.bodyText1,
                           ),
                         ],
                       ),
-                      Ui.getPrice(_service.minPrice,
-                          style: Get.textTheme.headline6),
+                      Ui.getPrice(_service.pivot.priceFrom.toDouble(), style: Get.textTheme.headline6),
                     ],
                   ),
                   Row(
@@ -173,7 +157,7 @@ class SearchServicesListItemWidget extends StatelessWidget {
                       SizedBox(width: 5),
                       Flexible(
                         child: Text(
-                          _service.eProvider.name,
+                        " SOME TEXT HERE",
                           maxLines: 1,
                           overflow: TextOverflow.fade,
                           softWrap: false,
@@ -192,7 +176,7 @@ class SearchServicesListItemWidget extends StatelessWidget {
                       SizedBox(width: 5),
                       Flexible(
                         child: Text(
-                          _service.eProvider.address,
+                         "SOME TEXT ALSO HERE",
                           maxLines: 1,
                           overflow: TextOverflow.fade,
                           softWrap: false,
@@ -204,22 +188,16 @@ class SearchServicesListItemWidget extends StatelessWidget {
                   Divider(height: 8, thickness: 1),
                   Wrap(
                     spacing: 5,
-                    children:
-                        List.generate(_service.subCategories.length, (index) {
+                    children: List.generate(_service.category.length, (index) {
                       return Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                        child: Text(
-                            _service.subCategories.elementAt(index).ru_title,
-                            style: Get.textTheme.caption
-                                .merge(TextStyle(fontSize: 10))),
+                        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                        child: Text(_service.category.elementAt(index).title, style: Get.textTheme.caption.merge(TextStyle(fontSize: 10))),
                         decoration: BoxDecoration(
                             color: Get.theme.primaryColor,
                             border: Border.all(
                               color: Get.theme.focusColor.withOpacity(0.2),
                             ),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(20))),
+                            borderRadius: BorderRadius.all(Radius.circular(20))),
                       );
                     }),
                     runSpacing: 5,

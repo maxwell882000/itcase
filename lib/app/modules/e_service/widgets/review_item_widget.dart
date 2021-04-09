@@ -26,7 +26,7 @@ class ReviewItemWidget extends StatelessWidget {
                   height: 65,
                   width: 65,
                   fit: BoxFit.cover,
-                  imageUrl: review.user.mediaThumb,
+                  imageUrl: "",
                   placeholder: (context, url) => Image.asset(
                     'assets/img/loading.gif',
                     fit: BoxFit.cover,

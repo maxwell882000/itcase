@@ -163,7 +163,7 @@ class Home2View extends GetView<HomeController> {
                       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                       child: Row(
                         children: [
-                          Expanded(child: Text("Recommended for you".tr, style: Get.textTheme.headline5)),
+                          Expanded(child: Text("Конкурсы".tr, style: Get.textTheme.headline5)),
                           FlatButton(
                             onPressed: () {},
                             shape: StadiumBorder(),

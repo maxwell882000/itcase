@@ -39,16 +39,16 @@ class SearchController extends GetxController {
   }
 
   Future searchEServices({String keywords}) async {
-    try {
-      eServices.value = await _eServiceRepository.getAll();
-      if (keywords != null && keywords.isNotEmpty) {
-        eServices.value = eServices.where((EService _service) {
-          return _service.title.toLowerCase().contains(keywords.toLowerCase());
-        }).toList();
-      }
-    } catch (e) {
-      Get.showSnackbar(Ui.ErrorSnackBar(message: e.toString()));
-    }
+    // try {
+    //   eServices.assignAll(await _eServiceRepository.getAll());
+    //   if (keywords != null && keywords.isNotEmpty) {
+    //     eServices.assignAll( eServices.where((EService _service) {
+    //       return _service.title.toLowerCase().contains(keywords.toLowerCase());
+    //     }).toList());
+    //   }
+    // } catch (e) {
+    //   Get.showSnackbar(Ui.ErrorSnackBar(message: e.toString()));
+    // }
   }
 
   Future getCategories() async {
@@ -57,7 +57,7 @@ class SearchController extends GetxController {
         categories.clear();
         return value;
       }).then((value) {
-        categories.value = value;
+        categories.assignAll(value);
       });
     } catch (e) {
       Get.showSnackbar(Ui.ErrorSnackBar(message: e.toString()));

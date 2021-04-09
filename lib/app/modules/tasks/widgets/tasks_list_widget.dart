@@ -38,7 +38,7 @@ class TasksListWidget extends StatelessWidget {
                     height: 70,
                     width: 70,
                     fit: BoxFit.cover,
-                    imageUrl: _task.eService?.firstMediaThumb,
+                    imageUrl: _task.eService.images,
                     placeholder: (context, url) => Image.asset(
                       'assets/img/loading.gif',
                       fit: BoxFit.cover,

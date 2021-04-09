@@ -3,6 +3,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 
 import '../../../global_widgets/search_bar_widget.dart';
+import '../../search/views/search_view.dart';
 import '../controllers/categories_controller.dart';
 import '../widgets/category_grid_item_widget.dart';
 import '../widgets/category_list_item_widget.dart';
@@ -32,7 +33,7 @@ class CategoriesView extends GetView<CategoriesController> {
           child: ListView(
             primary: true,
             children: [
-              SearchBarWidget().paddingSymmetric(horizontal: 20, vertical: 10),
+              SearchView().buildSearchBar(heroTag: false, onSubmit: controller.searchCategory),
               Padding(
                 padding: const EdgeInsets.only(left: 20, right: 10),
                 child: Row(children: [

@@ -47,7 +47,7 @@ class RecommendedCarouselWidget extends GetWidget<HomeController> {
                             height: 180,
                             width: double.infinity,
                             fit: BoxFit.cover,
-                            imageUrl: _service.firstMediaUrl,
+                            imageUrl: _service.images,
                             placeholder: (context, url) => Image.asset(
                               'assets/img/loading.gif',
                               fit: BoxFit.cover,
@@ -76,14 +76,14 @@ class RecommendedCarouselWidget extends GetWidget<HomeController> {
                               style: Get.textTheme.bodyText2.merge(TextStyle(color: Get.theme.hintColor)),
                             ),
                             Wrap(
-                              children: Ui.getStarsList(_service.rate),
+                              children: Ui.getStarsList(_service.pivot.priceFrom.toDouble()),
                             ),
                             SizedBox(height: 10),
                             Wrap(
                               children: [
-                                Text("\$" + _service.minPrice.toString(), style: Get.textTheme.bodyText1),
+                                Text("\$" + _service.pivot.priceFrom.toString(), style: Get.textTheme.bodyText1),
                                 Text(' - '),
-                                Text("\$" + _service.maxPrice.toString(), style: Get.textTheme.bodyText1),
+                                Text("\$" + _service.pivot.priceTo.toString(), style: Get.textTheme.bodyText1),
                               ],
                             )
                           ],

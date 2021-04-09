@@ -4,6 +4,7 @@ abstract class Model {
 
   void fromJson(Map<String, dynamic> json) {
     try {
+      print("ID IS " + json['id'].toString());
       id = json['id'];
     } catch (e) {
       print(e);
