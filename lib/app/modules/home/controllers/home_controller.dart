@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:itcase/app/models/tenders.dart';
+import 'package:itcase/app/repositories/task_repository.dart';
 import '../../../models/category_model.dart';
 import '../../../models/e_service_model.dart';
 import '../../../models/slide_model.dart';
@@ -16,11 +18,11 @@ class HomeController extends GetxController {
   SliderRepository _sliderRepo;
   CategoryRepository _categoryRepository;
   EServiceRepository _eServiceRepository;
-
+  TaskRepository _taskRepository;
   final addresses = List<Address>(0).obs;
   final slider = List<Slide>(0).obs;
   final currentSlide = 0.obs;
-
+  final tenders = List<Tenders>().obs;
   final eServices = List<EService>(0).obs;
   final categories = List<Category>(0).obs;
   final featured = List<Category>(0).obs;
@@ -30,6 +32,7 @@ class HomeController extends GetxController {
     _sliderRepo = new SliderRepository();
     _categoryRepository = new CategoryRepository();
     _eServiceRepository = new EServiceRepository();
+    _taskRepository = new TaskRepository();
   }
 
   @override
@@ -39,11 +42,8 @@ class HomeController extends GetxController {
   }
 
   Future refreshHome({bool showMessage = false}) async {
-    await getSlider();
-    await getAddresses();
-    await getRecommendedEServices();
+    await getTenders();
     await getCategories();
-    await getFeatured();
     if (showMessage) {
       Get.showSnackbar(Ui.SuccessSnackBar(message: "Home page refreshed successfully".tr));
     }
@@ -71,7 +71,13 @@ class HomeController extends GetxController {
       Get.showSnackbar(Ui.ErrorSnackBar(message: e.toString()));
     }
   }
-
+  Future getTenders() async{
+    try {
+      tenders.value = await _taskRepository.getAll();
+    } catch (e) {
+      Get.showSnackbar(Ui.ErrorSnackBar(message: e.toString()));
+    }
+  }
   Future getCategories() async {
     try {
       categories.value = await _categoryRepository.getAll();

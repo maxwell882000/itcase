@@ -15,11 +15,12 @@ class EService {
   String images;
   EService(
       {this.title,
-      this.description,
-      this.pivot,
-      this.category,
-      this.images,
-     });
+        this.description,
+        this.pivot,
+        this.category,
+        this.images,
+      });
+
 
   EService.fromJson(Map<String, dynamic> json) {
     try {
@@ -53,15 +54,15 @@ class EService {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      super == other &&
-          other is EService &&
-          runtimeType == other.runtimeType &&
-          title == other.title &&
-          description == other.description;
+              other is EService &&
+              runtimeType == other.runtimeType &&
+              title == other.title &&
+              description == other.description;
 
   @override
   int get hashCode =>
       super.hashCode ^
       title.hashCode ^
       description.hashCode;
+
 }

@@ -1,5 +1,11 @@
 import 'package:get/get.dart';
 import 'package:itcase/app/modules/auth/controllers/auth_controller.dart';
+
+import 'package:itcase/app/modules/category/controllers/categories_controller.dart';
+import 'package:itcase/app/modules/category/controllers/category_controller.dart';
+import 'package:itcase/app/modules/e_service/controllers/e_service_controller.dart';
+import 'package:itcase/app/modules/tasks/controllers/tender_controller.dart';
+
 import '../../search/controllers/search_controller.dart';
 
 import '../../account/controllers/account_controller.dart';
@@ -17,8 +23,16 @@ class RootBinding extends Bindings {
     Get.lazyPut<HomeController>(
       () => HomeController(),
     );
-    Get.lazyPut<TasksController>(
-      () => TasksController(),
+
+    Get.lazyPut<CategoriesController>(
+      () => CategoriesController(),
+    );
+
+    Get.lazyPut<CategoryController>(
+      () => CategoryController(),
+    );
+    Get.lazyPut<TenderController>(
+      () => TenderController(),
     );
     // Get.lazyPut<MessagesController>(
     //   () => MessagesController(),
@@ -33,5 +47,6 @@ class RootBinding extends Bindings {
     Get.lazyPut<SearchController>(
       () => SearchController(),
     );
+    Get.lazyPut(() => EServiceController());
   }
 }

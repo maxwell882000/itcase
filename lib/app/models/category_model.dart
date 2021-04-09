@@ -36,30 +36,30 @@ class Category {
 
   Category(
       {this.id,
-      this.ru_title,
-      this.en_title,
-      this.uz_title,
-      this.ru_slug,
-      this.en_slug,
-      this.uz_slug,
-      this.image,
-      this.position,
-      this.color,
-      this.lft,
-      this.rgt,
-      this.parent_id,
-      this.created_at,
-      this.updated_at,
-      this.favorite,
-      this.meta_title,
-      this.meta_description,
-      this.meta_keywords,
-      this.template,
-      this.ru_description,
-      this.en_description,
-      this.uz_description,
-      this.tender_meta_title_prefix,
-      this.categories});
+        this.ru_title,
+        this.en_title,
+        this.uz_title,
+        this.ru_slug,
+        this.en_slug,
+        this.uz_slug,
+        this.image,
+        this.position,
+        this.color,
+        this.lft,
+        this.rgt,
+        this.parent_id,
+        this.created_at,
+        this.updated_at,
+        this.favorite,
+        this.meta_title,
+        this.meta_description,
+        this.meta_keywords,
+        this.template,
+        this.ru_description,
+        this.en_description,
+        this.uz_description,
+        this.tender_meta_title_prefix,
+        this.categories});
 
   Category.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -71,8 +71,8 @@ class Category {
     ru_slug = json['ru_slug'];
     en_slug = json['en_slug'];
     uz_slug = json['uz_slug'];
-    image =
-        "http://handyman.smartersvision.com/mock/categories/media/nurse.svg";
+    image = "http://handyman.smartersvision.com/mock/categories/media/nurse.svg";
+
     position = json['position'].toString();
     color = Ui.parseColor("#0abde3").withOpacity(1);
     lft = json['lft'].toString();
@@ -100,7 +100,8 @@ class Category {
       });
     }
   }
- static String parseHtmlString(String htmlString) {
+
+  static String parseHtmlString(String htmlString) {
     final document = parse(htmlString);
     final String parsedString = parse(document.body.text).documentElement.text;
 

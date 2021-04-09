@@ -9,24 +9,26 @@ import 'package:get/get.dart';
 import '../../common/ui.dart';
 
 class TextFieldWidget extends StatelessWidget {
-  const TextFieldWidget(
-      {Key key,
-      this.onSaved,
-      this.validator,
-      this.maxLine,
-      this.keyboardType,
-      this.initialValue,
-      this.hintText,
-      this.iconData,
-      this.labelText,
-      this.obscureText,
-      this.suffixIcon,
-      this.isFirst,
-      this.isLast,
-      this.style,
-      this.textAlign,
-      this.height})
-      : super(key: key);
+
+  const TextFieldWidget({
+    Key key,
+    this.onSaved,
+    this.validator,
+    this.keyboardType,
+    this.initialValue,
+    this.hintText,
+    this.iconData,
+    this.labelText,
+    this.obscureText,
+    this.maxLine,
+    this.suffixIcon,
+    this.isFirst,
+    this.isLast,
+    this.style,
+    this.textAlign,
+    this.height,
+  }) : super(key: key);
+
 
   final FormFieldSetter<String> onSaved;
   final FormFieldValidator<String> validator;
@@ -42,6 +44,7 @@ class TextFieldWidget extends StatelessWidget {
   final bool obscureText;
   final bool isFirst;
   final bool isLast;
+
   final Widget suffixIcon;
 
   @override
@@ -63,28 +66,31 @@ class TextFieldWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(
-            labelText ?? "",
-            style: Get.textTheme.bodyText1,
-            textAlign: textAlign ?? TextAlign.start,
-          ).marginOnly(bottom: height ?? 0),
-          TextFormField(
-            keyboardType: keyboardType ?? TextInputType.text,
-            onSaved: onSaved,
-            validator: validator,
-            maxLines: maxLine ?? 1,
-            initialValue: initialValue ?? '',
-            style: style ?? Get.textTheme.bodyText2,
-            obscureText: obscureText ?? false,
-            textAlign: textAlign ?? TextAlign.start,
-            decoration: Ui.getInputDecoration(
-              hintText: hintText ?? '',
-              iconData: iconData,
-              suffixIcon: suffixIcon,
-            ),
-          ),
-        ],
-      ),
+        Text(
+        labelText ?? "",
+        style: Get.textTheme.bodyText1,
+        textAlign: textAlign ?? TextAlign.start,
+      ).marginOnly(bottom: height ?? 0),
+    SizedBox(height: height ?? 0),
+
+    TextFormField(
+    keyboardType: keyboardType ?? TextInputType.text,
+    onSaved: onSaved,
+    validator: validator,
+    maxLines: maxLine ?? 1,
+    initialValue: initialValue ?? '',
+    style: style ?? Get.textTheme.bodyText2,
+    obscureText: obscureText ?? false,
+    textAlign: textAlign ?? TextAlign.start,
+    decoration: Ui.getInputDecoration(
+    hintText: hintText ?? '',
+    iconData: iconData,
+    suffixIcon: suffixIcon,
+    ),
+    ),
+    ],
+    )
+    ,
     );
   }
 

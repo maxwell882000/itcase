@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart' show DateFormat;
+import 'package:itcase/app/models/tenders.dart';
+import 'package:itcase/app/modules/tasks/controllers/tender_controller.dart';
 
 import '../../../../common/ui.dart';
 import '../../../models/task_model.dart';
@@ -10,11 +12,119 @@ import '../../../routes/app_pages.dart';
 import '../controllers/tasks_controller.dart';
 
 class TasksListWidget extends StatelessWidget {
-  final controller = Get.find<TasksController>();
-  final List<Task> tasks;
+  final controller = Get.find<TenderController>();
+  final List<Tenders> tasks;
 
-  TasksListWidget({Key key, List<Task> this.tasks}) : super(key: key);
-
+  TasksListWidget({Key key, List<Tenders> this.tasks}) : super(key: key);
+  Widget list_tinders(var _task){
+   return Container(
+      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      decoration: Ui.getBoxDecoration(),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            child: CachedNetworkImage(
+              height: 70,
+              width: 70,
+              fit: BoxFit.cover,
+              imageUrl: "https://i.pinimg.com/originals/80/8c/0f/808c0faeff1173563adb93d4162d6a0f.jpg",
+              placeholder: (context, url) => Image.asset(
+                'assets/img/loading.gif',
+                fit: BoxFit.cover,
+                width: double.infinity,
+                height: 70,
+              ),
+              errorWidget: (context, url, error) => Icon(Icons.error_outline),
+            ),
+          ),
+          SizedBox(width: 20),
+          Expanded(
+            child: Wrap(
+              runSpacing: 10,
+              alignment: WrapAlignment.end,
+              children: <Widget>[
+                Row(
+                  children: [
+                    Flexible(
+                      child: Text(
+                        _task.title ?? '',
+                        style: Get.textTheme.bodyText2,
+                        maxLines: 3,
+                        // textAlign: TextAlign.end,
+                      ),
+                    ),
+                  ],
+                ),
+                Divider(height: 8, thickness: 1),
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: Text(
+                        "Your Review".tr,
+                        style: Get.textTheme.bodyText1,
+                      ),
+                    ),
+                    Wrap(
+                      spacing: 0,
+                      children: Ui.getStarsList(0.0),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        "Time".tr,
+                        style: Get.textTheme.bodyText1,
+                      ),
+                    ),
+                    Text(
+                      '${_task.created_at}',
+                      style: Get.textTheme.caption,
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        "Total Price".tr,
+                        style: Get.textTheme.bodyText1,
+                      ),
+                    ),
+                    Ui.getPrice(double.parse(_task.budget?? "0"), style: Get.textTheme.headline6),
+                  ],
+                ),
+                Wrap(
+                  spacing: 10,
+                  children: [
+                    FlatButton(
+                      onPressed: () {
+                        Get.toNamed(Routes.RATING, arguments: _task);
+                      },
+                      shape: StadiumBorder(),
+                      color: Get.theme.accentColor.withOpacity(0.1),
+                      child: Text("Rating".tr, style: Get.textTheme.subtitle1),
+                    ),
+                    FlatButton(
+                      onPressed: () {},
+                      shape: StadiumBorder(),
+                      color: Get.theme.accentColor.withOpacity(0.1),
+                      child: Text("Re-Booking".tr, style: Get.textTheme.subtitle1),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return Obx(() {
@@ -24,112 +134,8 @@ class TasksListWidget extends StatelessWidget {
         shrinkWrap: false,
         itemCount: tasks.length,
         itemBuilder: ((_, index) {
-          var _task = tasks.elementAt(index);
-          return Container(
-            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-            margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            decoration: Ui.getBoxDecoration(),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                  child: CachedNetworkImage(
-                    height: 70,
-                    width: 70,
-                    fit: BoxFit.cover,
-                    imageUrl: _task.eService.images,
-                    placeholder: (context, url) => Image.asset(
-                      'assets/img/loading.gif',
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                      height: 70,
-                    ),
-                    errorWidget: (context, url, error) => Icon(Icons.error_outline),
-                  ),
-                ),
-                SizedBox(width: 20),
-                Expanded(
-                  child: Wrap(
-                    runSpacing: 10,
-                    alignment: WrapAlignment.end,
-                    children: <Widget>[
-                      Row(
-                        children: [
-                          Text(
-                            _task.eService?.title ?? '',
-                            style: Get.textTheme.bodyText2,
-                            maxLines: 3,
-                            // textAlign: TextAlign.end,
-                          ),
-                        ],
-                      ),
-                      Divider(height: 8, thickness: 1),
-                      Row(
-                        children: [
-                          Expanded(
-                            flex: 1,
-                            child: Text(
-                              "Your Review".tr,
-                              style: Get.textTheme.bodyText1,
-                            ),
-                          ),
-                          Wrap(
-                            spacing: 0,
-                            children: Ui.getStarsList((_task.rate != null) ? _task.rate : 0.0),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              "Time".tr,
-                              style: Get.textTheme.bodyText1,
-                            ),
-                          ),
-                          Text(
-                            '${DateFormat('HH:mm | yyyy-MM-dd').format(_task.dateTime)}',
-                            style: Get.textTheme.caption,
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              "Total Price".tr,
-                              style: Get.textTheme.bodyText1,
-                            ),
-                          ),
-                          Ui.getPrice(_task.total, style: Get.textTheme.headline6),
-                        ],
-                      ),
-                      Wrap(
-                        spacing: 10,
-                        children: [
-                          FlatButton(
-                            onPressed: () {
-                              Get.toNamed(Routes.RATING, arguments: _task);
-                            },
-                            shape: StadiumBorder(),
-                            color: Get.theme.accentColor.withOpacity(0.1),
-                            child: Text("Rating".tr, style: Get.textTheme.subtitle1),
-                          ),
-                          FlatButton(
-                            onPressed: () {},
-                            shape: StadiumBorder(),
-                            color: Get.theme.accentColor.withOpacity(0.1),
-                            child: Text("Re-Booking".tr, style: Get.textTheme.subtitle1),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          );
+          var _task = tasks[index];
+          return list_tinders(_task);
         }),
       );
     });

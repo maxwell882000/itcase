@@ -2,6 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:itcase/app/models/tenders.dart';
+import 'package:itcase/app/modules/tasks/controllers/tender_controller.dart';
 import '../../../global_widgets/circular_loading_widget.dart';
 import '../../../../common/ui.dart';
 import 'package:intl/intl.dart' show DateFormat;
@@ -11,14 +13,16 @@ import '../controllers/tasks_controller.dart';
 import 'task_row_widget.dart';
 
 class TasksCarouselWidget extends StatelessWidget {
-  final controller = Get.find<TasksController>();
-  final List<Task> tasks;
-  final selectedTask = Task().obs;
+  final controller = Get.find<TenderController>();
+  final List<Tenders> tasks;
+  final selectedTask = Tenders().obs;
 
-  TasksCarouselWidget({Key key, List<Task> this.tasks}) : super(key: key);
+  TasksCarouselWidget({Key key, List<Tenders> this.tasks}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    print(selectedTask);
+
     return Column(
       children: [
         Container(
@@ -35,7 +39,7 @@ class TasksCarouselWidget extends StatelessWidget {
                   scrollDirection: Axis.horizontal,
                   itemCount: tasks.length,
                   itemBuilder: (_, index) {
-                    var _service = tasks.elementAt(index).eService;
+                    var _service = tasks.elementAt(index);
                     var _task = tasks.elementAt(index);
                     return GestureDetector(
                       onTap: () {
@@ -60,7 +64,7 @@ class TasksCarouselWidget extends StatelessWidget {
                                 height: 100,
                                 width: double.infinity,
                                 fit: BoxFit.cover,
-                                imageUrl: _service.images,
+                                imageUrl: "https://i.pinimg.com/originals/80/8c/0f/808c0faeff1173563adb93d4162d6a0f.jpg",
                                 placeholder: (context, url) => Image.asset(
                                   'assets/img/loading.gif',
                                   fit: BoxFit.cover,
@@ -94,11 +98,11 @@ class TasksCarouselWidget extends StatelessWidget {
                                     ),
                                     SizedBox(height: 5),
                                     Text(
-                                      '${DateFormat.yMMMMd().format(selectedTask.value.dateTime)}',
+                                      '${selectedTask.value.created_at}',
                                       style: Get.textTheme.caption.merge(TextStyle(color: selectedTask.value == _task ? Get.theme.primaryColor : Get.theme.focusColor)),
                                     ),
                                     Text(
-                                      'At ${DateFormat('HH:mm').format(selectedTask.value.dateTime)}',
+                                      'At ${selectedTask.value.created_at}',
                                       style: Get.textTheme.caption.merge(TextStyle(color: selectedTask.value == _task ? Get.theme.primaryColor : Get.theme.focusColor)),
                                     ),
                                   ],
@@ -112,7 +116,7 @@ class TasksCarouselWidget extends StatelessWidget {
                   });
             })),
         Obx(() {
-          if (!selectedTask.value.hasData) {
+          if (selectedTask.value.title == null ) {
             return CircularLoadingWidget(height: 300);
           }
           return Container(
@@ -136,7 +140,9 @@ class TasksCarouselWidget extends StatelessWidget {
                         height: 70,
                         width: 70,
                         fit: BoxFit.cover,
-                        imageUrl: selectedTask.value.eService.images,
+                        imageUrl:  "http://lorempixel.com/400/400/business/4/",
+                        // imageUrl: selectedTask.value.eService.images,
+
                         placeholder: (context, url) => Image.asset(
                           'assets/img/loading.gif',
                           fit: BoxFit.cover,
@@ -153,7 +159,7 @@ class TasksCarouselWidget extends StatelessWidget {
                         direction: Axis.vertical,
                         children: [
                           Text(
-                            selectedTask.value.eService?.title ?? '',
+                            selectedTask.value.title?? '',
                             style: Get.textTheme.bodyText2,
                             maxLines: 3,
                             // textAlign: TextAlign.end,
@@ -165,7 +171,7 @@ class TasksCarouselWidget extends StatelessWidget {
                               color: Get.theme.focusColor.withOpacity(0.1),
                             ),
                             child: Text(
-                              selectedTask.value.progress.tr,
+                                  "11",
                               style: TextStyle(color: Get.theme.hintColor),
                             ),
                           ),
@@ -183,29 +189,29 @@ class TasksCarouselWidget extends StatelessWidget {
                       runAlignment: WrapAlignment.end,
                       children: [
                         Text(
-                          '${DateFormat.yMMMMd().format(selectedTask.value.dateTime)}',
+                          '${selectedTask.value.created_at}',
                         ),
-                        Text('At ${DateFormat('HH:mm').format(selectedTask.value.dateTime)}'),
+                        Text('At ${selectedTask.value.updated_at}'),
                       ],
                     ),
                     hasDivider: true),
-                TaskRowWidget(description: "Payment Method".tr, value: selectedTask.value.paymentMethod.name, hasDivider: true),
+                TaskRowWidget(description: "Payment Method".tr, value: "PAyyy", hasDivider: true),
                 TaskRowWidget(
                   description: "Tax Amount".tr,
                   child: Align(
                     alignment: Alignment.centerRight,
-                    child: Ui.getPrice(selectedTask.value.tax, style: Get.textTheme.bodyText2),
+                    child: Ui.getPrice(0.4, style: Get.textTheme.bodyText2),
                   ),
                 ),
                 TaskRowWidget(
                   description: "Total Amount".tr,
                   child: Align(
                     alignment: Alignment.centerRight,
-                    child: Ui.getPrice(selectedTask.value.total, style: Get.textTheme.headline6),
+                    child: Ui.getPrice(double.parse(selectedTask.value.budget), style: Get.textTheme.headline6),
                   ),
                   hasDivider: true,
                 ),
-                TaskRowWidget(description: "Address".tr, value: selectedTask.value.address.address, hasDivider: true),
+                TaskRowWidget(description: "Address".tr, value: selectedTask.value.place, hasDivider: true),
                 TaskRowWidget(description: "Description".tr, value: selectedTask.value.description),
               ],
             ),

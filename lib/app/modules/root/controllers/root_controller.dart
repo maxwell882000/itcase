@@ -4,12 +4,15 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:itcase/app/modules/category/views/categories_view.dart';
+import 'package:itcase/app/modules/home/views/home2_view.dart';
+import 'package:itcase/app/modules/home/views/home_view.dart';
 import '../../../routes/app_pages.dart';
 
 import '../../account/views/account_view.dart';
-import '../../home/views/home2_view.dart';
 import '../../messages/views/messages_view.dart';
 import '../../tasks/views/tasks_view.dart';
+import '../../tasks/views/task_intro.dart';
 
 class RootController extends GetxController {
   final currentIndex = 0.obs;
@@ -25,9 +28,11 @@ class RootController extends GetxController {
   }
 
   List<Widget> pages = [
+    // CategoriesView(),
     Home2View(),
     TasksView(),
-    // MessagesView(),
+    TaskIntro(),
+    //MessagesView(),
     AccountView(),
   ];
 

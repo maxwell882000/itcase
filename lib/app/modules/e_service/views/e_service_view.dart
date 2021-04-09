@@ -312,17 +312,17 @@ class EServiceView extends GetView<EServiceController> {
         spacing: 5,
         runSpacing: 8,
         children: List.generate(_eService.category.length, (index) {
-              return Container(
-                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                child: Text(_eService.category[index].title, style: Get.textTheme.caption),
-                decoration: BoxDecoration(
-                    color: Get.theme.primaryColor,
-                    border: Border.all(
-                      color: Get.theme.focusColor.withOpacity(0.2),
-                    ),
-                    borderRadius: BorderRadius.all(Radius.circular(20))),
-              );
-            }),
+          return Container(
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+            child: Text(_eService.category[index].title, style: Get.textTheme.caption),
+            decoration: BoxDecoration(
+                color: Get.theme.primaryColor,
+                border: Border.all(
+                  color: Get.theme.focusColor.withOpacity(0.2),
+                ),
+                borderRadius: BorderRadius.all(Radius.circular(20))),
+          );
+        }),
       ),
     );
   }
@@ -361,3 +361,5 @@ class EServiceView extends GetView<EServiceController> {
     );
   }
 }
+
+

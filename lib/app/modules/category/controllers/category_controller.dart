@@ -45,6 +45,7 @@ class CategoryController extends GetxController {
           e.title,
         ]));
 
+
     print(caregoryFilter.value.choices);
     await refreshEServices();
     super.onInit();

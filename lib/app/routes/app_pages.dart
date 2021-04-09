@@ -1,4 +1,8 @@
-import 'package:get/get.dart' show GetPage, Transition;
+  import 'package:get/get.dart' show GetPage, Transition;
+import 'package:itcase/app/modules/tasks/bindings/task_binding.dart';
+import 'package:itcase/app/modules/tasks/views/task_create.dart';
+import 'package:itcase/app/modules/tasks/views/tasks_view.dart';
+import '../modules/account/views/image_upload.dart';
 import '../modules/favorites/bindings/favorites_binding.dart';
 import '../modules/favorites/views/favorites_view.dart';
 import '../modules/help_privacy/bindings/help_privacy_binding.dart';
@@ -34,6 +38,7 @@ import '../modules/settings/bindings/settings_binding.dart';
 import '../modules/settings/views/language_view.dart';
 import '../modules/settings/views/settings_view.dart';
 import '../modules/settings/views/theme_mode_view.dart';
+import '../modules/tasks/views/task_intro.dart';
 
 part 'app_routes.dart';
 
@@ -42,26 +47,93 @@ class AppPages {
 
   static final routes = [
     GetPage(name: Routes.ROOT, page: () => RootView(), binding: RootBinding()),
-    GetPage(name: Routes.RATING, page: () => RatingView(), binding: RatingBinding()),
+
+
+    GetPage(name: Routes.TINDERS_VIEW, page: () => TasksView(), binding: TaskBindings()),
+    GetPage(
+        name: Routes.RATING,
+        page: () => RatingView(),
+        binding: RatingBinding()),
     // GetPage(name: Routes.CHAT, page: () => ChatsView()),
-    GetPage(name: Routes.SETTINGS, page: () => SettingsView(), binding: SettingsBinding()),
-    GetPage(name: Routes.SETTINGS_THEME_MODE, page: () => ThemeModeView(), binding: SettingsBinding()),
-    GetPage(name: Routes.SETTINGS_LANGUAGE, page: () => LanguageView(), binding: SettingsBinding()),
-    GetPage(name: Routes.PROFILE, page: () => ProfileView(), binding: ProfileBinding()),
-    GetPage(name: Routes.CATEGORY, page: () => CategoryView(), binding: CategoryBinding()),
-    GetPage(name: Routes.CATEGORIES, page: () => CategoriesView(), binding: CategoryBinding()),
-    GetPage(name: Routes.LOGIN, page: () => LoginView(), binding: AuthBinding()),
-    GetPage(name: Routes.REGISTER, page: () => RegisterView(), binding: AuthBinding()),
-    GetPage(name: Routes.FORGOT_PASSWORD, page: () => ForgotPasswordView(), binding: AuthBinding()),
-    GetPage(name: Routes.PHONE_VERIFICATION, page: () => PhoneVerificationView(), binding: AuthBinding()),
-    GetPage(name: Routes.E_SERVICE, page: () => EServiceView(), binding: EServiceBinding(), transition: Transition.downToUp),
-    GetPage(name: Routes.BOOK_E_SERVICE, page: () => BookEServiceView(), binding: BookEServiceBinding()),
-    GetPage(name: Routes.CHECKOUT, page: () => CheckoutView(), binding: CheckoutBinding()),
-    GetPage(name: Routes.CONFIRMATION, page: () => ConfirmationView(), binding: CheckoutBinding()),
-    GetPage(name: Routes.SEARCH, page: () => SearchView(), binding: RootBinding(), transition: Transition.downToUp),
-    GetPage(name: Routes.NOTIFICATIONS, page: () => NotificationsView(), binding: NotificationsBinding()),
-    // GetPage(name: Routes.FAVORITES, page: () => FavoritesView(), binding: FavoritesBinding()),
-    GetPage(name: Routes.PRIVACY, page: () => PrivacyView(), binding: HelpPrivacyBinding()),
-    GetPage(name: Routes.HELP, page: () => HelpView(), binding: HelpPrivacyBinding()),
+    GetPage(
+        name: Routes.SETTINGS,
+        page: () => SettingsView(),
+        binding: SettingsBinding()),
+    GetPage(
+        name: Routes.SETTINGS_THEME_MODE,
+        page: () => ThemeModeView(),
+        binding: SettingsBinding()),
+    GetPage(
+        name: Routes.SETTINGS_LANGUAGE,
+        page: () => LanguageView(),
+        binding: SettingsBinding()),
+    GetPage(
+        name: Routes.PROFILE,
+        page: () => ProfileView(),
+        binding: ProfileBinding()),
+    GetPage(
+        name: Routes.CATEGORY,
+        page: () => CategoryView(),
+        binding: CategoryBinding()),
+    GetPage(
+        name: Routes.CATEGORIES,
+        page: () => CategoriesView(),
+        binding: CategoryBinding()),
+    GetPage(
+        name: Routes.LOGIN, page: () => LoginView(), binding: AuthBinding()),
+    GetPage(
+        name: Routes.REGISTER,
+        page: () => RegisterView(),
+        binding: AuthBinding()),
+    GetPage(
+        name: Routes.FORGOT_PASSWORD,
+        page: () => ForgotPasswordView(),
+        binding: AuthBinding()),
+    GetPage(
+        name: Routes.PHONE_VERIFICATION,
+        page: () => PhoneVerificationView(),
+        binding: AuthBinding()),
+    GetPage(
+        name: Routes.E_SERVICE,
+        page: () => EServiceView(),
+        binding: EServiceBinding(),
+        transition: Transition.downToUp),
+    GetPage(
+        name: Routes.BOOK_E_SERVICE,
+        page: () => BookEServiceView(),
+        binding: BookEServiceBinding()),
+    GetPage(
+        name: Routes.CHECKOUT,
+        page: () => CheckoutView(),
+        binding: CheckoutBinding()),
+    GetPage(
+        name: Routes.CONFIRMATION,
+        page: () => ConfirmationView(),
+        binding: CheckoutBinding()),
+    GetPage(
+        name: Routes.SEARCH,
+        page: () => SearchView(),
+        binding: RootBinding(),
+        transition: Transition.downToUp),
+    GetPage(
+        name: Routes.NOTIFICATIONS,
+        page: () => NotificationsView(),
+        binding: NotificationsBinding()),
+    // GetPage(
+    //     name: Routes.FAVORITES,
+    //     page: () => FavoritesView(),
+    //     binding: FavoritesBinding()),
+    GetPage(
+        name: Routes.PRIVACY,
+        page: () => PrivacyView(),
+        binding: HelpPrivacyBinding()),
+    GetPage(
+        name: Routes.HELP,
+        page: () => HelpView(),
+        binding: HelpPrivacyBinding()),
+    GetPage(name: Routes.UPLOAD, page: () => ImageUpload()),
+    GetPage(name: Routes.TASKS, page: () => TaskIntro()),
+    GetPage(name: Routes.CREATE_TASK, page: () => TaskCreate()),
+
   ];
 }

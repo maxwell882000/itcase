@@ -2,19 +2,20 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:date_time_picker/date_time_picker.dart';
-// import 'package:device_info/device_info.dart';
+import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_holo_date_picker/flutter_holo_date_picker.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:itcase/app/global_widgets/block_button_widget.dart';
-import 'package:itcase/app/global_widgets/text_field_widget.dart';
 
+import '../../../global_widgets/block_button_widget.dart';
+import '../../../global_widgets/text_field_widget.dart';
+import 'package:itcase/app/modules/account/widgets/account_link_widget.dart';
 import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
-import 'package:itcase/app/modules/auth/controllers/auth_controller.dart';
-import 'package:intl/intl.dart';
+import '../../../routes/app_pages.dart';
+import '../controllers/auth_controller.dart';
+
 // ignore: must_be_immutable
-class CreateAccount extends GetView<AuthController> {
+class Register2View extends GetView<AuthController> {
   // final _currentUser = Get.find<AuthService>().user;
   final GlobalKey<FormState> signupCustomer = new GlobalKey<FormState>();
   final GlobalKey<FormState> signupContractor = new GlobalKey<FormState>();
@@ -26,12 +27,13 @@ class CreateAccount extends GetView<AuthController> {
     image = await ImagePicker.pickImage(
         source: ImageSource.camera, imageQuality: 70);
     final img = image.readAsBytesSync();
-    controller.avatar.value = base64Encode(img);
     id == 0
         ? controller.contractor.value.image =
             "data:image/jpeg;base64," + base64Encode(img)
         : controller.customer.value.image =
             "data:image/jpeg;base64," + base64Encode(img);
+
+    // Get.showSnackbar(Ui.SuccessSnackBar(message: "Image selected.".tr));
   }
 
   _imgFromGallery(id) async {
@@ -39,13 +41,12 @@ class CreateAccount extends GetView<AuthController> {
     image = await ImagePicker.pickImage(
         source: ImageSource.gallery, imageQuality: 70);
     final img = image.readAsBytesSync();
-    controller.avatar.value = base64Encode(img);
-
     id == 0
         ? controller.contractor.value.image =
             "data:image/jpeg;base64," + base64Encode(img)
         : controller.customer.value.image =
             "data:image/jpeg;base64," + base64Encode(img);
+    // Get.showSnackbar(Ui.SuccessSnackBar(message: "Image selected.".tr));
   }
 
   void showPicker(context, ind) {
@@ -83,7 +84,7 @@ class CreateAccount extends GetView<AuthController> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Create an acount".tr,
+          "Register".tr,
           style: Get.textTheme.headline6
               .merge(TextStyle(color: context.theme.primaryColor)),
         ),
@@ -170,40 +171,22 @@ class CreateAccount extends GetView<AuthController> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Text(
-                "Select your role and enter details. Without this, you will not be able to perform any actions.",
-                style: TextStyle(
-                    fontSize: 14,
-                    color: Get.theme.focusColor,
-                    fontWeight: FontWeight.normal),
-                textAlign: TextAlign.center,
-              ).paddingAll(20),
               First(
-                Center(
-                  child: InkWell(
-                    onTap: () {
-                      showPicker(context, 0);
-                    },
-                    child: CircleAvatar(
-                      radius: 75,
-                      backgroundColor: Get.theme.accentColor,
-                      child: controller.avatar.value == "noavatar"
-                          ? Icon(
-                              Icons.add_a_photo,
-                              size: 40,
-                              color: Colors.white,
-                            )
-                          : ClipOval(
-                              child: Image.memory(
-                                base64Decode(controller.avatar.value),
-                                scale: 3,
-                                fit: BoxFit.cover,
-                                height: 140,
-                                width: 140,
-                              ),
-                            ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Avatar".tr,
+                      style: Get.textTheme.bodyText1,
                     ),
-                  ),
+                    AccountLinkWidget(
+                      icon: Icon(Icons.image, color: Get.theme.accentColor),
+                      text: Text("Upload".tr),
+                      onTap: (e) {
+                        showPicker(context, 0);
+                      },
+                    ),
+                  ],
                 ),
               ),
               TextFieldWidget(
@@ -214,8 +197,8 @@ class CreateAccount extends GetView<AuthController> {
                 },
                 validator: (val) =>
                     val.length == 0 ? "Fullname error".tr : null,
-                initialValue: controller.user.value.name,
-                iconData: Icons.person_outline,
+                initialValue: controller.contractor.value.name,
+                iconData: Icons.people_alt,
                 isLast: false,
                 isFirst: false,
               ),
@@ -226,8 +209,9 @@ class CreateAccount extends GetView<AuthController> {
                 keyboardType: TextInputType.phone,
                 onSaved: (val) =>
                     controller.contractor.value.phone_number = val,
-                validator: (val) => val.length == 0 ? "Phone error".tr : null,
-                initialValue: controller.user.value.phone_number,
+                validator: (val) =>
+                    val.length == 0 ? "Fullname error".tr : null,
+                initialValue: controller.contractor.value.phone_number,
                 isLast: false,
                 isFirst: false,
               ),
@@ -235,7 +219,7 @@ class CreateAccount extends GetView<AuthController> {
                 labelText: "Email Address".tr,
                 hintText: "johndoe@gmail.com".tr,
                 iconData: Icons.alternate_email,
-                initialValue: controller.user.value.email,
+                initialValue: controller.contractor.value.email,
                 onSaved: (val) => controller.contractor.value.email = val,
                 validator: (val) =>
                     RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
@@ -322,75 +306,34 @@ class CreateAccount extends GetView<AuthController> {
                             ),
                           ],
                         )),
-                        InkWell(
-                          onTap: () async {
-                            var datePicked =
-                                await DatePicker.showSimpleDatePicker(
-                              context,
-                              initialDate: DateTime(1994),
-                              firstDate: DateTime(1960),
-                              lastDate: DateTime(2012),
-                              dateFormat: "dd-MMMM-yyyy",
-                              locale: DateTimePickerLocale.en_us,
-                              looping: true,
-                            );
-                            controller.birthday.value =
-                                DateFormat('dd.MM.yyyy').format(datePicked);
-                            controller.contractor.value.birthday =
-                                DateFormat('d.m.y').format(datePicked);
-                          },
-                          child: Container(
-                            padding: EdgeInsets.all(20),
-                            margin: EdgeInsets.only(
-                                left: 20, right: 20, top: 10, bottom: 10),
-                            decoration: BoxDecoration(
-                                color: Get.theme.primaryColor,
-                                borderRadius: BorderRadius.circular(10),
-                                boxShadow: [
-                                  BoxShadow(
-                                      color:
-                                          Get.theme.focusColor.withOpacity(0.1),
-                                      blurRadius: 10,
-                                      offset: Offset(0, 5)),
-                                ],
-                                border: Border.all(
-                                    color: Get.theme.focusColor
-                                        .withOpacity(0.05))),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                Text(
-                                  "Date of birthday",
-                                  style: Get.textTheme.bodyText1,
-                                  textAlign: TextAlign.start,
-                                ),
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.event_available,
-                                      color: Get.theme.focusColor,
-                                    ).paddingOnly(right: 15),
-                                    Text(controller.birthday.value),
-                                  ],
-                                ).marginSymmetric(vertical: 10),
-                              ],
-                            ),
+                        box(
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Birthday".tr,
+                                style: Get.textTheme.bodyText1,
+                              ),
+                              DateTimePicker(
+                                type: DateTimePickerType.date,
+                                initialValue:
+                                    controller.contractor.value.birthday ??
+                                        DateTime.now().toString(),
+                                onChanged: (val) =>
+                                    controller.contractor.value.birthday = val,
+                                dateMask: 'd MMM, yyyy',
+                                firstDate: DateTime(2000),
+                                lastDate: DateTime(2100),
+                                icon: Icon(Icons.event_available),
+                                style: Get.textTheme.bodyText1,
+                                //locale: Locale('pt', 'BR'),
+                              ),
+                            ],
                           ),
                         ),
                       ],
                     )
                   : Column(children: [
-                      TextFieldWidget(
-                        labelText: "City".tr,
-                        hintText: "Enter your address".tr,
-                        iconData: Icons.map,
-                        initialValue: controller.user.value.city,
-                        validator: (val) =>
-                            val.length == 0 ? "Fullname error".tr : null,
-                        isLast: false,
-                        isFirst: false,
-                        onSaved: (val) => controller.user.value.city = val,
-                      ),
                       TextFieldWidget(
                         labelText: "Company".tr,
                         hintText: "Enter your company name".tr,
@@ -402,6 +345,17 @@ class CreateAccount extends GetView<AuthController> {
                         isFirst: false,
                         onSaved: (val) =>
                             controller.contractor.value.company_name = val,
+                      ),
+                      TextFieldWidget(
+                        labelText: "City".tr,
+                        hintText: "Enter your address".tr,
+                        iconData: Icons.map,
+                        initialValue: controller.user.value.city,
+                        validator: (val) =>
+                            val.length == 0 ? "Fullname error".tr : null,
+                        isLast: false,
+                        isFirst: false,
+                        onSaved: (val) => controller.user.value.city = val,
                       ),
                     ]),
               TextFieldWidget(
@@ -450,40 +404,22 @@ class CreateAccount extends GetView<AuthController> {
         child: ListView(
           primary: true,
           children: [
-            Text(
-              "Select your role and enter details. Without this, you will not be able to perform any actions.",
-              style: TextStyle(
-                  fontSize: 14,
-                  color: Get.theme.focusColor,
-                  fontWeight: FontWeight.normal),
-              textAlign: TextAlign.center,
-            ).paddingAll(20),
             First(
-              Center(
-                child: InkWell(
-                  onTap: () {
-                    showPicker(context, 0);
-                  },
-                  child: CircleAvatar(
-                    backgroundColor: Get.theme.accentColor,
-                    radius: 75,
-                    child: controller.avatar.value == "noavatar"
-                        ? Icon(
-                            Icons.add_a_photo,
-                            size: 40,
-                            color: Colors.white,
-                          )
-                        : ClipOval(
-                            child: Image.memory(
-                              base64Decode(controller.avatar.value),
-                              scale: 3,
-                              fit: BoxFit.cover,
-                              height: 140,
-                              width: 140,
-                            ),
-                          ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Avatar".tr,
+                    style: Get.textTheme.bodyText1,
                   ),
-                ),
+                  AccountLinkWidget(
+                    icon: Icon(Icons.image, color: Get.theme.accentColor),
+                    text: Text("Upload".tr),
+                    onTap: (e) {
+                      showPicker(context, 1);
+                    },
+                  ),
+                ],
               ),
             ),
             TextFieldWidget(
@@ -492,7 +428,7 @@ class CreateAccount extends GetView<AuthController> {
               onSaved: (val) => controller.customer.value.name = val,
               initialValue: controller.customer.value.name,
               validator: (val) => val.length == 0 ? "Fullname error".tr : null,
-              iconData: Icons.person_outline,
+              iconData: Icons.people_alt,
               isLast: false,
               isFirst: false,
             ),
@@ -626,11 +562,11 @@ class CreateAccount extends GetView<AuthController> {
     });
   }
 
-  // deviceInfo() async {
-  //   DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-  //   AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-  //   return androidInfo.device;
-  // }
+  deviceInfo() async {
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+    return androidInfo.device;
+  }
 
   box(child) {
     return Container(

@@ -25,16 +25,21 @@ class RootView extends GetView<RootController> {
           children: [
             CustomBottomNavigationItem(
               icon: Icons.home_outlined,
-              label: "Home".tr,
+              label: "Hoss".tr,
             ),
             CustomBottomNavigationItem(
               icon: Icons.assignment_outlined,
               label: "Bookings".tr,
             ),
-            // CustomBottomNavigationItem(
-            //   icon: Icons.chat_outlined,
-            //   label: "Chats".tr,
-            // ),
+
+            CustomBottomNavigationItem(
+              icon: Icons.add_comment,
+              label: "Task".tr,
+            ),
+            CustomBottomNavigationItem(
+              icon: Icons.chat_outlined,
+              label: "Chats".tr,
+            ),
             CustomBottomNavigationItem(
               icon: Icons.person_outline,
               label: "Account".tr,

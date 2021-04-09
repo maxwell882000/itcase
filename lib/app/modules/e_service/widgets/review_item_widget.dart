@@ -79,7 +79,7 @@ class ReviewItemWidget extends StatelessWidget {
                     ],
                   ),
                   backgroundColor:
-                      Theme.of(context).accentColor.withOpacity(0.9),
+                  Theme.of(context).accentColor.withOpacity(0.9),
                   shape: StadiumBorder(),
                 ),
               ),

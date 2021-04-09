@@ -14,6 +14,7 @@ void initServices() async {
   await Get.putAsync(() => GlobalService().init());
   await Get.putAsync(() => AuthService().init());
   await Get.putAsync(() => SettingsService().init());
+
   Get.log('All services started...');
 }
 

@@ -1,7 +1,8 @@
 class Pivot{
   int priceFrom,
-         priceTo,
-         pricePerHour;
+      priceTo,
+      pricePerHour;
+
 
   Pivot.fromJson(Map json){
     priceFrom = json['price_from'];

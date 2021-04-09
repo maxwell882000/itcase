@@ -54,22 +54,23 @@ class ServicesListItemWidget extends StatelessWidget {
                   ),
                 ),
                 // if (_service.eProvider.available)
-                  Container(
-                    width: 80,
-                    child: Text("Available".tr,
-                        maxLines: 1,
-                        style: Get.textTheme.bodyText2.merge(
-                          TextStyle(color: Colors.green, height: 1.4, fontSize: 10),
-                        ),
-                        softWrap: false,
-                        textAlign: TextAlign.center,
-                        overflow: TextOverflow.fade),
-                    decoration: BoxDecoration(
-                      color: Colors.green.withOpacity(0.2),
-                      borderRadius: BorderRadius.only(bottomRight: Radius.circular(10), bottomLeft: Radius.circular(10)),
-                    ),
-                    padding: EdgeInsets.symmetric(horizontal: 5, vertical: 6),
+                Container(
+                  width: 80,
+                  child: Text("Available".tr,
+                      maxLines: 1,
+                      style: Get.textTheme.bodyText2.merge(
+                        TextStyle(color: Colors.green, height: 1.4, fontSize: 10),
+                      ),
+                      softWrap: false,
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.fade),
+                  decoration: BoxDecoration(
+                    color: Colors.green.withOpacity(0.2),
+                    borderRadius: BorderRadius.only(bottomRight: Radius.circular(10), bottomLeft: Radius.circular(10)),
                   ),
+                  padding: EdgeInsets.symmetric(horizontal: 5, vertical: 6),
+                ),
+
                 // if (!_service.eProvider.available)
                 //   Container(
                 //     width: 80,
@@ -206,4 +207,6 @@ class ServicesListItemWidget extends StatelessWidget {
       ),
     );
   }
+
 }
+

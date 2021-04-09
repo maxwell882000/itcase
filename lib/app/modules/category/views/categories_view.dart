@@ -55,7 +55,10 @@ class CategoriesView extends GetView<CategoriesController> {
                         icon: Obx(() {
                           return Icon(
                             Icons.format_list_bulleted,
-                            color: controller.layout.value == CategoriesLayout.LIST ? Get.theme.accentColor : Get.theme.focusColor,
+                            color:
+                                controller.layout.value == CategoriesLayout.LIST
+                                    ? Get.theme.accentColor
+                                    : Get.theme.focusColor,
                           );
                         }),
                       ),
@@ -66,7 +69,10 @@ class CategoriesView extends GetView<CategoriesController> {
                         icon: Obx(() {
                           return Icon(
                             Icons.apps,
-                            color: controller.layout.value == CategoriesLayout.GRID ? Get.theme.accentColor : Get.theme.focusColor,
+                            color:
+                                controller.layout.value == CategoriesLayout.GRID
+                                    ? Get.theme.accentColor
+                                    : Get.theme.focusColor,
                           );
                         }),
                       )
@@ -84,9 +90,14 @@ class CategoriesView extends GetView<CategoriesController> {
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                     itemCount: controller.categories.length,
                     itemBuilder: (BuildContext context, int index) {
-                      return CategoryGridItemWidget(category: controller.categories.elementAt(index), heroTag: "heroTag");
+                      return CategoryGridItemWidget(
+                          category: controller.categories.elementAt(index),
+                          heroTag: "heroTag");
                     },
-                    staggeredTileBuilder: (int index) => new StaggeredTile.fit(Get.mediaQuery.orientation == Orientation.portrait ? 2 : 4),
+                    staggeredTileBuilder: (int index) => new StaggeredTile.fit(
+                        Get.mediaQuery.orientation == Orientation.portrait
+                            ? 2
+                            : 4),
                     mainAxisSpacing: 15.0,
                     crossAxisSpacing: 15.0,
                   ),

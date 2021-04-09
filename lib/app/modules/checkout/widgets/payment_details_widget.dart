@@ -45,7 +45,9 @@ class PaymentDetailsWidget extends StatelessWidget {
                   errorWidget: (context, url, error) => Icon(Icons.error_outline),
                 ),
               ),
-              // if (_task.eService.eProvider.available)
+
+           //   if (_task.eService.eProvider.available)
+
                 Container(
                   width: 80,
                   child: Text("Available".tr,
@@ -62,7 +64,10 @@ class PaymentDetailsWidget extends StatelessWidget {
                   ),
                   padding: EdgeInsets.symmetric(horizontal: 5, vertical: 6),
                 ),
-              // if (!_task.eService.eProvider.available)
+
+
+           //   if (!_task.eService.eProvider.available)
+
                 Container(
                   width: 80,
                   child: Text("Offline".tr,

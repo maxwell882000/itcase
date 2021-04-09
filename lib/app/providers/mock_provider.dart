@@ -1,6 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:get/get.dart';
+
+import 'package:itcase/app/models/tenders.dart';
+
 import '../models/e_service_model.dart';
 import '../models/e_service_model.dart';
 import '../models/faq_category_model.dart';
@@ -25,7 +28,9 @@ class MockApiClient {
   String get itcase_url => url + "api/";
   final Dio httpClient;
   final Options _options =
-      buildCacheOptions(Duration(days: 3), forceRefresh: true);
+
+  buildCacheOptions(Duration(days: 3), forceRefresh: true);
+
 
   MockApiClient({@required this.httpClient}) {
     httpClient.interceptors
@@ -34,7 +39,9 @@ class MockApiClient {
 
   Future<List<User>> getAllUsers() async {
     var response =
-        await httpClient.get(baseUrl + "users/all.json", options: _options);
+
+    await httpClient.get(baseUrl + "users/all.json", options: _options);
+
     if (response.statusCode == 200) {
       return response.data['data']
           .map<User>((obj) => User.fromJson(obj))
@@ -46,7 +53,9 @@ class MockApiClient {
 
   Future<List<Slide>> getHomeSlider() async {
     var response =
-        await httpClient.get(baseUrl + "slides/home.json", options: _options);
+
+    await httpClient.get(baseUrl + "slides/home.json", options: _options);
+
     if (response.statusCode == 200) {
       return response.data['data']
           .map<Slide>((obj) => Slide.fromJson(obj))
@@ -58,7 +67,9 @@ class MockApiClient {
 
   Future<User> getLogin() async {
     var response =
-        await httpClient.get(baseUrl + "users/user.json", options: _options);
+
+    await httpClient.get(baseUrl + "users/user.json", options: _options);
+
     if (response.statusCode == 200) {
       return User.fromJson(response.data['data']);
     } else {
@@ -175,7 +186,9 @@ class MockApiClient {
 
   Future<List<EService>> getMostRatedEServices() async {
     var response =
-        await httpClient.get(baseUrl + "services/all.json", options: _options);
+
+    await httpClient.get(baseUrl + "services/all.json", options: _options);
+
     if (response.statusCode == 200) {
       // List<EService> _services = response.data['data']
       //     .map<EService>((obj) => EService.fromJson(obj))
@@ -191,7 +204,8 @@ class MockApiClient {
 
   Future<List<EService>> getAvailableEServices() async {
     var response =
-        await httpClient.get(baseUrl + "services/all.json", options: _options);
+    await httpClient.get(baseUrl + "services/all.json", options: _options);
+
     if (response.statusCode == 200) {
       // List<EService> _services = response.data['data']
       //     .map<EService>((obj) => EService.fromJson(obj))
@@ -207,7 +221,8 @@ class MockApiClient {
 
   Future<List<Category>> getAllCategories() async {
     var response =
-        await httpClient.get(itcase_url + "catalog", options: _options);
+    await httpClient.get(itcase_url + "catalog", options: _options);
+
     if (response.statusCode == 200) {
       return response.data['parentCategories']
           .map<Category>((obj) => Category.fromJson(obj))
@@ -231,16 +246,29 @@ class MockApiClient {
 
   Future<List<Task>> getTasks() async {
     var response =
-        await httpClient.get(baseUrl + "tasks/all.json", options: _options);
+    await httpClient.get(itcase_url + "tasks/all.json", options: _options);
+
     if (response.statusCode == 200) {
       return response.data['data']
           .map<Task>((obj) => Task.fromJson(obj))
           .toList();
+
     } else {
       throw new Exception(response.statusMessage);
     }
   }
+  Future<List<Tenders>> getTenders() async {
+    var response =
+    await httpClient.get(itcase_url + "tenders", options: _options);
+    if (response.statusCode == 200) {
+      return response.data['tenders']['data']
+          .map<Tenders>((obj) => Tenders.fromJson(obj))
+          .toList();
 
+    } else {
+      throw new Exception(response.statusMessage);
+    }
+  }
   Future<List<Notification>> getNotifications() async {
     var response = await httpClient.get(baseUrl + "notifications/all.json",
         options: _options);
@@ -255,7 +283,8 @@ class MockApiClient {
 
   Future<List<FaqCategory>> getCategoriesWithFaqs() async {
     var response =
-        await httpClient.get(baseUrl + "help/faqs.json", options: _options);
+    await httpClient.get(baseUrl + "help/faqs.json", options: _options);
+
     if (response.statusCode == 200) {
       return response.data['data']
           .map<FaqCategory>((obj) => FaqCategory.fromJson(obj))
@@ -267,7 +296,7 @@ class MockApiClient {
 
   Future<Setting> getSettings() async {
     var response =
-        await httpClient.get(baseUrl + "settings/all.json", options: _options);
+    await httpClient.get(baseUrl + "settings/all.json", options: _options);
     if (response.statusCode == 200) {
       return Setting.fromJson(response.data['data']);
     } else {

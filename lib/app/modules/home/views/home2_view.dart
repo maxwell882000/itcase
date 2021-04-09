@@ -14,7 +14,7 @@ import '../controllers/home_controller.dart';
 import '../widgets/address_widget.dart';
 import '../widgets/categories_carousel_widget.dart';
 import '../widgets/featured_categories_widget.dart';
-import '../widgets/recommended_carousel_widget.dart';
+import '../widgets/tinders_carousel_widget.dart';
 
 class Home2View extends GetView<HomeController> {
   @override
@@ -152,7 +152,7 @@ class Home2View extends GetView<HomeController> {
                             },
                             shape: StadiumBorder(),
                             color: Get.theme.accentColor.withOpacity(0.1),
-                            child: Text("View All".tr, style: Get.textTheme.subtitle1),
+                            child: Text("Посмотреть все".tr, style: Get.textTheme.subtitle1),
                           ),
                         ],
                       ),
@@ -163,18 +163,21 @@ class Home2View extends GetView<HomeController> {
                       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                       child: Row(
                         children: [
-                          Expanded(child: Text("Конкурсы".tr, style: Get.textTheme.headline5)),
+                          Expanded(child: Text("Задания".tr, style: Get.textTheme.headline5)),
+
                           FlatButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Get.toNamed(Routes.TINDERS_VIEW);
+                            },
                             shape: StadiumBorder(),
                             color: Get.theme.accentColor.withOpacity(0.1),
-                            child: Text("View All".tr, style: Get.textTheme.subtitle1),
+                            child: Text("Посмотреть все".tr, style: Get.textTheme.subtitle1),
                           ),
                         ],
                       ),
                     ),
                     RecommendedCarouselWidget(),
-                    FeaturedCategoriesWidget(),
+                   // FeaturedCategoriesWidget(),
                   ],
                 ),
               ),
