@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:html/parser.dart';
 import 'package:itcase/app/models/pivot.dart';
 import 'package:itcase/app/models/subcategory_model.dart';
-
+import 'package:itcase/app/providers/mock_provider.dart';
+import 'package:get/get.dart';
 import '../../common/ui.dart';
 
 class Category {
@@ -33,7 +34,8 @@ class Category {
   Color color;
   int id;
   Pivot pivot;
-
+  final choose = false.obs;
+  static final UPLOAD_DIRECTORY = 'uploads/handbook_categories_images/';
   Category(
       {this.id,
         this.ru_title,
@@ -60,7 +62,12 @@ class Category {
         this.uz_description,
         this.tender_meta_title_prefix,
         this.categories});
-
+  Category.fromJsonToUser(Map<String, dynamic> json){
+    ru_title = json['ru_title'];
+    en_title = json['en_title'];
+    uz_title = json['uz_title'];
+    title = ru_title;
+  }
   Category.fromJson(Map<String, dynamic> json) {
     id = json['id'];
 
@@ -71,7 +78,13 @@ class Category {
     ru_slug = json['ru_slug'];
     en_slug = json['en_slug'];
     uz_slug = json['uz_slug'];
-    image = "http://handyman.smartersvision.com/mock/categories/media/nurse.svg";
+    if(json['image']!=null) {
+      image = MockApiClient.url + UPLOAD_DIRECTORY + json['image'];
+    }
+    else{
+      image = "http://handyman.smartersvision.com/mock/categories/media/nurse.svg";
+    }
+
 
     position = json['position'].toString();
     color = Ui.parseColor("#0abde3").withOpacity(1);

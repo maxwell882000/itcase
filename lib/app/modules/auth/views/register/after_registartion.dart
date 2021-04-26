@@ -3,27 +3,17 @@ import 'package:get/get.dart';
 import 'package:itcase/app/global_widgets/block_button_widget.dart';
 import 'package:itcase/app/global_widgets/main_drawer_widget.dart';
 import 'package:itcase/app/modules/auth/controllers/auth_controller.dart';
-import 'package:itcase/app/modules/root/controllers/root_controller.dart';
+import 'package:itcase/app/routes/app_pages.dart';
 
-class CreatedAccount extends GetView<AuthController> {
+
+class AfterRegistration extends GetView<AuthController> {
+
   @override
   Widget build(BuildContext context) {
+
+
     return Scaffold(
-      drawer: MainDrawerWidget(),
-      /*appBar: AppBar(
-        title: Text(
-          "Success".tr,
-          style: context.textTheme.headline6,
-        ),
-        centerTitle: true,
-        backgroundColor: Colors.transparent,
-        automaticallyImplyLeading: false,
-        leading: new IconButton(
-          icon: new Icon(Icons.sort, color: Get.theme.hintColor),
-          onPressed: () => {Scaffold.of(context).openDrawer()},
-        ),
-        elevation: 0,
-      ),*/
+
       body: Container(
         alignment: AlignmentDirectional.center,
         padding: EdgeInsets.symmetric(horizontal: 30, vertical: 60),
@@ -135,9 +125,12 @@ class CreatedAccount extends GetView<AuthController> {
             ],
           ),
           color: Get.theme.accentColor,
-          onPressed: () {
-            Get.find<RootController>().changePageOutRoot(1);
-          }).paddingOnly(bottom: 20, right: 20, left: 20),
+          onPressed: ()  async{
+            if(await controller.validate()) {
+              controller.currentUser.value.auth = true;
+              Get.offAllNamed(Routes.ROOT);
+            }
+            }).paddingOnly(bottom: 20, right: 20, left: 20),
     );
   }
 }

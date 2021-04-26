@@ -87,7 +87,7 @@ class CategoryView extends GetView<CategoryController> {
                         scrollDirection: Axis.horizontal,
                         children: List.generate(controller.caregoryFilter.value.choices.length, (index) {
                           var _filter = controller.caregoryFilter.value.choices[index];
-                          print("FILTERRR" + _filter.toString());
+
                           return Obx(() {
                             return Padding(
                               padding: const EdgeInsetsDirectional.only(start: 20),
@@ -107,7 +107,7 @@ class CategoryView extends GetView<CategoryController> {
                                   print( _filter);
                                   controller.toggleSelected(_filter[0]);
                                   print(controller.selected.value);
-                                  controller.getEServicesOfCategory(filter: controller.selected.value);
+                                  controller.getEServicesOfCategory(id: controller.selected.value);
                                 },
                               ),
                             );

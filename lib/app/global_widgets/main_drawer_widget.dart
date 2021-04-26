@@ -1,17 +1,23 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:itcase/app/models/user_model.dart';
+import 'package:itcase/common/ui.dart';
 
 
 import '../modules/auth/controllers/auth_controller.dart';
-import '../modules/auth/views/register/create_account.dart';
+import '../modules/auth/views/register/fill_account.dart';
 import '../modules/root/controllers/root_controller.dart' show RootController;
 import '../routes/app_pages.dart';
 import '../services/settings_service.dart';
 import 'drawer_link_widget.dart';
 
 class MainDrawerWidget extends StatelessWidget {
+  final RootController controller = Get.find();
+
   @override
   Widget build(BuildContext context) {
+    print('ASDSAD');
     return Drawer(
       child: ListView(
         children: [
@@ -22,67 +28,112 @@ class MainDrawerWidget extends StatelessWidget {
             child: Container(
               padding: EdgeInsets.symmetric(vertical: 30, horizontal: 15),
               decoration: BoxDecoration(
-                color: Theme.of(context).hintColor.withOpacity(0.1),
+                color: Theme
+                    .of(context)
+                    .hintColor
+                    .withOpacity(0.1),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Welcome".tr,
+                  Text("Добро пожаловать".tr,
                       style: Get.textTheme.headline5.merge(
-                          TextStyle(color: Theme.of(context).accentColor))),
-                  SizedBox(height: 5),
-                  Text("Login account or create new one for free".tr,
-                      style: Get.textTheme.bodyText1),
-                  SizedBox(height: 15),
-                  Wrap(
-                    spacing: 10,
-                    children: <Widget>[
-                      FlatButton(
-                        onPressed: () {
-                          Get.offAndToNamed(Routes.LOGIN);
-                        },
-                        color: Get.theme.accentColor,
-                        height: 40,
-                        child: Wrap(
-                          runAlignment: WrapAlignment.center,
-                          crossAxisAlignment: WrapCrossAlignment.center,
-                          spacing: 9,
-                          children: [
-                            Icon(Icons.exit_to_app_outlined,
-                                color: Get.theme.primaryColor, size: 24),
-                            Text(
-                              "Login".tr,
-                              style: Get.textTheme.subtitle1.merge(
-                                  TextStyle(color: Get.theme.primaryColor)),
-                            ),
-                          ],
+                          TextStyle(color: Theme
+                              .of(context)
+                              .accentColor))),
+                  Row(
+                    children: [
+                      Container(
+                        decoration: Ui.getBoxDecoration(
+                          radius: 14,
+                          border: Border.all(width: 5, color: Get.theme
+                              .primaryColor),
                         ),
-                        shape: StadiumBorder(),
-                      ),
-                      FlatButton(
-                        color: Get.theme.focusColor.withOpacity(0.2),
-                        height: 40,
-                        onPressed: () {
-                          Get.offAllNamed(Routes.REGISTER);
-                        },
-                        child: Wrap(
-                          runAlignment: WrapAlignment.center,
-                          crossAxisAlignment: WrapCrossAlignment.center,
-                          spacing: 9,
-                          children: [
-                            Icon(Icons.person_add_outlined,
-                                color: Get.theme.hintColor, size: 24),
-                            Text(
-                              "Register".tr,
-                              style: Get.textTheme.subtitle1
-                                  .merge(TextStyle(color: Get.theme.hintColor)),
+                        child: InkWell(
+                          onTap: () { Get.back();
+                          Get.find<RootController>().changePage(3);
+                          },
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                            child: CachedNetworkImage(
+                              height: 100,
+                              width: 100,
+                              fit: BoxFit.cover,
+                              imageUrl: controller.currentUser.value.image_gotten,
+                              placeholder: (context, url) =>
+                                  Image.asset(
+                                    'assets/img/loading.gif',
+                                    fit: BoxFit.cover,
+                                    width: double.infinity,
+                                    height: 100,
+                                  ),
+                              errorWidget: (context, url, error) =>
+                                  Icon(Icons.error_outline),
                             ),
-                          ],
+                          ),
                         ),
-                        shape: StadiumBorder(),
                       ),
+                      SizedBox(width: 5),
+                      if(controller.currentUser.value.auth)
+                        Text("${controller.currentUser.value.name}".tr,
+                            style: Get.textTheme.bodyText1),
                     ],
                   ),
+
+
+                  if(!controller.currentUser.value.auth)
+                    SizedBox(height: 15),
+                  if(!controller.currentUser.value.auth)
+                    Wrap(
+                      spacing: 10,
+                      children: <Widget>[
+                        FlatButton(
+                          onPressed: () {
+                            Get.offAndToNamed(Routes.LOGIN);
+                          },
+                          color: Get.theme.accentColor,
+                          height: 40,
+                          child: Wrap(
+                            runAlignment: WrapAlignment.center,
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            spacing: 9,
+                            children: [
+                              Icon(Icons.exit_to_app_outlined,
+                                  color: Get.theme.primaryColor, size: 24),
+                              Text(
+                                "Login".tr,
+                                style: Get.textTheme.subtitle1.merge(
+                                    TextStyle(color: Get.theme.primaryColor)),
+                              ),
+                            ],
+                          ),
+                          shape: StadiumBorder(),
+                        ),
+                        FlatButton(
+                          color: Get.theme.focusColor.withOpacity(0.2),
+                          height: 40,
+                          onPressed: () {
+                            Get.offAllNamed(Routes.REGISTER);
+                          },
+                          child: Wrap(
+                            runAlignment: WrapAlignment.center,
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            spacing: 9,
+                            children: [
+                              Icon(Icons.person_add_outlined,
+                                  color: Get.theme.hintColor, size: 24),
+                              Text(
+                                "Register".tr,
+                                style: Get.textTheme.subtitle1
+                                    .merge(
+                                    TextStyle(color: Get.theme.hintColor)),
+                              ),
+                            ],
+                          ),
+                          shape: StadiumBorder(),
+                        ),
+                      ],
+                    ),
                 ],
               ),
             ),
@@ -124,8 +175,7 @@ class MainDrawerWidget extends StatelessWidget {
 
             text: "My tasks",
             onTap: (e) {
-              // Get.offAndToNamed(Routes.FAVORITES);
-              // Get.to(CreateAccount());
+              Get.toNamed(Routes.MY_TASKS);
             },
           ),
           DrawerLinkWidget(
@@ -133,17 +183,17 @@ class MainDrawerWidget extends StatelessWidget {
             text: "Messages",
             onTap: (e) {
               Get.back();
-              Get.find<RootController>().changePage(2);
+              Get.toNamed(Routes.CHATS_ALL);
             },
           ),
-          DrawerLinkWidget(
-            icon: Icons.check,
-            text: "Be Performer",
-            onTap: (e) {
-              Get.put(AuthController());
-              Get.to(CreateAccount());
-            },
-          ),
+          if(controller.currentUser.value.auth && !controller.currentUser.value.isContractor.value)
+            DrawerLinkWidget(
+              icon: Icons.check,
+              text: "Become contractor".tr,
+              onTap: (e) {
+               Get.toNamed(Routes.BECOME_CONSTRUCTOR);
+              },
+            ),
           ListTile(
             dense: true,
             title: Text(
@@ -165,7 +215,7 @@ class MainDrawerWidget extends StatelessWidget {
           ),
           DrawerLinkWidget(
             icon: Icons.settings_outlined,
-            text: "Settings",
+            text: "Settings App",
             onTap: (e) {
               Get.offAndToNamed(Routes.SETTINGS);
             },
@@ -213,16 +263,25 @@ class MainDrawerWidget extends StatelessWidget {
             icon: Icons.logout,
             text: "Logout",
             onTap: (e) {
+              controller.currentUser.value = new User();
               Get.offAllNamed(Routes.LOGIN);
             },
           ),
-          if (Get.find<SettingsService>().setting.value.enableVersion)
+          if (Get
+              .find<SettingsService>()
+              .setting
+              .value
+              .enableVersion)
             ListTile(
               dense: true,
               title: Text(
                 "Version".tr +
                     " " +
-                    Get.find<SettingsService>().setting.value.appVersion,
+                    Get
+                        .find<SettingsService>()
+                        .setting
+                        .value
+                        .appVersion,
                 style: Get.textTheme.caption,
               ),
               trailing: Icon(

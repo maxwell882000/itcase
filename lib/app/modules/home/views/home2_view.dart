@@ -29,8 +29,8 @@ class Home2View extends GetView<HomeController> {
             shrinkWrap: false,
             slivers: <Widget>[
               SliverAppBar(
-                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                expandedHeight: 280,
+                backgroundColor: Get.theme.accentColor,
+                expandedHeight: 100,
                 elevation: 0.5,
                 // pinned: true,
                 floating: true,
@@ -140,7 +140,7 @@ class Home2View extends GetView<HomeController> {
               SliverToBoxAdapter(
                 child: Wrap(
                   children: [
-                    AddressWidget(),
+                    // AddressWidget(),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                       child: Row(
@@ -152,7 +152,7 @@ class Home2View extends GetView<HomeController> {
                             },
                             shape: StadiumBorder(),
                             color: Get.theme.accentColor.withOpacity(0.1),
-                            child: Text("Посмотреть все".tr, style: Get.textTheme.subtitle1),
+                            child: Text("View all".tr, style: Get.textTheme.subtitle1),
                           ),
                         ],
                       ),
@@ -163,7 +163,7 @@ class Home2View extends GetView<HomeController> {
                       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                       child: Row(
                         children: [
-                          Expanded(child: Text("Задания".tr, style: Get.textTheme.headline5)),
+                          Expanded(child: Text("Tasks".tr, style: Get.textTheme.headline5)),
 
                           FlatButton(
                             onPressed: () {
@@ -171,12 +171,12 @@ class Home2View extends GetView<HomeController> {
                             },
                             shape: StadiumBorder(),
                             color: Get.theme.accentColor.withOpacity(0.1),
-                            child: Text("Посмотреть все".tr, style: Get.textTheme.subtitle1),
+                            child: Text("View All".tr, style: Get.textTheme.subtitle1),
                           ),
                         ],
                       ),
                     ),
-                    RecommendedCarouselWidget(),
+                    TindersCarouselWidget(),
                    // FeaturedCategoriesWidget(),
                   ],
                 ),

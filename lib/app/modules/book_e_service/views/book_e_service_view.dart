@@ -38,7 +38,7 @@ class BookEServiceView extends GetView<BookEServiceController> {
                 children: [
                   Text("Your Address".tr, style: Get.textTheme.caption),
                   SizedBox(height: 8),
-                  Text(controller.currentAddress.address, style: Get.textTheme.bodyText2),
+                  Text(controller.currentAddress.address?? "", style: Get.textTheme.bodyText2),
                 ],
               ),
             ),

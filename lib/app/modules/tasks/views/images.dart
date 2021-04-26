@@ -17,7 +17,7 @@ class Img extends StatefulWidget {
 class _ImgState extends State<Img> {
   List<Asset> images = List<Asset>();
   String _error = 'No Error Dectected';
-  List<String> base = [];
+  List<List<int>> base = [];
   @override
   void initState() {
     super.initState();
@@ -28,6 +28,7 @@ class _ImgState extends State<Img> {
       crossAxisCount: 3,
       children: List.generate(images.length, (index) {
         Asset asset = images[index];
+
         return AssetThumb(
           asset: asset,
           width: 300,
@@ -92,9 +93,7 @@ class _ImgState extends State<Img> {
                 Asset as = images[i];
                 ByteData byteData = await as.requestOriginal();
                 List<int> v = byteData.buffer.asUint8List();
-                var img = "data:image/jpeg;base64," + base64Encode(v);
-
-                base.add(base64Encode(v));
+                base.add(v);
               }
               Get.back(result: base);
             },

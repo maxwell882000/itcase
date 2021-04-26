@@ -1,12 +1,14 @@
-
 import 'dart:convert';
 import 'package:intl/intl.dart';
+import 'package:itcase/app/global_widgets/format.dart';
+import 'package:itcase/app/models/category_model.dart';
+import 'package:itcase/app/models/subcategory_model.dart';
 import 'package:itcase/app/providers/api.dart';
-
+import 'package:get/get.dart';
 class Tenders {
   int id, owner_id, need_id, contractor_id;
-  int  published;
-  int opened;
+  int published;
+  final opened = true.obs;
   String client_name,
       client_type,
       client_email,
@@ -26,16 +28,20 @@ class Tenders {
       slug,
       created_at,
       updated_at,
-      status,
       published_at,
       delete_reason,
       place,
       work_start_at,
       work_end_at;
   String geo_location;
+  List files;
   bool email_subscription;
   int views;
-
+  bool remote = false;
+  String icon = "";
+  List categories = [];
+  bool status;
+  final choose = false.obs;
   Tenders({
     this.client_name,
     this.client_type,
@@ -62,19 +68,25 @@ class Tenders {
     this.owner_id,
     this.need_id,
     this.contractor_id,
-    this.opened,
-    this.published,
-  });
 
-  Tenders.fromJson(var json) {
+    this.published,
+    this.remote,
+    this.files,
+    this.categories,
+  });
+  Tenders.fromJsonShort(Map json){
+    this.id = json['id'];
+    this.title = json['title'];
+  }
+  Tenders.fromJson(Map json) {
     id = json['id'];
     client_type = json['private'];
     client_email = json['client_name'];
-    client_phone_number =json['client_phone_number'];
+    client_phone_number = json['client_phone_number'];
     client_company_name = json['client_company_name'];
     client_site_url = json['client_site_url'];
     title = json['title'];
-    description = json['description'];
+    description = Category.parseHtmlString(json['description']);
     budget = json['budget'].toString();
     deadline = json['deadline'];
     target_audience = json['target_audience'];
@@ -84,26 +96,72 @@ class Tenders {
     what_for = json['what_for'];
     type = json['type'];
     slug = json['slug'];
-    opened = json['opened'];
+    opened.value = json['opened']== 1 && Format.compareDates( Format.inputFormatWithoutHours.format(DateTime.now()),deadline);
     need_id = json['need_id'];
     created_at = formatedStr(json['created_at']);
     updated_at = formatedStr(json['updated_at']);
-    owner_id = json['owned_id'];
+    owner_id = json['owner_id'];
     contractor_id = json['contractor_id'];
-    status = json['status'];
+    status = json['status'] == "active" ? true : false;
     published = json['published'];
     published_at = json['published_at'];
     geo_location = json['geo_location'];
-    email_subscription = json['email_subscription'];
+    email_subscription = json['email_subscription'] == 1;
     views = json['views'];
     delete_reason = json['delete_reason'];
     place = json['place'];
-    work_start_at= json['work_start_at'];
-    work_end_at= json['work_end_at'];
+    work_start_at = json['work_start_at'];
+    work_end_at = json['work_end_at'];
+    if (json.containsKey('icon')) {
+      icon = json['icon'];
+    }
+    if (json.containsKey('categories')) {
+      print(json['categories']);
+      json['categories']
+          .forEach((e) => categories.add(new SubCategory.fromJson(e)));
+      // print(categories[0].id);
+    }
   }
-  String formatedStr(String date){
+
+  String formatedStr(String date) {
     return DateFormat('yyyy-MM-dd').format(DateTime.parse(date));
   }
+
+  Map<String, dynamic> toJsonOnCreate() {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['title'] = this.title;
+    data['description'] = this.description;
+    data['budget'] = int.parse(this.budget.replaceAll(' ', ''));
+    data['deadline'] = this.deadline;
+    data['links'] = this.links ?? "1";
+    data['additional_info'] = this.additional_info;
+    data['other_info'] = this.other_info;
+    data['work_start_at'] = this.work_start_at;
+    data['geo_location'] = this.geo_location;
+    data['work_end_at'] = this.work_end_at;
+    data['remote'] = this.remote ? 'on' : 'off';
+    data['place'] = this.place;
+    data['categories'] = this.categories.join(' ');
+    data['files'] = this.files ?? [];
+    return data;
+  }
+  Map<String, dynamic> toJsonModify() {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['title'] = this.title;
+    data['description'] = this.description;
+    data['deadline'] = this.deadline;
+    data['links'] = this.links ?? "1";
+    data['additional_info'] = this.additional_info;
+    data['other_info'] = this.other_info;
+    data['work_start_at'] = this.work_start_at;
+    data['geo_location'] = this.geo_location;
+    data['work_end_at'] = this.work_end_at;
+    data['remote'] = this.remote ? 'on' : 'off';
+    data['place'] = this.place;
+    data['files'] = this.files ?? [];
+    return data;
+  }
+
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = Map<String, dynamic>();
 
@@ -149,4 +207,3 @@ class Tenders {
     }
   }
 }
-

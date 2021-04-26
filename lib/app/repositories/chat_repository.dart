@@ -1,112 +1,109 @@
-// import '../models/chat_model.dart';
-// import '../models/message_model.dart';
+import 'dart:convert';
 
-// class ChatRepository {
-//   final FirebaseAuth _auth = FirebaseAuth.instance;
+import 'package:itcase/app/providers/api.dart';
+import 'package:get/get.dart';
+import '../models/chat_model.dart';
+import '../models/message_model.dart';
 
-// //  User _userFromFirebaseUser(User user) {
-// //    return user != null ? User(uid: user.uid) : null;
-// //  }
+class ChatRepository {
+//  User _userFromFirebaseUser(User user) {
+//    return user != null ? User(uid: user.uid) : null;
+//  }
+  Future<Map> createChats(String json) async {
+    final result = await API().post(json, 'account/chats');
+    if (result.statusCode == 200) {
+      return jsonDecode(result.body);
+    }
+    throw "Chat cannot be created".tr;
+  }
+  Future<List<Chat>> getAllChats() async {
+    final response = await API().getData("messages/all_chats");
+    final result = jsonDecode(response.body);
+    print('sadsaddsdsadsadadasdas');
+    print(result);
+    if (response.statusCode ==200){
 
-//   Future signInWithToken(String token) async {
-//     try {
-//       UserCredential result = await _auth.signInWithCustomToken(token);
-//       if (result.user != null) {
-//         return true;
-//       } else {
-//         return null;
-//       }
-//     } catch (e) {
-//       print(e.toString());
-//       return null;
-//     }
-//   }
+      return result.map<Chat>((e) => new Chat.fromJson(e)).toList();
+    }
 
-//   Future signUpWithEmailAndPassword(String email, String password) async {
-//     try {
-//       UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
-//       if (result.user != null) {
-//         return true;
-//       } else {
-//         return null;
-//       }
-//     } catch (e) {
-//       print(e.toString());
-//       return null;
-//     }
-//   }
+    throw "get All Chats";
+  }
+  Future<List<Message>> updatingChats(String chatId, String lastMessageGotten) async {
+    final response = await API().getData("messages/" + chatId + "/" + lastMessageGotten);
+    final body = jsonDecode(response.body);
+    print(body);
+    print(response.statusCode == 200);
+    if (response.statusCode == 200) {
+      return body.map<Message>((e) => new Message.fromJson(e)).toList().reversed.toList();
+    }
+    print(body);
+    throw "updating Chats";
+  }
 
-//   Future signOut() async {
-//     try {
-//       return await _auth.signOut();
-//     } catch (e) {
-//       print(e.toString());
-//       return null;
-//     }
-//   }
+  Future<List<Chat>> notificationChats()async{
+    final response = await API().getData('messages/notificationLastMessages');
+    final body = jsonDecode(response.body);
 
-//   Future<void> addUserInfo(userData) async {
-//     FirebaseFirestore.instance.collection("users").add(userData).catchError((e) {
-//       print(e.toString());
-//     });
-//   }
+    if(response.statusCode == 200){
+      return body.map<Chat>((e)=> new Chat.fromJson(e)).toList();
+    }
+    throw "notificationChats";
+  }
+  Future<bool> readSomeMessages(String messagesId) async{
+    final response = await API().put(messagesId, "messages/read/messagesIsRead");
+    print(response.body);
+    if (response.statusCode ==200){
+      return true;
+    }
+    return false;
+  }
+   Future<List> updateMessages(String listInt) async{
+      final response = await API().post(listInt, "messages/read/messagesIsRead");
+      print("MESSAGES GET");
+      print(response.body);
+      if(response.statusCode == 200){
+        return jsonDecode(response.body);
+      }
+      throw "Update Message errisNullOrBlank";
+   }
+   Future<bool> readMessage(String chatId)async {
+    final response = await API().getData('messages/read/'+ chatId);
+    print(response.body);
+    if (response.statusCode == 200){
+      print("messages are read");
+      return true;
+    }
+    return false;
+  }
 
-//   getUserInfo(String token) async {
-//     return FirebaseFirestore.instance.collection("users").where("token", isEqualTo: token).get().catchError((e) {
-//       print(e.toString());
-//     });
-//   }
+  Future<List> getMessagesOfChat(String chatId) async {
+    final response = await API().getData('account/chats/' + chatId);
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      if (body['chat']['data'].isEmpty){
+        throw "";
+      }
 
-//   searchByName(String searchField) {
-//     return FirebaseFirestore.instance.collection("users").where('userName', isEqualTo: searchField).get();
-//   }
+      List<Message> messages =
+          body['chat']['data'].map<Message>((e) => new Message.fromJson(e)).toList();
+      return [
+        messages.reversed.toList(),
+        body['chat']['last_page'],
+        body['chat']['current_page']
+      ];
+    }
+    print(body);
+    throw "Get message of chat Error";
+  }
 
-//   // Create Message
-//   Future<void> createMessage(Message message) {
-//     return FirebaseFirestore.instance.collection("messages").doc(message.id).set(message.toJson()).catchError((e) {
-//       print(e);
-//     });
-//   }
-
-//   Stream<List<Message>> getUserMessages(String userId) {
-//     return FirebaseFirestore.instance
-//         .collection("messages")
-//         .where('visible_to_users', arrayContains: userId)
-//         //.orderBy('time', descending: true)
-//         .snapshots()
-//         .map((QuerySnapshot query) {
-//       List<Message> retVal = List();
-//       query.docs.forEach((element) {
-//         retVal.add(Message.fromDocumentSnapshot(element));
-//       });
-//       return retVal;
-//     });
-//   }
-
-//   Stream<List<Chat>> getChats(Message message) {
-//     return FirebaseFirestore.instance.collection("messages").doc(message.id).collection("chats").orderBy('time', descending: true).snapshots().map((QuerySnapshot query) {
-//       List<Chat> retVal = List();
-//       query.docs.forEach((element) {
-//         retVal.add(Chat.fromDocumentSnapshot(element));
-//       });
-//       return retVal;
-//     });
-//     // return updateMessage(message.id, {'read_by_users': message.readByUsers}).then((value) async {
-//     //
-//     // });
-//   }
-
-//   Future<void> addMessage(Message message, Chat chat) {
-//     return FirebaseFirestore.instance.collection("messages").doc(message.id).collection("chats").add(chat.toJson()).whenComplete(() {
-//       updateMessage(message.id, message.toUpdatedMap());
-//     }).catchError((e) {
-//       print(e.toString());
-//     });
-//   }
-
-//   Future<void> updateMessage(String messageId, Map<String, dynamic> message) {
-//     return FirebaseFirestore.instance.collection("messages").doc(messageId).update(message).catchError((e) {
-//       print(e.toString());
-//     });
-//   }
-// }
+  Future<void> sendMessage(String json, final message) async {
+    final response = await API().post(json, 'messages');
+    final body = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+       message.fromJsonSend(body);
+       return;
+    }
+    print(body);
+    throw "Send Message Error".tr;
+  }
+}

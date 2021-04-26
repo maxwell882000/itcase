@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:itcase/app/models/user_model.dart';
 
 import '../../../../common/ui.dart';
 import '../../../models/category_model.dart';
@@ -8,7 +9,6 @@ import '../../../models/subcategory_model.dart';
 import '../../../repositories/e_service_repository.dart';
 
 class CategoryFilter {
-
   List choices;
 
   CategoryFilter() {
@@ -22,9 +22,10 @@ class CategoryFilter {
 
 class CategoryController extends GetxController {
   final category = new Category().obs;
-  var selected  =  0.obs;
+  var selected = 0.obs;
   final caregoryFilter = new CategoryFilter().obs;
-  final eServices = List<EService>().obs;
+  final eServices = List<User>().obs;
+  final isLoading = true.obs;
   EServiceRepository _eServiceRepository;
 
   CategoryController() {
@@ -35,16 +36,12 @@ class CategoryController extends GetxController {
   Future<void> onInit() async {
     category.value = Get.arguments as Category;
     selected.value = category.value.id;
-    caregoryFilter.value.setChoices([
-       category.value.id,
-      "Все пользователи"
-    ]);
+    caregoryFilter.value.setChoices([category.value.id, "Все пользователи"]);
 
     category.value.categories.forEach((e) => caregoryFilter.value.setChoices([
           e.id,
           e.title,
         ]));
-
 
     print(caregoryFilter.value.choices);
     await refreshEServices();
@@ -52,7 +49,7 @@ class CategoryController extends GetxController {
   }
 
   Future refreshEServices({bool showMessage}) async {
-    await getEServicesOfCategory(filter: selected.value);
+    await getEServicesOfCategory(id: selected.value);
     if (showMessage == true) {
       Get.showSnackbar(Ui.SuccessSnackBar(
           message: "List of services refreshed successfully".tr));
@@ -71,13 +68,15 @@ class CategoryController extends GetxController {
     // }
   }
 
-  Future getEServicesOfCategory({int filter}) async {
+  Future getEServicesOfCategory({int id}) async {
     try {
+      isLoading.value = true;
       eServices.assignAll([]);
-      eServices.assignAll(await _eServiceRepository.getAllCategories(filter.toString()));
-      print(eServices.first.id);
+      eServices.value = await _eServiceRepository.getAllCategories(id.toString());
+
     } catch (e) {
       Get.showSnackbar(Ui.ErrorSnackBar(message: e.toString()));
     }
+    isLoading.value = false;
   }
 }

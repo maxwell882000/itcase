@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:itcase/app/models/chat_model.dart';
 import '../../../models/message_model.dart';
 import '../../../routes/app_pages.dart';
 import '../../../services/auth_service.dart';
@@ -8,19 +9,19 @@ import '../../../../common/ui.dart';
 import 'package:intl/intl.dart' show DateFormat;
 
 class MessageItemWidget extends StatelessWidget {
-  MessageItemWidget({Key key, this.message, this.onDismissed}) : super(key: key);
-  final Message message;
-  final ValueChanged<Message> onDismissed;
+  MessageItemWidget({Key key, this.chat, this.onDismissed}) : super(key: key);
+  final Chat chat;
+  final ValueChanged<Chat> onDismissed;
 
   @override
   Widget build(BuildContext context) {
-    AuthService _authService = Get.find<AuthService>();
+
     return InkWell(
       onTap: () {
-        Get.toNamed(Routes.CHAT, arguments: this.message);
+        Get.toNamed(Routes.CHAT, arguments: this.chat);
       },
       child: Dismissible(
-        key: Key(this.message.hashCode.toString()),
+        key: Key(this.chat.hashCode.toString()),
         background: Container(
           padding: EdgeInsets.all(12),
           margin: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
@@ -37,14 +38,14 @@ class MessageItemWidget extends StatelessWidget {
           ),
         ),
         onDismissed: (direction) {
-          onDismissed(this.message);
+          onDismissed(this.chat);
           // Then show a snackbar.
-          Get.showSnackbar(Ui.SuccessSnackBar(message: "The conversation with ${this.message.name} is dismissed"));
+          Get.showSnackbar(Ui.SuccessSnackBar(message: "The conversation with NAME is dismissed"));
         },
         child: Container(
           padding: EdgeInsets.all(12),
           margin: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-          decoration: Ui.getBoxDecoration(color: this.message.readByUsers.contains(_authService.user.value.id) ? Get.theme.primaryColor : Get.theme.accentColor.withOpacity(0.05)),
+          decoration: Ui.getBoxDecoration(color: true ? Get.theme.primaryColor : Get.theme.accentColor.withOpacity(0.05)),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
@@ -59,7 +60,7 @@ class MessageItemWidget extends StatelessWidget {
                         height: 140,
                         width: double.infinity,
                         fit: BoxFit.cover,
-                        imageUrl: this.message.users.firstWhere((element) => element.id == _authService.user.value.id).mediaThumb,
+                        imageUrl: chat.user.image_gotten,
                         // imageUrl: 'assets/img/loading.gif',
                         placeholder: (context, url) => Image.asset(
                           'assets/img/loading.gif',
@@ -97,38 +98,43 @@ class MessageItemWidget extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Text(
-                            this.message.name,
+                            chat.user.name,
                             overflow: TextOverflow.fade,
                             softWrap: false,
                             style: Get.textTheme.bodyText1
-                                .merge(TextStyle(fontWeight: this.message.readByUsers.contains(_authService.user.value.id) ? FontWeight.w400 : FontWeight.w800)),
+                                .merge(TextStyle(fontWeight: false ? FontWeight.w400 : FontWeight.w800)),
                           ),
                         ),
                         Text(
-                          DateFormat('HH:mm').format(DateTime.fromMillisecondsSinceEpoch(this.message.lastMessageTime, isUtc: true)),
+                          // DateFormat('HH:mm').format(DateTime.fromMillisecondsSinceEpoch(this.message.lastMessageTime, isUtc: true)),
+                        chat.user.lastSeen,
                           overflow: TextOverflow.fade,
                           softWrap: false,
                           style: Get.textTheme.caption,
                         ),
                       ],
                     ),
+                    if(!chat.lastMessage.isNull)
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Expanded(
                           child: Text(
-                            this.message.lastMessage,
+                        chat.lastMessage.text,
                             overflow: TextOverflow.ellipsis,
                             maxLines: 2,
                             style: Get.textTheme.caption
-                                .merge(TextStyle(fontWeight: this.message.readByUsers.contains(_authService.user.value.id) ? FontWeight.w400 : FontWeight.w800)),
+                                .merge(TextStyle(fontWeight: true? FontWeight.w400 : FontWeight.w800)),
                           ),
                         ),
-                        Text(
-                          DateFormat('dd-MM-yyyy').format(DateTime.fromMillisecondsSinceEpoch(this.message.lastMessageTime, isUtc: true)),
-                          overflow: TextOverflow.fade,
-                          softWrap: false,
-                          style: Get.textTheme.caption,
+                        Obx(
+                          ()=> Text(
+                            // DateFormat('dd-MM-yyyy').format(DateTime.fromMillisecondsSinceEpoch(this.message.lastMessageTime, isUtc: true)),
+                            chat.lastMessage.whenSended.value,
+                            overflow: TextOverflow.fade,
+                            softWrap: false,
+                            style: Get.textTheme.caption,
+                          ),
                         ),
                       ],
                     )

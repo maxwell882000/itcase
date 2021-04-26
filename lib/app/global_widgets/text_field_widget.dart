@@ -9,7 +9,6 @@ import 'package:get/get.dart';
 import '../../common/ui.dart';
 
 class TextFieldWidget extends StatelessWidget {
-
   const TextFieldWidget({
     Key key,
     this.onSaved,
@@ -27,10 +26,11 @@ class TextFieldWidget extends StatelessWidget {
     this.style,
     this.textAlign,
     this.height,
+    this.controller,
   }) : super(key: key);
 
-
   final FormFieldSetter<String> onSaved;
+  final TextEditingController controller;
   final FormFieldValidator<String> validator;
   final TextInputType keyboardType;
   final String initialValue;
@@ -47,9 +47,26 @@ class TextFieldWidget extends StatelessWidget {
 
   final Widget suffixIcon;
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
+  widget(){
+    return TextFormField(
+      controller: controller,
+      keyboardType: keyboardType ?? TextInputType.text,
+      onSaved: onSaved,
+      validator: validator,
+      maxLines: maxLine ?? 1,
+      initialValue: initialValue,
+      style: style ?? Get.textTheme.bodyText2,
+      obscureText: obscureText ?? false,
+      textAlign: textAlign ?? TextAlign.start,
+      decoration: Ui.getInputDecoration(
+        hintText: hintText ?? '',
+        iconData: iconData,
+        suffixIcon: suffixIcon,
+      ),
+    );
+  }
+  container(Widget widget,{double height,double topMargin = 0,double bottomMargin = 0,String labelText,BorderRadiusGeometry buildBorderRadius}){
+    return  Container(
       padding: EdgeInsets.only(top: 20, bottom: 14, left: 20, right: 20),
       margin: EdgeInsets.only(
           left: 20, right: 20, top: topMargin, bottom: bottomMargin),
@@ -66,32 +83,25 @@ class TextFieldWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-        Text(
-        labelText ?? "",
-        style: Get.textTheme.bodyText1,
-        textAlign: textAlign ?? TextAlign.start,
-      ).marginOnly(bottom: height ?? 0),
-    SizedBox(height: height ?? 0),
-
-    TextFormField(
-    keyboardType: keyboardType ?? TextInputType.text,
-    onSaved: onSaved,
-    validator: validator,
-    maxLines: maxLine ?? 1,
-    initialValue: initialValue ?? '',
-    style: style ?? Get.textTheme.bodyText2,
-    obscureText: obscureText ?? false,
-    textAlign: textAlign ?? TextAlign.start,
-    decoration: Ui.getInputDecoration(
-    hintText: hintText ?? '',
-    iconData: iconData,
-    suffixIcon: suffixIcon,
-    ),
-    ),
-    ],
-    )
-    ,
+          Text(
+            labelText ?? "",
+            style: Get.textTheme.bodyText1,
+            textAlign: textAlign ?? TextAlign.start,
+          ).marginOnly(bottom: height ?? 0),
+          SizedBox(height: height ?? 0),
+          widget
+        ],
+      ),
     );
+  }
+  @override
+  Widget build(BuildContext context) {
+    return container(widget(),
+    height: height,
+    topMargin: topMargin,
+    bottomMargin: bottomMargin,
+    labelText: labelText,
+    buildBorderRadius: buildBorderRadius);
   }
 
   BorderRadius get buildBorderRadius {

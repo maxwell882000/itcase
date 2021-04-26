@@ -1,15 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:itcase/app/models/user_model.dart';
 import '../../../global_widgets/circular_loading_widget.dart';
 import '../../category/widgets/services_list_item_widget.dart';
 
 import '../../../models/e_service_model.dart';
 
 class SearchServicesListWidget extends StatelessWidget {
-  final List<EService> services;
+  final List<User> services;
 
-  SearchServicesListWidget({Key key, List<EService> this.services}) : super(key: key);
+  SearchServicesListWidget({Key key, List<User> this.services}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

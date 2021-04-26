@@ -7,14 +7,14 @@ import 'package:get/get.dart';
 
 class EServiceTitleBarWidget extends StatelessWidget implements PreferredSize {
   final Widget title;
-
-  const EServiceTitleBarWidget({Key key, @required this.title}) : super(key: key);
+  final double height;
+  const EServiceTitleBarWidget({Key key, @required this.title, this.height =100}) : super(key: key);
 
   Widget buildTitleBar() {
     return Container(
       margin: EdgeInsets.only(left: 20, right: 20),
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-      height: 100,
+      height: height,
       width: double.infinity,
       decoration: BoxDecoration(
         color: Get.theme.scaffoldBackgroundColor,

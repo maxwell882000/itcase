@@ -5,121 +5,136 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
-
 import 'package:itcase/app/models/user_model.dart';
-import 'package:itcase/app/modules/auth/views/register/create_account.dart';
-import 'package:itcase/app/modules/auth/views/register/created_account.dart';
+import 'package:itcase/app/modules/auth/controllers/verify_controller.dart';
+import 'package:itcase/app/modules/auth/views/phone_verification_view.dart';
+import 'package:itcase/app/modules/auth/views/register/fill_account.dart';
+import 'package:itcase/app/modules/auth/views/register/after_registartion.dart';
 import 'package:itcase/app/providers/api.dart';
+import 'package:itcase/app/repositories/user_repository.dart';
 import 'package:itcase/app/routes/app_pages.dart';
 import 'package:itcase/app/services/auth_service.dart';
 import 'package:itcase/common/ui.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 class AuthController extends GetxController {
   String confirm;
   GetStorage _box;
   final currentUser = Get.find<AuthService>().user;
-
+  final formKey = GlobalKey<FormState>().obs;
+  final tempKey = GlobalKey<FormState>().obs;
   final Map<String, dynamic> data = Map<String, dynamic>();
 
+  final UserRepository _userRepository = new UserRepository();
   var user = new User().obs;
-  var customer = new Customer().obs;
-  var contractor = new Contractor().obs;
+
+  var tempUser = new TempUser().obs;
+
   final hidePassword = true.obs;
-  final agree = false.obs;
-  final gender = "male".obs;
-  final type = "individual".obs;
-  final role = "contractor".obs;
-  final avatar = "noavatar".obs;
-  final birthday = DateFormat('dd.MM.yyyy').format(DateTime.now()).obs;
+
+  final loading = false.obs;
 
   @override
   void onInit() {
-    // if (Get.find<AuthService>().isAuth) Get.toNamed(Routes.ROOT);
+    user = Get.find<AuthService>().user;
+    // start();
     super.onInit();
   }
 
-  login(GlobalKey<FormState> loginForm) async {
-    if (loginForm.currentState.validate()) {
-      loginForm.currentState.save();
-      _box = new GetStorage();
-      print(user.value.toJsonlogin());
-      var response = await API().login(user.value.toJsonlogin());
-      print(response.statusCode);
-      if (response.statusCode == 200) {
-        var body = jsonDecode(response.body);
-        currentUser.value.auth = true;
-        currentUser.value.token = body['token'];
-
-        // var res = await API().getData('accout');
-        // print(res.body);
-
-        _box.write('current_user', jsonEncode(user));
-        Get.toNamed(Routes.ROOT);
-      } else {
-        print(response.body);
-        Get.showSnackbar(
-            Ui.ErrorSnackBar(message: "Email or password incorrect.".tr));
-      }
-    } else {
-      Get.showSnackbar(Ui.ErrorSnackBar(
-          message: "There are errors in some fields please correct them!".tr));
-    }
-    update();
-  }
-
-  step2(GlobalKey<FormState> signupForm) async {
-    if (signupForm.currentState.validate()) {
-      signupForm.currentState.save();
-      var response =
-          await API().post(jsonEncode(user.value.toJsonSingup()), "register");
-      print(response.body);
-      print(response.statusCode);
-      if (response.statusCode == 200) {
-        var body = jsonDecode(response.body);
-        currentUser.value.auth = true;
-        currentUser.value.token = body['token'];
-        Get.to(CreateAccount());
-      } else {
-        Get.showSnackbar(
-            Ui.ErrorSnackBar(message: jsonEncode(jsonDecode(response.body))));
-      }
-    } else {
-      Get.showSnackbar(Ui.ErrorSnackBar(
-          message: "There are errors in some fields please correct them!".tr));
-    }
-  }
-
-  signup(GlobalKey<FormState> signupForm, role) async {
-    if (signupForm.currentState.validate()) {
-      signupForm.currentState.save();
-      var data;
-      if (role == 'contractor') {
-        data = jsonEncode(contractor.value.toJson());
-      } else {
-        data = jsonEncode(customer.value.toJson());
-      }
-      if (!agree.value) {
-        Get.showSnackbar(Ui.ErrorSnackBar(
-            title: "Error", message: "Please agree with your personal data."));
-      }
-      if (avatar.value == null && contractor.value.image == null) {
-        Get.showSnackbar(Ui.ErrorSnackBar(
-            title: "Error", message: "Please choose avatar picture."));
-      }
-      print(jsonEncode(contractor.value.toJson()));
-      var response = await API().post(data, 'account/create');
-      print(response.body);
-      // print(response.statusCode);
-      // print(jsonEncode(jsonDecode(response.body)));
-      if (response.statusCode == 200) {
-        var body = jsonDecode(response.body);
-        if (body['message'] != null) {
-          _box = new GetStorage();
-          print(role);
-          _box.write('user_role', role);
-          Get.to(CreatedAccount());
+  validate() async {
+    try {
+      Map body = await _userRepository.getAccount();
+      print("THIS IS THE PASSWORD");
+      print(user.value.password);
+      body['user']['password'] = user.value.password;
+      print(body);
+      currentUser.value.fromJson(body['user']);
+      currentUser.value.password = user.value.password;
+      if (currentUser.value.phoneConfirmed) {
+        if (currentUser.value.account_paid == null) {
+          Future.delayed(Duration(seconds: 5))
+              .then((value) => VerifyController().make_payment());
+          Get.showSnackbar(Ui.ErrorSnackBar(
+              message:
+                  "You did not pay for your account. Please make payment at first. Web site for making payment will open in 5 seconds".tr
+                      .tr));
+          return false;
         }
+      } else {
+          _userRepository.resendPhoneCode().then((value) {
+            print("TRUUUUUUU");
+            print(value);
+            if(value){
+
+              Get.toNamed(Routes.PHONE_VERIFICATION);
+            }
+          });
+         Get.showSnackbar(Ui.ErrorSnackBar(
+            message:
+            "You are required to confirm your phone number. Window for confirmation of phone will open in 3 seconds".tr
+                .tr));
+         return false;
+      }
+    } catch (e) {
+      if (e == 401) {
+
+        await Get.showSnackbar(Ui.ErrorSnackBar(
+            message:
+                "You are required at first fill your data. Window for filling data will open in 3 seconds".tr
+                    .tr));
+        currentUser.value.phone_number = "";
+        Get.toNamed(Routes.BECOME_CONSUMER, arguments: currentUser.value);
+        return false;
+      }
+      print(e);
+      Get.showSnackbar(Ui.ErrorSnackBar(message: e));
+      return false;
+    }
+
+    return true;
+  }
+
+  login(GlobalKey<FormState> loginForm) async {
+    loading.value = true;
+    try {
+      if (loginForm.currentState.validate()) {
+        loginForm.currentState.save();
+        _box = new GetStorage();
+        print(user.value.toJsonlogin());
+        var response = await API().login(jsonEncode(user.value.toJsonlogin()));
+        print(response.statusCode);
+        if (response.statusCode == 200) {
+          var body = jsonDecode(response.body);
+          currentUser.value.auth = true;
+          currentUser.value.token = body['token'];
+          currentUser.value.password = user.value.password;
+          if (await validate()) {
+            _box.write('current_user', jsonEncode(user));
+            Get.offAllNamed(Routes.ROOT);
+          }
+        } else {
+          print(response.body);
+          Get.showSnackbar(
+              Ui.ErrorSnackBar(message: "Email or password incorrect.".tr));
+        }
+      } else {
+        Get.showSnackbar(Ui.ErrorSnackBar(
+            message: "There are errors in some fields please correct them!"
+                .tr));
       }
     }
+    catch(e){
+      Get.showSnackbar(Ui.ErrorSnackBar(
+          message: "Try again please"
+              .tr));
+    }
+    finally{
+      loading.value = false;
+      update();
+    }
+
   }
+
+  modify_passwords() {}
 }

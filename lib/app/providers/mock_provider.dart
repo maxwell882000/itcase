@@ -3,6 +3,7 @@ import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:get/get.dart';
 
 import 'package:itcase/app/models/tenders.dart';
+import 'package:itcase/common/helper.dart';
 
 import '../models/e_service_model.dart';
 import '../models/e_service_model.dart';
@@ -24,12 +25,10 @@ class MockApiClient {
   final _globalService = Get.find<GlobalService>();
 
   String get baseUrl => _globalService.global.value.mockBaseUrl;
-  static String get url => "http://itcasetest.vid.uz/";
+  static String get url => "https://itcase.com/";
   String get itcase_url => url + "api/";
   final Dio httpClient;
-  final Options _options =
-
-  buildCacheOptions(Duration(days: 3), forceRefresh: true);
+  final Options _options = buildCacheOptions(Duration(days: 3), forceRefresh: true);
 
 
   MockApiClient({@required this.httpClient}) {
@@ -101,12 +100,22 @@ class MockApiClient {
     }
   }
 
-  Future<List<EService>> getAllEServices(String id) async {
+  Future<List<User>> getAllEServices(String id) async {
+    print(itcase_url + "contractors/category/" + id);
+    print(_options);
     var response = await httpClient
         .get(itcase_url + "contractors/category/" + id, options: _options);
     if (response.statusCode == 200) {
-      List<EService> result = [];
-      response.data['contractors']['data'].forEach((key, value) =>result.add( new EService.fromJson(value)));
+      List<User> result = [];
+      try {
+        print(response.data['contractors']['data']);
+        response.data['contractors']['data'].forEach((value) =>
+            result.add(new User.fromJson(value)));
+      }catch(e){
+        print(response.data['contractors']['data']);
+        response.data['contractors']['data'].forEach((key,value) =>
+            result.add(new User.fromJson(value)));
+      }
       return result;
     } else {
       throw new Exception(response.statusMessage);
@@ -137,12 +146,13 @@ class MockApiClient {
     }
   }
 
-  Future<EService> getEService(String id) async {
+  Future<User> getEService(String id) async {
     var response = await httpClient
         .get(itcase_url + "contractors/category/" + id, options: _options);
     if (response.statusCode == 200) {
-
-      return new EService.fromJson(response.data['contractor']);
+      print("THERE ANSWER");
+      print(response.data);
+      return new User.fromJson(response.data['contractor']);
     } else {
       throw new Exception(response.statusMessage);
     }
@@ -258,16 +268,16 @@ class MockApiClient {
     }
   }
   Future<List<Tenders>> getTenders() async {
-    var response =
-    await httpClient.get(itcase_url + "tenders", options: _options);
-    if (response.statusCode == 200) {
-      return response.data['tenders']['data']
-          .map<Tenders>((obj) => Tenders.fromJson(obj))
-          .toList();
+      var response =
+      await httpClient.get(itcase_url + "tenders", options: _options);
+      if (response.statusCode == 200) {
+        return response.data['tenders']['data']
+            .map<Tenders>((obj) => Tenders.fromJson(obj))
+            .toList();
 
-    } else {
-      throw new Exception(response.statusMessage);
-    }
+      } else {
+        throw new Exception(response.statusMessage);
+      }
   }
   Future<List<Notification>> getNotifications() async {
     var response = await httpClient.get(baseUrl + "notifications/all.json",
@@ -295,10 +305,11 @@ class MockApiClient {
   }
 
   Future<Setting> getSettings() async {
-    var response =
-    await httpClient.get(baseUrl + "settings/all.json", options: _options);
+    var response = await Helper.getJsonFile('config/settings.json');
+
+    return Setting.fromJson(response['data']);
     if (response.statusCode == 200) {
-      return Setting.fromJson(response.data['data']);
+
     } else {
       throw new Exception(response.statusMessage);
     }

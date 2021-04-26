@@ -5,6 +5,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:itcase/app/models/user_model.dart';
 
 import '../../../../common/ui.dart';
 import '../../../models/e_service_model.dart';
@@ -13,16 +14,17 @@ import '../../../routes/app_pages.dart';
 class ServicesListItemWidget extends StatelessWidget {
   const ServicesListItemWidget({
     Key key,
-    @required EService service,
+    @required User service,
   })  : _service = service,
         super(key: key);
 
-  final EService _service;
+  final User _service;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        print("GO OT THE ROOT");
         Get.toNamed(Routes.E_SERVICE, arguments: _service);
       },
       child: Container(
@@ -42,7 +44,7 @@ class ServicesListItemWidget extends StatelessWidget {
                       height: 80,
                       width: 80,
                       fit: BoxFit.cover,
-                      imageUrl: _service.images ?? "",
+                      imageUrl: _service.image_gotten ?? "",
                       placeholder: (context, url) => Image.asset(
                         'assets/img/loading.gif',
                         fit: BoxFit.cover,
@@ -99,7 +101,7 @@ class ServicesListItemWidget extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        _service.title ?? '',
+                        _service.name ?? '',
                         style: Get.textTheme.bodyText2,
                         maxLines: 3,
                         // textAlign: TextAlign.end,
@@ -126,7 +128,7 @@ class ServicesListItemWidget extends StatelessWidget {
                                     color: Get.theme.accentColor,
                                     size: 18,
                                   ),
-                                  Text(" From  " , style: Get.textTheme.bodyText2.merge(TextStyle(color: Get.theme.accentColor, height: 1.4))),
+                                  Text("From".tr , style: Get.textTheme.bodyText2.merge(TextStyle(color: Get.theme.accentColor, height: 1.4))),
                                 ],
                               ),
                               backgroundColor: Get.theme.accentColor.withOpacity(0.15),
@@ -154,7 +156,7 @@ class ServicesListItemWidget extends StatelessWidget {
                       SizedBox(width: 5),
                       Flexible(
                         child: Text(
-                          _service.description ?? "",
+                          _service.about_myself ?? "",
                           maxLines: 1,
                           overflow: TextOverflow.fade,
                           softWrap: false,
@@ -173,7 +175,7 @@ class ServicesListItemWidget extends StatelessWidget {
                       SizedBox(width: 5),
                       Flexible(
                         child: Text(
-                          "PRICE",
+                          "PRICE".tr,
                           maxLines: 1,
                           overflow: TextOverflow.fade,
                           softWrap: false,

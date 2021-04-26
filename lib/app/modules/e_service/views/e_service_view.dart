@@ -3,6 +3,9 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:itcase/app/models/user_model.dart';
+import 'package:itcase/app/modules/e_service/widgets/add_contractor_to_tender.dart';
+import 'package:itcase/app/modules/e_service/widgets/remain_comment.dart';
 import '../../../global_widgets/block_button_widget.dart';
 import '../../../global_widgets/circular_loading_widget.dart';
 import '../../../models/e_service_model.dart';
@@ -20,7 +23,7 @@ class EServiceView extends GetView<EServiceController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      var _eService = controller.eService.value;
+      var _eService = controller.userConractor.value;
       if (!_eService.hasData) {
         return Scaffold(
           body: CircularLoadingWidget(height: Get.height),
@@ -30,6 +33,7 @@ class EServiceView extends GetView<EServiceController> {
           bottomNavigationBar: buildBlockButtonWidget(_eService),
           body: RefreshIndicator(
               onRefresh: () async {
+
                 controller.refreshEService(showMessage: true);
               },
               child: CustomScrollView(
@@ -56,8 +60,8 @@ class EServiceView extends GetView<EServiceController> {
                         return Stack(
                           alignment: AlignmentDirectional.bottomCenter,
                           children: <Widget>[
-                            buildCarouselSlider(controller.eService.value),
-                            buildCarouselBullets(controller.eService.value),
+                            buildCarouselSlider(controller.userConractor.value),
+                            buildCarouselBullets(controller.userConractor.value),
                           ],
                         );
                       }),
@@ -70,23 +74,12 @@ class EServiceView extends GetView<EServiceController> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         SizedBox(height: 10),
-                        buildCategories(controller.eService.value),
+                        buildCategories(controller.userConractor.value),
                         EServiceTilWidget(
                           title: Text("Description".tr, style: Get.textTheme.subtitle2),
-                          content: Text(_eService.description, style: Get.textTheme.bodyText1),
+                          content: Text(_eService.about_myself, style: Get.textTheme.bodyText1),
                         ),
-                        // EServiceTilWidget(
-                        //   title: Text("Service Provider".tr, style: Get.textTheme.subtitle2),
-                        //   content: EProviderItemWidget(provider: _eService.eProvider),
-                        //   actions: [
-                        //     GestureDetector(
-                        //       onTap: () {
-                        //         // TODO Service provider page link
-                        //       },
-                        //       child: Text("View More".tr, style: Get.textTheme.subtitle1),
-                        //     ),
-                        //   ],
-                        // ),
+
                         EServiceTilWidget(
                           title: Text("Galleries".tr, style: Get.textTheme.subtitle2),
                           content: Container(
@@ -115,7 +108,7 @@ class EServiceView extends GetView<EServiceController> {
                                               height: 100,
                                               width: double.infinity,
                                               fit: BoxFit.cover,
-                                              imageUrl: _eService.images,
+                                              imageUrl: _eService.image_gotten,
                                               placeholder: (context, url) => Image.asset(
                                                 'assets/img/loading.gif',
                                                 fit: BoxFit.cover,
@@ -152,30 +145,41 @@ class EServiceView extends GetView<EServiceController> {
                           title: Text("Reviews & Ratings".tr, style: Get.textTheme.subtitle2),
                           content: Column(
                             children: [
-                              Text('0', style: Get.textTheme.headline1),
+                              Text(controller.userConractor.value.rate.toString(), style: Get.textTheme.headline1),
                               Wrap(
-                                children: Ui.getStarsList(0, size: 32),
+                                children: Ui.getStarsList(controller.userConractor.value.rate, size: 32),
                               ),
                               Text(
-                                "Reviews (%s)".trArgs(["some "]),
+                                "Reviews (%s)".trArgs([controller.userConractor.value.comments.length.toString()]),
                                 style: Get.textTheme.caption,
                               ).paddingOnly(top: 10),
                               Divider(height: 35, thickness: 1.3),
                               Obx(() {
-                                if (controller.reviews.isEmpty) {
-                                  return CircularLoadingWidget(height: 100);
-                                }
-                                return ListView.separated(
-                                  padding: EdgeInsets.all(0),
-                                  itemBuilder: (context, index) {
-                                    return ReviewItemWidget(review: controller.reviews.elementAt(index));
-                                  },
-                                  separatorBuilder: (context, index) {
-                                    return Divider(height: 35, thickness: 1.3);
-                                  },
-                                  itemCount: controller.reviews.length,
-                                  primary: false,
-                                  shrinkWrap: true,
+                                return Stack(
+                                  children: [
+                                    Visibility(
+                                      visible: !controller.isLoaded.value,
+                                      child: CircularLoadingWidget(
+                                        height: 100,
+                                        onCompleteText: "No comments".tr,
+                                      ),
+                                    ),
+                                    Visibility(
+                                      child: ListView.separated(
+                                        padding: EdgeInsets.all(0),
+                                        itemBuilder: (context, index) {
+                                          return ReviewItemWidget(review: controller.comments.value[controller.comments.length - index - 1]);
+                                        },
+                                        separatorBuilder: (context, index) {
+                                          return Divider(height: 35, thickness: 1.3);
+                                        },
+                                        itemCount: controller.comments.length,
+                                        primary: false,
+                                        shrinkWrap: true,
+                                      ),
+                                      visible: controller.isLoaded.value,
+                                    ),
+                                  ],
                                 );
                               }),
                             ],
@@ -199,8 +203,8 @@ class EServiceView extends GetView<EServiceController> {
     });
   }
 
-  CarouselSlider buildCarouselSlider(EService _eService) {
-    print(_eService.images);
+  CarouselSlider buildCarouselSlider(User _eService) {
+
     return CarouselSlider(
       options: CarouselOptions(
         autoPlay: true,
@@ -220,7 +224,7 @@ class EServiceView extends GetView<EServiceController> {
                 width: double.infinity,
                 height: 350,
                 fit: BoxFit.cover,
-                imageUrl: _eService.images,
+                imageUrl: _eService.image_gotten,
                 placeholder: (context, url) => Image.asset(
                   'assets/img/loading.gif',
                   fit: BoxFit.cover,
@@ -235,7 +239,7 @@ class EServiceView extends GetView<EServiceController> {
     );
   }
 
-  Container buildCarouselBullets(EService _eService) {
+  Container buildCarouselBullets(User _eService) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 92, horizontal: 20),
       child: Row(
@@ -256,7 +260,7 @@ class EServiceView extends GetView<EServiceController> {
     );
   }
 //controller.currentSlide.value == _eService.media.indexOf(media) ? : Get.theme.primaryColor.withOpacity(0.4)
-  EServiceTitleBarWidget buildEServiceTitleBarWidget(EService _eService) {
+  EServiceTitleBarWidget buildEServiceTitleBarWidget(User _eService) {
     return EServiceTitleBarWidget(
       title: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -266,7 +270,7 @@ class EServiceView extends GetView<EServiceController> {
             children: [
               Expanded(
                 child: Text(
-                  _eService.title,
+                  _eService.name,
                   style: Get.textTheme.headline5,
                 ),
               ),
@@ -281,11 +285,11 @@ class EServiceView extends GetView<EServiceController> {
               Expanded(
                 child: Wrap(
                   crossAxisAlignment: WrapCrossAlignment.end,
-                  children: List.from(Ui.getStarsList(2.0))
+                  children: List.from(Ui.getStarsList(controller.userConractor.value.rate))
                     ..addAll([
                       SizedBox(width: 5),
                       Text(
-                        "Reviews (%s)".trArgs(["Тотал намбер"]),
+                        "Reviews (%s)".trArgs([controller.userConractor.value.comments.length.toString()]),
                         style: Get.textTheme.caption,
                       ),
                     ]),
@@ -303,7 +307,7 @@ class EServiceView extends GetView<EServiceController> {
     );
   }
 
-  Widget buildCategories(EService _eService) {
+  Widget buildCategories(User _eService) {
     print(_eService.category);
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -327,7 +331,7 @@ class EServiceView extends GetView<EServiceController> {
     );
   }
 
-  Widget buildBlockButtonWidget(EService _eService) {
+  Widget buildBlockButtonWidget(User _eService) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 20),
       decoration: BoxDecoration(
@@ -337,27 +341,60 @@ class EServiceView extends GetView<EServiceController> {
           BoxShadow(color: Get.theme.focusColor.withOpacity(0.1), blurRadius: 10, offset: Offset(0, -5)),
         ],
       ),
-      child: BlockButtonWidget(
-          text: Stack(
-            alignment: AlignmentDirectional.centerEnd,
-            children: [
-              SizedBox(
-                width: double.infinity,
-                child: Text(
-                  "Book This Service".tr,
-                  textAlign: TextAlign.center,
-                  style: Get.textTheme.headline6.merge(
-                    TextStyle(color: Get.theme.primaryColor),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Expanded(
+            child: BlockButtonWidget(
+                text: SizedBox(
+                  width: double.infinity,
+                  child: Text(
+                    "Add to tender".tr,
+                    textAlign: TextAlign.center,
+                    style: Get.textTheme.headline6.merge(
+                      TextStyle(color: Get.theme.primaryColor),
+                    ),
                   ),
                 ),
-              ),
-              Icon(Icons.arrow_forward_ios, color: Get.theme.primaryColor, size: 20)
-            ],
+                color: Get.theme.accentColor,
+                onPressed: ()async {
+                  final result =  await Get.bottomSheet(
+                    AddContractorToTender(),
+                    isScrollControlled: true,
+                  );
+                }).paddingOnly(right: 20, left: 20),
           ),
-          color: Get.theme.accentColor,
-          onPressed: () {
-            Get.toNamed(Routes.BOOK_E_SERVICE, arguments: _eService);
-          }).paddingOnly(right: 20, left: 20),
+          SizedBox(
+            width: 20,
+          ),
+          Expanded(
+            child: BlockButtonWidget(
+                text: Stack(
+                  alignment: AlignmentDirectional.centerEnd,
+                  children: [
+                    SizedBox(
+                      width: double.infinity,
+                      child: Text(
+                        "Comment".tr,
+                        textAlign: TextAlign.center,
+                        style: Get.textTheme.headline6.merge(
+                          TextStyle(color: Get.theme.primaryColor),
+                        ),
+                      ),
+                    ),
+                    Icon(Icons.arrow_forward_ios, color: Get.theme.primaryColor, size: 20)
+                  ],
+                ),
+                color: Get.theme.accentColor,
+                onPressed: ()async {
+                  final result =  await Get.bottomSheet(
+                    RemainComment(),
+                    isScrollControlled: true,
+                  );
+                }).paddingOnly(right: 20, left: 20),
+          ),
+        ],
+      ),
     );
   }
 }

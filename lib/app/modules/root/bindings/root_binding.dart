@@ -10,8 +10,7 @@ import '../../search/controllers/search_controller.dart';
 
 import '../../account/controllers/account_controller.dart';
 import '../../home/controllers/home_controller.dart';
-import '../../messages/controllers/messages_controller.dart';
-import '../../tasks/controllers/tasks_controller.dart';
+
 import '../controllers/root_controller.dart';
 
 class RootBinding extends Bindings {
@@ -34,13 +33,8 @@ class RootBinding extends Bindings {
     Get.lazyPut<TenderController>(
       () => TenderController(),
     );
-    // Get.lazyPut<MessagesController>(
-    //   () => MessagesController(),
-    // );
-    // );
-    Get.lazyPut<AuthController>(
-      () => AuthController(),
-    );
+
+
     Get.lazyPut<AccountController>(
       () => AccountController(),
     );

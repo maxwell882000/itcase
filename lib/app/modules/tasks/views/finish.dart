@@ -2,11 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:itcase/app/modules/account/widgets/account_link_widget.dart';
-import 'package:itcase/app/modules/tasks/controllers/tasks_controller.dart';
-import 'package:itcase/app/routes/app_pages.dart';
-import 'package:itcase/common/ui.dart';
 
-class TaskFinish extends GetView<TasksController> {
+import 'package:itcase/app/routes/app_pages.dart';
+
+
+class TaskFinish extends StatelessWidget {
   final bool hideAppBar;
 
   TaskFinish({this.hideAppBar = false}) {}
@@ -72,7 +72,9 @@ class TaskFinish extends GetView<TasksController> {
                       color: Get.theme.accentColor,
                     ),
                   ),
-                  onTap: (e) async {},
+                  onTap: (e) async {
+                    Get.toNamed(Routes.MY_TASKS);
+                  },
                 ),
               ),
             ],

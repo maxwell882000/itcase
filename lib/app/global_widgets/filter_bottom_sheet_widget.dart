@@ -4,11 +4,31 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:itcase/app/routes/app_pages.dart';
 
 import '../modules/search/controllers/search_controller.dart';
 import 'circular_loading_widget.dart';
 
 class FilterBottomSheetWidget extends GetView<SearchController> {
+  Widget buttonInRowAbove(
+      {String hintText, Function onPressed, String buttonName}) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 45),
+      child: Row(
+        children: [
+          Expanded(child: Text(hintText, style: Get.textTheme.headline5)),
+          FlatButton(
+            onPressed: () => onPressed(),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            color: Get.theme.accentColor.withOpacity(0.15),
+            child: Text(buttonName, style: Get.textTheme.subtitle1),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -27,9 +47,9 @@ class FilterBottomSheetWidget extends GetView<SearchController> {
       child: Stack(
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.only(top: 80),
+            padding: const EdgeInsets.only(top: 100, bottom: 100),
             child: ListView(
-              padding: EdgeInsets.only(top: 20, bottom: 15, left: 4, right: 4),
+              padding: EdgeInsets.only(top: 20, bottom: 25, left: 4, right: 4),
               children: [
                 ExpansionTile(
                   title: Text("Available Provider".tr,
@@ -56,7 +76,9 @@ class FilterBottomSheetWidget extends GetView<SearchController> {
                 ),
                 GetX(initState: (_) {
                   print("initState");
-                  controller.getCategories();
+                  if (controller.categories.value.isEmpty) {
+                    controller.getCategories();
+                  }
                 }, builder: (_) {
                   if (controller.categories.isEmpty) {
                     return CircularLoadingWidget(height: 100);
@@ -69,14 +91,12 @@ class FilterBottomSheetWidget extends GetView<SearchController> {
                       var _category = controller.categories.elementAt(index);
                       return CheckboxListTile(
                         controlAffinity: ListTileControlAffinity.trailing,
-                        value: false,
+                        value: _category.choose.value,
                         onChanged: (value) {
-                          // setState(() {
-                          //   _con.filter?.open = value;
-                          // });
+                          _category.choose.value = value;
                         },
                         title: Text(
-                          _category.ru_title,
+                          _category.title,
                           style: Get.textTheme.bodyText1,
                           overflow: TextOverflow.fade,
                           softWrap: false,
@@ -90,23 +110,25 @@ class FilterBottomSheetWidget extends GetView<SearchController> {
               ],
             ),
           ),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 45),
-            child: Row(
-              children: [
-                Expanded(
-                    child: Text("Filter".tr, style: Get.textTheme.headline5)),
-                FlatButton(
-                  onPressed: () {
-                    Get.back();
-                  },
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                  color: Get.theme.accentColor.withOpacity(0.15),
-                  child: Text("Apply".tr, style: Get.textTheme.subtitle1),
-                ),
-              ],
-            ),
+          buttonInRowAbove(
+              hintText: "Filter".tr,
+              buttonName: "Apply".tr,
+              onPressed: () async {
+                await controller.onSubmit();
+                Get.back();
+              }),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: buttonInRowAbove(
+                hintText: "Search in map".tr,
+                buttonName: "Go".tr,
+                onPressed: () async {
+                  Get.back();
+                  Get.toNamed(Routes.TENDER_SEARCH_MAP,
+                      arguments: controller.choosenCategories().isEmpty
+                          ? controller.allIdCategories()
+                          : controller.choosenCategories());
+                }),
           ),
           Container(
             height: 30,

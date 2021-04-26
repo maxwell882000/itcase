@@ -8,11 +8,11 @@ import '../../../routes/app_pages.dart';
 import '../../../../common/ui.dart';
 import '../controllers/home_controller.dart';
 
-class RecommendedCarouselWidget extends GetWidget<HomeController> {
+class TindersCarouselWidget extends GetWidget<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 270,
+      height: 230,
       color: Get.theme.primaryColor,
       child: GetX(builder: (context) {
         return ListView.builder(
@@ -27,7 +27,7 @@ class RecommendedCarouselWidget extends GetWidget<HomeController> {
                 width: 400,
                 child: GestureDetector(
                   onTap: () {
-                    // Get.toNamed(Routes.E_SERVICE, arguments: _tenders);
+                    Get.toNamed(Routes.TENDER_VIEW, arguments: _tenders);
                   },
                   child: TasksListWidget().list_tinders(_tenders),
                 ),

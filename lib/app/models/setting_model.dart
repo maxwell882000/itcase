@@ -33,7 +33,10 @@ class Setting {
   String homeSection10;
   String homeSection11;
   String homeSection12;
-
+  String button_color;
+  String link_color;
+  String app_bar;
+  String enable_color;
   Setting(
       {this.appName,
       this.enableStripe,
@@ -67,7 +70,10 @@ class Setting {
       this.homeSection9,
       this.homeSection10,
       this.homeSection11,
-      this.homeSection12});
+      this.homeSection12,
+      this.button_color,
+        this.enable_color,
+      this.link_color});
 
   Setting.fromJson(Map<String, dynamic> json) {
     appName = json['app_name'];
@@ -104,6 +110,10 @@ class Setting {
     homeSection10 = json['home_section_10'];
     homeSection11 = json['home_section_11'];
     homeSection12 = json['home_section_12'];
+    button_color = json['button_color'];
+    link_color = json['link_color'];
+    app_bar = json['app_bar'];
+    enable_color = json['enable_color'];
   }
 
   Map<String, dynamic> toJson() {
@@ -142,6 +152,9 @@ class Setting {
     data['home_section_10'] = this.homeSection10;
     data['home_section_11'] = this.homeSection11;
     data['home_section_12'] = this.homeSection12;
+    data['button_color'] =    button_color;
+    data['link_color'] = link_color;
+    data['app_bar']  = app_bar;
     return data;
   }
 }

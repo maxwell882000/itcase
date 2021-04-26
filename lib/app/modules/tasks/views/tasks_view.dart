@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:itcase/app/global_widgets/home_search_bar_widget.dart';
+import 'package:itcase/app/modules/search/controllers/search_controller.dart';
+import 'package:itcase/app/modules/search/views/search_view.dart';
 import 'package:itcase/app/modules/tasks/controllers/tender_controller.dart';
+import 'package:itcase/app/routes/app_pages.dart';
 
-import '../controllers/tasks_controller.dart';
-import '../widgets/tasks_carousel_widget.dart';
+
 import '../widgets/tasks_list_widget.dart';
 
 class TasksView extends GetView<TenderController> {
+  
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3,
+      length: 2,
       child: Scaffold(
         appBar: AppBar(
           title: Text(
@@ -39,7 +43,7 @@ class TasksView extends GetView<TenderController> {
                   decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: Get.theme.accentColor.withOpacity(0.2)),
                   child: Align(
                     alignment: Alignment.center,
-                    child: Text("Ongoing".tr, maxLines: 1, textAlign: TextAlign.center, overflow: TextOverflow.fade),
+                    child: Text("All".tr, maxLines: 1, textAlign: TextAlign.center, overflow: TextOverflow.fade),
                   ),
                 ),
               ),
@@ -49,17 +53,7 @@ class TasksView extends GetView<TenderController> {
                   decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: Get.theme.accentColor.withOpacity(0.2)),
                   child: Align(
                     alignment: Alignment.center,
-                    child: Text("Completed".tr, maxLines: 1, textAlign: TextAlign.center, overflow: TextOverflow.fade),
-                  ),
-                ),
-              ),
-              Tab(
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 5),
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: Get.theme.accentColor.withOpacity(0.2)),
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Text("Archived".tr, maxLines: 1, textAlign: TextAlign.center, overflow: TextOverflow.fade),
+                    child: Text("Available".tr, maxLines: 1, textAlign: TextAlign.center, overflow: TextOverflow.fade),
                   ),
                 ),
               ),
@@ -67,38 +61,50 @@ class TasksView extends GetView<TenderController> {
             onTap: (index) async {
               switch (index) {
                 case 0:
-                  await controller.getOngoingTasks();
+
+                  controller.paginationHelper.update();
+                  await controller.getTenders();
+                  controller.setShowMore(controller.getTenders);
                   break;
                 case 1:
-                  await controller.getCompletedTasks();
+                  controller.paginationHelper.update();
+                  await controller.getAvailableTenders();
+                  controller.setShowMore(controller.getAvailableTenders);
                   break;
-                case 2:
-                  await controller.getArchivedTasks();
               }
             },
           ),
         ),
         body: Padding(
           padding: const EdgeInsets.only(top: 20),
-          child: TabBarView(
+          child: Column(
             children: [
-              RefreshIndicator(
-                onRefresh: () async {
-                  await controller.getOngoingTasks(showMessage: true);
-                },
-                child: TasksListWidget(tasks: controller.ongoingTasks),
-              ),
-              RefreshIndicator(
-                onRefresh: () async {
-                  await controller.getCompletedTasks(showMessage: true);
-                },
-                child: TasksListWidget(tasks: controller.completedTasks),
-              ),
-              RefreshIndicator(
-                onRefresh: () async {
-                  await controller.getArchivedTasks(showMessage: true);
-                },
-                child: TasksListWidget(tasks: controller.archivedTasks),
+              HomeSearchBarWidget().buildSearchBar(heroTag: 'tender_search', onSubmit: (SearchController controller) {
+                  controller.tenders.value = this.controller.currentTasks.value;
+                  Get.toNamed(Routes.TENDER_SEARCH );
+              }),
+              Expanded(
+                child: TabBarView(
+                  children: [
+                    RefreshIndicator(
+                      onRefresh: () async {
+                        controller.paginationHelper.update();
+                        await controller.getTenders(showMessage: true);
+
+                        controller.currentTasks.value = controller.allTasks.value;
+                      },
+                      child: TasksListWidget(tasks: controller.allTasks),
+                    ),
+                    RefreshIndicator(
+                      onRefresh: () async {
+                        controller.paginationHelper.update();
+                        await controller.getAvailableTenders(showMessage: true);
+                        controller.currentTasks.value = controller.availableTasks.value;
+                      },
+                      child: TasksListWidget(tasks: controller.availableTasks),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
@@ -106,4 +112,5 @@ class TasksView extends GetView<TenderController> {
       ),
     );
   }
+
 }

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:itcase/app/providers/api.dart';
+import 'package:get/get.dart';
 
 import '../models/category_model.dart';
 import '../providers/mock_provider.dart';
@@ -31,5 +32,13 @@ class CategoryRepository {
 
   Future<List<Category>> getFeatured() {
     return _apiClient.getFeaturedCategories();
+  }
+  Future<List> getAllCategoriesTender() async{
+    var res = await API().getData('tenders/create/category');
+    if (res.statusCode ==200){
+      Map body = jsonDecode(res.body);
+      return body['category'];
+    }
+    throw {'message': "Occured Error".tr};
   }
 }

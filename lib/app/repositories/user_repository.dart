@@ -1,4 +1,8 @@
+import 'dart:convert';
+import 'package:get/get.dart';
 import 'package:dio/dio.dart';
+import 'package:itcase/app/providers/api.dart';
+import 'package:itcase/app/services/auth_service.dart';
 
 import '../models/address_model.dart';
 import '../models/user_model.dart';
@@ -23,19 +27,60 @@ class UserRepository {
     return _apiClient.getAddresses();
   }
 
-  // getId(id) {
-  //   return apiClient.getId(id);
-  // }
-  //
-  // delete(id) {
-  //   return apiClient.delete(id);
-  // }
-  //
-  // edit(obj) {
-  //   return apiClient.edit(obj);
-  // }
-  //
-  // add(obj) {
-  //   return apiClient.add(obj);
-  // }
+  Future<Map> getAccount({String id}) async {
+    if (id == null || id.isEmpty) {
+      id = '0';
+    }
+    var res = await API().getData('account/seeAccount/$id');
+    if (res.statusCode == 200) {
+      Map body = jsonDecode(res.body);
+      body['user']['role'] = body['role'];
+
+      return body;
+    } else if (res.statusCode == 401) {
+      throw 401;
+    } else {
+      print(res.statusCode);
+      print(res.body);
+      throw ("Error Occurred".tr);
+    }
+  }
+
+  Future<String> registerAccount(String json) async {
+          // print(json);
+    var response = await API().post(json, "register");
+    print(response);
+    var body = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      return body['token'];
+    }
+    throw body['error'];
+  }
+
+  Future<bool> resendPhoneCode() async {
+    final response = await API().post("","phone/resend");
+    print(response.body);
+    if (response.statusCode == 200) {
+      return true;
+    }
+    print(response.body);
+    return false;
+  }
+
+  Future<Map> modifyAccount(Map<String, dynamic> json, {String url}) async {
+    final response = await API().multipart(json, url, method: "POST");
+    Map body = jsonDecode(response);
+    return body;
+  }
+
+  Future<Map> saveProfessional(String json) async{
+    final result = await API().post(json, 'account/professional');
+    print(result.body);
+    if (result.statusCode ==200){
+      Map body = jsonDecode(result.body);
+      return body;
+    }
+
+    throw result.body;
+  }
 }

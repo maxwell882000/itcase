@@ -1,17 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:itcase/app/models/category_model.dart';
-import 'package:itcase/app/modules/tasks/controllers/tasks_controller.dart';
-import 'package:itcase/app/routes/app_pages.dart';
 
-class TaskIntro extends GetView<TasksController> {
+import 'package:itcase/app/routes/app_pages.dart';
+import 'package:itcase/app/services/auth_service.dart';
+
+class TaskIntro extends StatelessWidget {
   final bool hideAppBar;
   final GlobalKey<FormState> _profileForm = new GlobalKey<FormState>();
-
+  final currentUser = Get.find<AuthService>().user;
   TaskIntro({this.hideAppBar = false}) {
     // controller.profileForm = new GlobalKey<FormState>();
   }
+
   var subcategory;
 
   @override
@@ -28,8 +29,8 @@ class TaskIntro extends GetView<TasksController> {
               backgroundColor: Colors.transparent,
               automaticallyImplyLeading: false,
               leading: new IconButton(
-                icon: new Icon(Icons.arrow_back_ios, color: Colors.black),
-                onPressed: () => Get.back(),
+                icon: new Icon(Icons.sort, color: Colors.black87),
+                onPressed: () => {Scaffold.of(context).openDrawer()},
               ),
               elevation: 0,
             ),
@@ -82,16 +83,21 @@ class TaskIntro extends GetView<TasksController> {
                               .merge(TextStyle(color: Get.theme.primaryColor))),
                     ),
                     SizedBox(height: 15.0),
-                    FlatButton(
-                      onPressed: () {},
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                      color: Get.theme.primaryColorDark,
-                      child: Text("Become a performer".tr,
-                          style: Get.textTheme.bodyText2
-                              .merge(TextStyle(color: Get.theme.primaryColor))),
+                    Visibility(
+                      visible: !currentUser.value.isContractor.value,
+                      child: FlatButton(
+                        onPressed: () {
+                          Get.toNamed(Routes.BECOME_CONSTRUCTOR);
+                        },
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        color: Get.theme.primaryColorDark,
+                        child: Text("Become a performer".tr,
+                            style: Get.textTheme.bodyText2
+                                .merge(TextStyle(color: Get.theme.primaryColor))),
+                      ),
                     ),
                   ],
                 ),

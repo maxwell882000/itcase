@@ -4,468 +4,608 @@ import 'dart:io';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:itcase/app/global_widgets/format.dart';
+
 import 'package:itcase/app/modules/account/widgets/account_link_widget.dart';
+import 'package:itcase/app/modules/tasks/controllers/create_task_controller.dart';
 import 'package:itcase/app/modules/tasks/views/images.dart';
-import 'package:itcase/app/modules/tasks/views/map.dart';
+
 import 'package:itcase/common/ui.dart';
+import 'package:intl/intl.dart';
 import '../../../global_widgets/text_field_widget.dart';
 
-class TaskCreate extends StatefulWidget {
-  @override
-  _TaskCreateState createState() => _TaskCreateState();
-}
-
-class _TaskCreateState extends State<TaskCreate> {
-  String title,
-      description,
-      placeLoc = 'город',
-      dateStart,
-      dateEnd,
-      amount,
-      detail,
-      privateInfo,
-      photo,
-      phone;
-  var place = 'У меня';
-  bool private = false;
-  var imgs;
-
+class TaskCreate extends GetView<CreateTasksController> {
   final GlobalKey<FormState> _profileForm = new GlobalKey<FormState>();
 
-  File file;
-  String img, base64, imgName;
-  fromGallery() async {
-    file = await ImagePicker.pickImage(
-        source: ImageSource.gallery, imageQuality: 70);
-    if (file != null) {
-      setState(() {
-        final img = file.readAsBytesSync();
-        base64 = base64Encode(img);
-        imgName = file.path.split('/').last;
-        print(img);
-      });
-    }
-  }
 
-  fromCamera() async {
-    file = await ImagePicker.pickImage(
-        source: ImageSource.camera, imageQuality: 70);
-    if (file != null) {
-      setState(() {
-        final img = file.readAsBytesSync();
-        base64 = base64Encode(img);
-        imgName = file.path.split('/').last;
-      });
-    }
-  }
+  File file;
+  final length_valid = 5;
 
   next() {
     var data = {};
   }
 
+
+
+  storeCategories(String text){
+    controller.categoriesDropDown.id.clear();
+    controller.categoriesDropDown.subCategoriesList.clear();
+    controller.categoriesDropDown.categories.value = text;
+    controller.categoriesDropDown.categoriesList.where((element) => element[0][0] == text).forEach((e) => e[1].forEach((e) {
+      controller.categoriesDropDown.id.add(e[1]);
+      controller.categoriesDropDown.subCategoriesList.add(e[0]);
+    }));
+    controller.categoriesDropDown.subCategories.value= "";
+    controller.tenders.value.categories = [];
+  }
+  storeSubCategories(String text){
+
+    int index = getChoosen(text);
+    if (!checkChoosen(text)) {
+      controller.tenders.value.categories.add(index);
+    }
+    else {
+      controller.tenders.value.categories.remove(index);
+    }
+    controller.categoriesDropDown.subCategories.value = controller.tenders.value.categories.length.toString();
+  }
+  int getChoosen(String text){
+    int index = controller.categoriesDropDown.subCategoriesList.indexOf(text);
+    if (index == -1){
+      return index;
+    }
+    return controller.categoriesDropDown.id[index];
+  }
+  bool checkChoosen(String text){
+   return controller.tenders.value.categories.indexOf(getChoosen(text)) == -1 ? false : true;
+  }
+
+  Widget getCategories(String text, List<String> input, Function onChanged , final controller) {
+    return Expanded(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            text,
+            style: Get.textTheme.bodyText1,
+          ),
+          DropdownButton<String>(
+            style: Get.textTheme.bodyText2,
+            icon: Icon(Icons.arrow_drop_down),
+            isExpanded: true,
+            hint: Text(
+              controller.value
+            ),
+            onChanged: (v) {
+              // controller.te.value = v;
+              onChanged(v);
+            },
+            items: input
+                .map((String value) {
+                  bool choosen = checkChoosen(value);
+              return new DropdownMenuItem<String>(
+                value: value,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Flexible(child: Text(value)),
+                    Visibility(
+                      visible: choosen,
+                      child: Icon(
+                        Icons.check_circle_outline,
+                      ),
+                    )
+                  ],
+                ),
+              );
+            }).toList(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget subCategories(String text, List<String> input, Function onChanged , final controller) {
+    return Expanded(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            text,
+            style: Get.textTheme.bodyText1,
+          ),
+          DropdownButton<String>(
+            style: Get.textTheme.bodyText2,
+            icon: Icon(Icons.arrow_drop_down),
+            isExpanded: true,
+            value: controller.value.isEmpty? null: controller.value,
+            onChanged: (v) {
+              // controller.te.value = v;
+              onChanged(v);
+            },
+            items: input
+                .map((String value) {
+
+              return new DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text(
-            "Create a task".tr,
-            style: TextStyle(color: Get.theme.primaryColor),
+    return Obx(
+      () => Scaffold(
+          appBar: AppBar(
+            title: Text(
+              "Create a task".tr,
+              style: TextStyle(color: Get.theme.primaryColor),
+            ),
+            centerTitle: true,
+            backgroundColor: Get.theme.accentColor,
+            automaticallyImplyLeading: false,
+            elevation: 0,
           ),
-          centerTitle: true,
-          backgroundColor: Get.theme.accentColor,
-          automaticallyImplyLeading: false,
-          leading: new IconButton(
-            icon: new Icon(Icons.arrow_back_ios, color: Get.theme.primaryColor),
-            onPressed: () => Get.back(),
-          ),
-          elevation: 0,
-        ),
-        bottomNavigationBar: Container(
-          padding: EdgeInsets.symmetric(vertical: 10),
-          decoration: BoxDecoration(
-            color: Get.theme.primaryColor,
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20), topRight: Radius.circular(20)),
-            boxShadow: [
-              BoxShadow(
-                  color: Get.theme.focusColor.withOpacity(0.1),
-                  blurRadius: 10,
-                  offset: Offset(0, -5)),
-            ],
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                child: FlatButton(
-                  onPressed: () async {
-                    // print(imgs[0]);
-                    Get.to(SearchMap());
+          bottomNavigationBar: Container(
+            padding: EdgeInsets.symmetric(vertical: 10),
+            decoration: BoxDecoration(
+              color: Get.theme.primaryColor,
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+              boxShadow: [
+                BoxShadow(
+                    color: Get.theme.focusColor.withOpacity(0.1),
+                    blurRadius: 10,
+                    offset: Offset(0, -5)),
+              ],
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: FlatButton(
+                    onPressed: () {
+                      // print(imgs[0]);
+
+                      controller.submit_task(_profileForm);
+                      // Get.toNamed(Routes.MAP);
+                    },
+                    padding: EdgeInsets.symmetric(horizontal: 30, vertical: 12),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    color: Get.theme.accentColor,
+                    child: Text("Save".tr,
+                        style: Get.textTheme.bodyText2
+                            .merge(TextStyle(color: Get.theme.primaryColor))),
+                  ),
+                ),
+                SizedBox(width: 10),
+                FlatButton(
+                  onPressed: () {
+                    Get.back();
                   },
                   padding: EdgeInsets.symmetric(horizontal: 30, vertical: 12),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10)),
-                  color: Get.theme.accentColor,
-                  child: Text("Save".tr,
-                      style: Get.textTheme.bodyText2
-                          .merge(TextStyle(color: Get.theme.primaryColor))),
+                  color: Get.theme.hintColor.withOpacity(0.1),
+                  child: Text("Back".tr, style: Get.textTheme.bodyText2),
                 ),
-              ),
-              SizedBox(width: 10),
-              FlatButton(
-                onPressed: () {},
-                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 12),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)),
-                color: Get.theme.hintColor.withOpacity(0.1),
-                child: Text("Reset".tr, style: Get.textTheme.bodyText2),
-              ),
-            ],
-          ).paddingSymmetric(vertical: 10, horizontal: 20),
-        ),
-        body: Form(
-          key: _profileForm,
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                TextFieldWidget(
-                  onSaved: (input) => setState(() {
-                    title = input;
-                  }),
-                  validator: (input) => input.length < 3
-                      ? "Should be more than 3 letters".tr
-                      : null,
-                  hintText: "Enter title of task".tr,
-                  labelText: "Title".tr,
-                  iconData: Icons.title,
-                  isFirst: true,
-                  isLast: false,
-                ),
-                TextFieldWidget(
-                  onSaved: (input) => setState(() {
-                    description = input;
-                  }),
-                  validator: (input) => input.length < 100
-                      ? "Should be more than 100 letters"
-                      : null,
-                  hintText: "Write something",
-                  keyboardType: TextInputType.multiline,
-                  isFirst: false,
-                  isLast: true,
-                  maxLine: 5,
-                  height: 10,
-                  labelText: "Description".tr,
-                  iconData: Icons.description,
-                ),
-                box(
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      ListTile(
-                        dense: true,
-                        title: Text(
-                          "Work details".tr,
-                          style: TextStyle(
-                              color: Colors.black, fontWeight: FontWeight.bold),
-                        ),
-                        trailing: Icon(
-                          Icons.info_outline,
-                          color: Get.theme.focusColor.withOpacity(0.5),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10.0,
-                      ),
-                      Text(
-                        "Work description".tr,
-                        style: Get.textTheme.bodyText1,
-                      ),
-                      SizedBox(
-                        height: 8,
-                      ),
-                      Container(
-                        padding: EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                            color: Get.theme.primaryColor,
-                            border: Border.all(
-                                color: Get.theme.focusColor.withOpacity(0.2))),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            TextFormField(
-                              maxLines: 3,
-                              onSaved: (input) => setState(() {
-                                detail = input;
-                              }),
-                              validator: (input) => input.length < 25
-                                  ? "Should be more than 25 letters"
-                                  : null,
-                              style: Get.textTheme.bodyText2,
-                              decoration: Ui.getInputDecoration(
-                                hintText: "Write description",
-                                iconData: Icons.description,
-                              ),
-                              keyboardType: TextInputType.multiline,
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: 10.0),
-                      Text(
-                        "Private information".tr,
-                        style: Get.textTheme.bodyText1,
-                      ),
-                      SizedBox(
-                        height: 8,
-                      ),
-                      Container(
-                        padding: EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                            color: Get.theme.primaryColor,
-                            border: Border.all(
-                                color: Get.theme.focusColor.withOpacity(0.2))),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            TextFormField(
-                              maxLines: 2,
-                              onSaved: (input) => setState(() {
-                                detail = input;
-                              }),
-                              validator: (input) => input.length < 25
-                                  ? "Should be more than 25 letters"
-                                  : null,
-                              style: Get.textTheme.bodyText2,
-                              decoration: Ui.getInputDecoration(
-                                hintText: "apartment number, intercom code",
-                                iconData: Icons.info,
-                              ),
-                              keyboardType: TextInputType.multiline,
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: 10.0),
-                      Container(
-                        padding: EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                            color: Get.theme.primaryColor,
-                            border: Border.all(
-                                color: Get.theme.focusColor.withOpacity(0.05))),
-                        child: AccountLinkWidget(
-                          icon: Icon(Icons.album, color: Get.theme.accentColor),
-                          text: Text("Pictures".tr),
-                          onTap: (e) async {
-                            imgs = await Get.to(Img(), fullscreenDialog: true);
-                            print(imgs.length);
-                          },
-                        ),
-                      ),
-                      SizedBox(height: 10.0),
-                      Text(
-                        "Privacy".tr,
-                        style: Get.textTheme.bodyText1,
-                      ),
-                      Row(children: [
-                        Expanded(
-                          child: Text(
-                            "Task can see only special people, after finish only you and he",
-                            style: TextStyle(
-                                color: Colors.black38,
-                                fontWeight: FontWeight.w100,
-                                fontSize: 12),
-                          ),
-                        ),
-                        Switch(
-                          value: private,
-                          onChanged: (val) {
-                            setState(() {
-                              private = val;
-                            });
-                          },
-                          // activeTrackColor: Colors.yellow,
-                          // activeColor: Colors.orangeAccent,
-                        ),
-                      ]),
-                    ],
-                  ),
-                ),
-                box(
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text(
-                        "Place of indication of service".tr,
-                        style: Get.textTheme.bodyText1,
-                      ),
-                      DropdownButton<String>(
-                        style: Get.textTheme.bodyText2,
-                        icon: Icon(Icons.arrow_drop_down),
-                        isExpanded: true,
-                        value: place,
-                        onChanged: (v) {
-                          setState(() {
-                            place = v;
-                          });
-                        },
-                        items: <String>['У меня', 'У исполнителя', 'Неважно']
-                            .map((String value) {
-                          return new DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                      ),
-                      DropdownButton<String>(
-                        style: Get.textTheme.bodyText2,
-                        icon: Icon(Icons.arrow_drop_down),
-                        isExpanded: true,
-                        value: placeLoc,
-                        onChanged: (v) {
-                          setState(() {
-                            placeLoc = v;
-                          });
-                        },
-                        items: <String>[
-                          'город',
-                          'район',
-                          'станция метро',
-                          'улица'
-                        ].map((String value) {
-                          return new DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                      ),
-                    ],
-                  ),
-                ),
-                box(
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Date".tr,
-                        style: Get.textTheme.bodyText1,
-                      ),
-                      Row(
-                        // crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: DateTimePicker(
-                              type: DateTimePickerType.dateTime,
-                              onChanged: (val) => dateStart = val,
-                              dateMask: 'd MMM, yyyy',
-                              firstDate: DateTime(2000),
-                              lastDate: DateTime(2100),
-                              icon: Icon(Icons.event_available),
-                              dateLabelText: 'Start Date',
-                              style: Get.textTheme.bodyText1,
-                              use24HourFormat: true,
-                              //locale: Locale('pt', 'BR'),
-                            ),
-                          ),
-                          Expanded(
-                            child: DateTimePicker(
-                              type: DateTimePickerType.dateTime,
-                              onChanged: (val) => dateEnd = val,
-                              dateMask: 'd MMM, yyyy',
-                              firstDate: DateTime(2000),
-                              lastDate: DateTime(2100),
-                              icon: Icon(Icons.event),
-                              dateLabelText: 'End Date',
-                              style: Get.textTheme.bodyText1,
-                              timeLabelText: "Hour",
-                              use24HourFormat: true,
-                              //locale: Locale('pt', 'BR'),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                Last(
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text(
-                        "Cost of work".tr,
-                        style: Get.textTheme.bodyText1,
-                      ),
-                      DropdownButton<String>(
-                        style: Get.textTheme.bodyText2,
-                        icon: Icon(Icons.arrow_drop_down),
-                        isExpanded: true,
-                        value: amount,
-                        onChanged: (v) {
-                          setState(() {
-                            amount = v;
-                          });
-                        },
-                        items: <String>[
-                          '500 000',
-                          '1 000 000',
-                          '1 500 000',
-                          '2 000 000'
-                        ].map((String value) {
-                          return new DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                      ),
-                    ],
-                  ),
-                ),
-                TextFieldWidget(
-                  onSaved: (input) => setState(() {
-                    phone = input;
-                  }),
-                  validator: (input) => input == null
-                      ? "Please enter a valid phone number."
-                      : null,
-                  hintText: "+998 99 1234567",
-                  keyboardType: TextInputType.phone,
-                  labelText: "Phone".tr,
-                  iconData: Icons.phone_iphone,
-                ),
-                /*InkWell(
-                  onTap: () async {
-                    final List<DateTime> picked =
-                        await DateRagePicker.showDatePicker(
-                            context: context,
-                            initialFirstDate: new DateTime.now(),
-                            initialLastDate:
-                                (new DateTime.now()).add(new Duration(days: 7)),
-                            firstDate: new DateTime(2015),
-                            lastDate: new DateTime(2070));
-                    if (picked != null && picked.length == 2) {
-                      date = picked.toString();
-                    }
-                  },
-                  child: AbsorbPointer(
-                    child: TextFieldWidget(
-                        // keyboardType: TextInputType.phone,
-                        // onSaved: (input) =>
-
-                        // validator: (input) =>,
-                        initialValue: date,
-                        // hintText: "+1 565 6899 659",
-                        labelText: "Date".tr,
-                        iconData: Icons.calendar_today),
-                  ),
-                ),*/
               ],
-            ),
+            ).paddingSymmetric(vertical: 10, horizontal: 20),
           ),
-        ));
+          body: Form(
+            key: _profileForm,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  TextFieldWidget(
+                    onSaved: (input) {
+                      controller.tenders.value.title = input;
+                    },
+                    validator: (input) => input.length < 3
+                        ? "Should be more than 3 letters".tr
+                        : null,
+                    hintText: "Enter title of task".tr,
+                    labelText: "Title".tr,
+                    iconData: Icons.title,
+                    initialValue: controller.tenders.value.title,
+                    isFirst: true,
+                    isLast: false,
+                  ),
+                  box(
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        ListTile(
+                          dense: true,
+                          title: Text(
+                            "Work details".tr,
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          trailing: Icon(
+                            Icons.info_outline,
+                            color: Get.theme.focusColor.withOpacity(0.5),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10.0,
+                        ),
+                        Text(
+                          "Work description".tr,
+                          style: Get.textTheme.bodyText1,
+                        ),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        Container(
+                          padding: EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                              color: Get.theme.primaryColor,
+                              border: Border.all(
+                                  color:
+                                      Get.theme.focusColor.withOpacity(0.2))),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              TextFormField(
+                                maxLines: 3,
+                                onSaved: (input) {
+                                  controller.tenders.value.description = input;
+                                },
+                                validator: (input) =>
+                                    input.length < length_valid
+                                        ? "Should be more than 25 letters".tr
+                                        : null,
+                                style: Get.textTheme.bodyText2,
+                                initialValue: controller.tenders.value.description,
+                                decoration: Ui.getInputDecoration(
+                                  hintText: "Write description".tr,
+                                  iconData: Icons.description,
+                                ),
+                                keyboardType: TextInputType.multiline,
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 10.0),
+                        Text(
+                          "Additional information".tr,
+                          style: Get.textTheme.bodyText1,
+                        ),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        Container(
+                          padding: EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                              color: Get.theme.primaryColor,
+                              border: Border.all(
+                                  color:
+                                      Get.theme.focusColor.withOpacity(0.2))),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              TextFormField(
+                                maxLines: 2,
+                                onSaved: (input) {
+                                  controller.tenders.value.additional_info =
+                                      input;
+                                },
+                                validator: (input) =>
+                                    input.length < length_valid
+                                        ? "Should be more than 25 letters".tr
+                                        : null,
+                                style: Get.textTheme.bodyText2,
+                                initialValue: controller.tenders.value.additional_info,
+                                decoration: Ui.getInputDecoration(
+                                  hintText:
+                                      "Please enter additional information".tr,
+                                  iconData: Icons.info,
+                                ),
+                                keyboardType: TextInputType.multiline,
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 10.0),
+                        Text(
+                          "Ways of communication".tr,
+                          style: Get.textTheme.bodyText1,
+                        ),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        Container(
+                          padding: EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                              color: Get.theme.primaryColor,
+                              border: Border.all(
+                                  color:
+                                      Get.theme.focusColor.withOpacity(0.2))),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              TextFormField(
+                                maxLines: 2,
+                                onSaved: (input) {
+                                  controller.tenders.value.other_info = input;
+                                },
+                                validator: (input) =>
+                                    input.length < length_valid
+                                        ? "Should be more than 25 letters".tr
+                                        : null,
+                                style: Get.textTheme.bodyText2,
+                                initialValue: controller.tenders.value.other_info,
+                                decoration: Ui.getInputDecoration(
+                                  hintText:
+                                      "Please enter ways of communication".tr,
+                                  iconData: Icons.info,
+                                ),
+                                keyboardType: TextInputType.multiline,
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 10.0),
+                        Container(
+                          padding: EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                              color: Get.theme.primaryColor,
+                              border: Border.all(
+                                  color:
+                                      Get.theme.focusColor.withOpacity(0.05))),
+                          child: AccountLinkWidget(
+                            icon:
+                                Icon(Icons.album, color: Get.theme.accentColor),
+                            text: Text("Pictures".tr),
+                            onTap: (e) async {
+                              controller.tenders.value.files =
+                                  (await Get.to(Img(), fullscreenDialog: true)) ?? [];
+                              print(controller.tenders.value.files.length);
+                              print(controller.tenders.value.files);
+                            },
+                          ),
+                        ),
+                        SizedBox(height: 10.0),
+                        Text(
+                          "Remote work".tr,
+                          style: Get.textTheme.bodyText1,
+                        ),
+                        Row(children: [
+                          Expanded(
+                            child: Text(
+                              "Task can see only special people, after finish only you and he"
+                                  .tr,
+                              style: TextStyle(
+                                  color: Colors.black38,
+                                  fontWeight: FontWeight.w100,
+                                  fontSize: 12),
+                            ),
+                          ),
+                          Switch(
+                            value: controller.remote.value,
+                            onChanged: (val) {
+                              print(val);
+                              print(controller.tenders.value.remote);
+                              controller.remote.value =
+                                  !controller.remote.value;
+                              controller.tenders.value.remote =
+                                  controller.remote.value;
+                            },
+                            // activeTrackColor: Colors.yellow,
+                            // activeColor: Colors.orangeAccent,
+                          ),
+                        ]),
+                      ],
+                    ),
+                  ),
+                  box(
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          "Place of indication of service".tr,
+                          style: Get.textTheme.bodyText1,
+                        ),
+                        DropdownButton<String>(
+                          style: Get.textTheme.bodyText2,
+                          icon: Icon(Icons.arrow_drop_down),
+                          isExpanded: true,
+                          value: controller.place.value.isEmpty ? null :controller.place.value,
+                          onChanged: (v) {
+                            print(v);
+                            controller.place.value = v;
+
+                          },
+                          items: controller.placeItems.map<DropdownMenuItem<String>>((value) {
+                            return new DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }
+                          ).toList(),
+                        ),
+                      ],
+                    ),
+                  ),
+                  box(
+                    Row(
+                      children: [
+                         getCategories("Categories".tr,controller.categoriesDropDown.categoriesList.map<String>((e) => e[0][0]).toList(), storeCategories , controller.categoriesDropDown.categories),
+                        getCategories("SubCategories".tr, controller.categoriesDropDown.subCategoriesList, storeSubCategories, controller.categoriesDropDown.subCategories)
+                      ],
+                    )
+                  ),
+                  box(
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Date".tr,
+                          style: Get.textTheme.bodyText1,
+                        ),
+                        Row(
+                          // crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: DateTimePicker(
+                                type: DateTimePickerType.dateTime,
+                                onSaved: (val) {
+                                  controller.tenders.value.work_start_at = Format.parseDate(val,Format.outputFormat);
+                                },
+                                dateMask: 'd MMM, yyyy',
+                                firstDate: DateTime(2000),
+                                lastDate: DateTime(2100),
+                                icon: Icon(Icons.event_available),
+                                dateLabelText: 'Start Date'.tr,
+                                style: Get.textTheme.bodyText1,
+                                use24HourFormat: true,
+                                //locale: Locale('pt', 'BR'),
+                              ),
+                            ),
+                            Expanded(
+                              child: DateTimePicker(
+                                type: DateTimePickerType.dateTime,
+                                onSaved: (val) {
+                                  controller.tenders.value.work_end_at = Format.parseDate(val,Format.outputFormat);
+                                },
+                                dateMask: 'd MMM, yyyy',
+                                firstDate: DateTime(2000),
+                                lastDate: DateTime(2100),
+                                icon: Icon(Icons.event),
+                                dateLabelText: 'End Date'.tr,
+                                style: Get.textTheme.bodyText1,
+                                timeLabelText: "Hour".tr,
+                                use24HourFormat: true,
+                                //locale: Locale('pt', 'BR'),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: DateTimePicker(
+                                type: DateTimePickerType.dateTime,
+                                onSaved: (val) {
+                                  if (val.isNotEmpty) {
+                                    controller.tenders.value.deadline =
+                                       Format.parseDate(val, Format.outputFormatDeadline);
+                                  }
+                                },
+                                dateMask: 'd.M.yyyy',
+                                firstDate: DateTime(2000),
+                                lastDate: DateTime(2100),
+
+                                icon: Icon(Icons.event),
+                                validator: (val) {
+                                  print(val);
+                                  return null;
+                                },
+                                dateLabelText:
+                                    'Deadline of accepting applications'.tr,
+                                style: Get.textTheme.bodyText1,
+                                timeLabelText: "Hour".tr,
+                                use24HourFormat: true,
+                                //locale: Locale('pt', 'BR'),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  Last(
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          child: DropdownButton<String>(
+                            hint: Text(
+                              "Choose cost of work".tr,
+                              style: Get.textTheme.bodyText1,
+                            ),
+                            style: Get.textTheme.bodyText2,
+                            icon: Icon(Icons.arrow_drop_down),
+                            isExpanded: true,
+                            value: controller.amount.value.isEmpty
+                                ? null
+                                : controller.amount.value,
+                            onChanged: (v) {
+                              controller.amount.value = v;
+                              controller.tenders.value.budget =
+                                  controller.amount.value;
+                              controller.textEditingController.value.clear();
+                            },
+                            items: <String>[
+                              '500 000',
+                              '1 000 000',
+                              '1 500 000',
+                              '2 000 000'
+                            ].map((String value) {
+                              return new DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
+                          ),
+                          width: 100,
+                          height: 50,
+                        ),
+                        Expanded(
+                          child: TextFieldWidget(
+                            controller: controller.textEditingController.value,
+                            onSaved: (input) {
+                              if (input.isNotEmpty)
+                                controller.tenders.value.budget = input;
+                            },
+                            hintText: "Enter cost".tr,
+                            keyboardType: TextInputType.phone,
+                            initialValue: controller.tenders.value.budget,
+                            labelText: "Cost of work".tr,
+                            iconData: Icons.phone_iphone,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  TextFieldWidget(
+                    onSaved: (input) =>
+                        controller.tenders.value.client_phone_number = input,
+                    validator: (input) {
+                      bool reg = new RegExp(r'^\+[0-9]{12}$').hasMatch(input);
+                      print("THERE US");
+                      print(reg);
+                      return !reg
+                          ? "Please enter a valid phone number.".tr
+                          : null;
+                    },
+                    initialValue: controller.tenders.value.client_phone_number,
+                    hintText: "+998 99 1234567",
+                    keyboardType: TextInputType.phone,
+                    labelText: "Phone".tr,
+                    iconData: Icons.phone_iphone,
+                  ),
+                ],
+              ),
+            ),
+          )),
+    );
   }
 }
 

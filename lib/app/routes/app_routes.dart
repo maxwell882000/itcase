@@ -10,10 +10,12 @@ abstract class Routes {
   static const RATING = '/rating';
   static const CHAT = '/chat';
 
+  static const SETTINGS_PROFILE = '/settings/profile';
   static const SETTINGS = '/settings';
   static const SETTINGS_THEME_MODE = '/settings/theme_mode';
   static const SETTINGS_LANGUAGE = '/settings/language';
-
+  static const GUEST = "/account/guest";
+  static const ACCOUNT = "/account";
   static const PROFILE = '/profile';
   static const CATEGORY = '/category';
   static const CATEGORIES = '/categories';
@@ -29,5 +31,20 @@ abstract class Routes {
   static const UPLOAD = '/upload';
   static const TASKS = '/tasks';
   static const CREATE_TASK = '/create-task';
-  static const TINDERS_VIEW = '/tinder-view';
+  static const TINDERS_VIEW = '/tinders-view';
+  static const BECOME_CONSUMER = "/become-consumer";
+  static const BECOME_CONSTRUCTOR = "/become-constructor";
+  static const MY_TASKS = "/my-task";
+  static const GUEST_TASKS = '/guest-task';
+  static const AFTER_REGISTRATION = "/created-account";
+  static const MAP = "/map";
+  static const TENDER_VIEW = '/tinder-view';
+  static const TAKE_OFFER = '/take-offer';
+  static const TENDER_SEARCH = '/tinder/search';
+  static const TENDER_SEARCH_MAP = '/tinder/search/map';
+  static const CHATS_ALL = '/chats/all';
+  static const FILL_ACCOUNT = '/fill_account';
+  static const DYNAMIC_URL = '/dynamic_url';
+
+  static const REQUESTED_TASKS = '/requested_tasks';
 }

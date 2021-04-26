@@ -9,9 +9,10 @@ import 'filter_bottom_sheet_widget.dart';
 class HomeSearchBarWidget extends StatelessWidget implements PreferredSize {
   final controller = Get.find<SearchController>();
 
-  Widget buildSearchBar() {
+  Widget buildSearchBar({String heroTag = "home_search", Function onSubmit}) {
+    controller.heroTag.value = heroTag;
     return Hero(
-      tag: "home_search",
+      tag: heroTag,
       child: Container(
         margin: EdgeInsets.only(left: 20, right: 20, bottom: 16),
         padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
@@ -23,13 +24,20 @@ class HomeSearchBarWidget extends StatelessWidget implements PreferredSize {
             borderRadius: BorderRadius.circular(10)),
         child: GestureDetector(
           onTap: () {
-            Get.toNamed(Routes.SEARCH, arguments: "home_search");
+            if (heroTag=="home_search")
+            Get.toNamed(Routes.SEARCH);
+            else {
+              onSubmit(controller);
+            }
           },
           child: Row(
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.only(right: 12, left: 0),
-                child: Icon(Icons.search, color: Get.theme.accentColor),
+                child: GestureDetector(
+                    onTap: () {
+                    },
+                    child: Icon(Icons.search, color: Get.theme.accentColor)),
               ),
               Expanded(
                 child: Text(
@@ -43,10 +51,11 @@ class HomeSearchBarWidget extends StatelessWidget implements PreferredSize {
               SizedBox(width: 8),
               GestureDetector(
                 onTap: () {
-                  Get.bottomSheet(
-                    FilterBottomSheetWidget(),
-                    isScrollControlled: true,
-                  );
+                  if (heroTag=="home_search")
+                    Get.toNamed(Routes.SEARCH);
+                  else {
+                    onSubmit(controller);
+                  }
                 },
                 child: Container(
                   padding: const EdgeInsets.only(right: 10, left: 10, top: 10, bottom: 10),

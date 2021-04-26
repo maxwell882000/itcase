@@ -1,10 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-
+import 'package:itcase/app/models/comments.dart';
+import 'package:get/get.dart';
 import '../../../models/review_model.dart';
 
 class ReviewItemWidget extends StatelessWidget {
-  final Review review;
+  final Comments review;
 
   ReviewItemWidget({Key key, this.review}) : super(key: key);
 
@@ -26,7 +27,7 @@ class ReviewItemWidget extends StatelessWidget {
                   height: 65,
                   width: 65,
                   fit: BoxFit.cover,
-                  imageUrl: "",
+                  imageUrl: review.images,
                   placeholder: (context, url) => Image.asset(
                     'assets/img/loading.gif',
                     fit: BoxFit.cover,
@@ -43,7 +44,7 @@ class ReviewItemWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      review.user.name,
+                      review.who_set,
                       overflow: TextOverflow.fade,
                       softWrap: false,
                       maxLines: 2,
@@ -53,7 +54,7 @@ class ReviewItemWidget extends StatelessWidget {
                           .merge(TextStyle(color: Theme.of(context).hintColor)),
                     ),
                     Text(
-                      "BIO", // review.user.bio,
+                      "Published".tr + ": " + review.date, // review.user.bio,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.caption,
                     ),
@@ -67,7 +68,7 @@ class ReviewItemWidget extends StatelessWidget {
                   label: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Text(review.rate.toString(),
+                      Text(review.assessment,
                           style: Theme.of(context).textTheme.bodyText1.merge(
                               TextStyle(
                                   color: Theme.of(context).primaryColor))),
@@ -86,7 +87,7 @@ class ReviewItemWidget extends StatelessWidget {
             ],
           ),
           Text(
-            review.review,
+            review.comment,
             style: Theme.of(context).textTheme.caption,
             overflow: TextOverflow.ellipsis,
             softWrap: false,

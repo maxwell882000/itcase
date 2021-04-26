@@ -6,10 +6,8 @@ import 'package:itcase/app/models/tenders.dart';
 import 'package:itcase/app/modules/tasks/controllers/tender_controller.dart';
 import '../../../global_widgets/circular_loading_widget.dart';
 import '../../../../common/ui.dart';
-import 'package:intl/intl.dart' show DateFormat;
 
-import '../../../models/task_model.dart';
-import '../controllers/tasks_controller.dart';
+
 import 'task_row_widget.dart';
 
 class TasksCarouselWidget extends StatelessWidget {

@@ -1,121 +1,123 @@
-// import 'package:cached_network_image/cached_network_image.dart';
-// import 'package:flutter/material.dart';
-// import 'package:get/get.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:itcase/app/global_widgets/format.dart';
+import 'package:itcase/app/models/message_model.dart';
+import 'package:itcase/app/modules/messages/controllers/chats_controller.dart';
+import 'package:itcase/app/modules/messages/controllers/messages_controller.dart';
 
-// import '../../../models/chat_model.dart';
-// import '../../../services/auth_service.dart';
+import '../../../models/chat_model.dart';
+import '../../../services/auth_service.dart';
 
-// class ChatMessageItem extends StatelessWidget {
-//   final Chat chat;
+class ChatMessageItem extends GetView<ChatController> {
+  final Message message;
 
-//   ChatMessageItem({this.chat});
+  ChatMessageItem({this.message});
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Get.find<AuthService>().user.value.id == this.chat.userId ? getSentMessageLayout(context) : getReceivedMessageLayout(context);
-//   }
+  @override
+  Widget build(BuildContext context) {
+    return message.user_id != int.parse(controller.chat.value.user.id)
+        ? getSentMessageLayout(context)
+        : getReceivedMessageLayout(context);
+  }
 
-//   Widget getSentMessageLayout(context) {
-//     return Align(
-//       alignment: Alignment.centerRight,
-//       child: Container(
-//         decoration: BoxDecoration(
-//             color: Get.theme.focusColor.withOpacity(0.2),
-//             borderRadius: BorderRadius.only(topLeft: Radius.circular(15), bottomLeft: Radius.circular(15), bottomRight: Radius.circular(15))),
-//         padding: EdgeInsets.symmetric(vertical: 7, horizontal: 15),
-//         margin: EdgeInsets.symmetric(vertical: 5),
-//         child: Row(
-//           mainAxisSize: MainAxisSize.min,
-//           mainAxisAlignment: MainAxisAlignment.start,
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: [
-//             new Flexible(
-//               child: new Column(
-//                 crossAxisAlignment: CrossAxisAlignment.end,
-//                 children: <Widget>[
-//                   new Text(this.chat.user.name, style: Get.textTheme.bodyText1.merge(TextStyle(fontWeight: FontWeight.w600))),
-//                   new Container(
-//                     margin: const EdgeInsets.only(top: 5.0),
-//                     child: new Text(chat.text),
-//                   ),
-//                 ],
-//               ),
-//             ),
-//             new Container(
-//               margin: const EdgeInsets.only(left: 8.0),
-//               width: 42,
-//               height: 42,
-//               child: ClipRRect(
-//                 borderRadius: BorderRadius.all(Radius.circular(42)),
-//                 child: CachedNetworkImage(
-//                   width: double.infinity,
-//                   fit: BoxFit.cover,
-//                   imageUrl: this.chat.user.mediaThumb,
-//                   placeholder: (context, url) => Image.asset(
-//                     'assets/img/loading.gif',
-//                     fit: BoxFit.cover,
-//                     width: double.infinity,
-//                   ),
-//                   errorWidget: (context, url, error) => Icon(Icons.error_outline),
-//                 ),
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
+  Widget layout({Widget child = const SizedBox()}) {
+    return new Flexible(
+      child: new Row(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: <Widget>[
+          Flexible(
+            child: new Container(
+              margin: const EdgeInsets.only(top: 5.0),
+              child: new Text(message.text),
+            ),
+          ),
+          Align(
+            heightFactor: 2,
+            child: SizedBox(
+              height: 5,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Obx(
+                    () => Text(
+                      !message.isSend.value
+                          ? ""
+                          : Format.parseDate(message.whenSended.value,
+                              Format.outputFormatMessages),
+                      textAlign: TextAlign.start,
+                      overflow: TextOverflow.visible,
+                      style: Get.textTheme.bodyText1.merge(TextStyle()),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          child,
+        ],
+      ),
+    );
+  }
 
-//   Widget getReceivedMessageLayout(context) {
-//     return Align(
-//       alignment: Alignment.centerLeft,
-//       child: Container(
-//         decoration: BoxDecoration(
-//             color: Get.theme.accentColor, borderRadius: BorderRadius.only(topRight: Radius.circular(15), bottomLeft: Radius.circular(15), bottomRight: Radius.circular(15))),
-//         padding: EdgeInsets.symmetric(vertical: 7, horizontal: 10),
-//         margin: EdgeInsets.symmetric(vertical: 5),
-//         child: Row(
-//           mainAxisSize: MainAxisSize.min,
-//           mainAxisAlignment: MainAxisAlignment.start,
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: <Widget>[
-//             new Container(
-//               margin: const EdgeInsets.only(right: 10),
-//               width: 42,
-//               height: 42,
-//               child: ClipRRect(
-//                 borderRadius: BorderRadius.all(Radius.circular(42)),
-//                 child: CachedNetworkImage(
-//                   width: double.infinity,
-//                   fit: BoxFit.cover,
-//                   imageUrl: this.chat.user.mediaThumb,
-//                   placeholder: (context, url) => Image.asset(
-//                     'assets/img/loading.gif',
-//                     fit: BoxFit.cover,
-//                     width: double.infinity,
-//                   ),
-//                   errorWidget: (context, url, error) => Icon(Icons.error_outline),
-//                 ),
-//               ),
-//             ),
-//             new Flexible(
-//               child: new Column(
-//                 crossAxisAlignment: CrossAxisAlignment.start,
-//                 children: <Widget>[
-//                   new Text(this.chat.user.name, style: Get.textTheme.bodyText1.merge(TextStyle(fontWeight: FontWeight.w600, color: Get.theme.primaryColor))),
-//                   new Container(
-//                     margin: const EdgeInsets.only(top: 5.0),
-//                     child: new Text(
-//                       chat.text,
-//                       style: TextStyle(color: Get.theme.primaryColor),
-//                     ),
-//                   ),
-//                 ],
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
+  Widget getSentMessageLayout(context) {
+    return Align(
+      alignment: Alignment.centerRight,
+      child: Container(
+        decoration: BoxDecoration(
+            color: Get.theme.focusColor.withOpacity(0.2),
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(15),
+                bottomLeft: Radius.circular(15),
+                bottomRight: Radius.circular(15))),
+        padding: EdgeInsets.symmetric(vertical: 7, horizontal: 17),
+        margin: EdgeInsets.symmetric(vertical: 5),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            layout(
+              child: Align(
+                heightFactor: 0.05,
+                child: Obx(
+                  () => Icon(
+                    !message.isSend.value
+                        ? Icons.refresh
+                        : !message.isRead.value
+                            ? Icons.check
+                            : Icons.send,
+                    size: 12,
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget getReceivedMessageLayout(context) {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Container(
+        decoration: BoxDecoration(
+            color: Get.theme.accentColor,
+            borderRadius: BorderRadius.only(
+                topRight: Radius.circular(15),
+                bottomLeft: Radius.circular(15),
+                bottomRight: Radius.circular(15))),
+        padding: EdgeInsets.symmetric(vertical: 7, horizontal: 10),
+        margin: EdgeInsets.symmetric(vertical: 5),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[layout()],
+        ),
+      ),
+    );
+  }
+}

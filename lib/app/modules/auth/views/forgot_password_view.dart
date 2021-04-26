@@ -64,13 +64,13 @@ class ForgotPasswordView extends GetView<AuthController> {
                 ),
                 Container(
                   decoration: Ui.getBoxDecoration(
-                    radius: 14,
+                    radius: 100,
                     border: Border.all(width: 5, color: Get.theme.primaryColor),
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                     child: Image.asset(
-                      'assets/icon/icon.png',
+                      'assets/icon/logo_itcase.png',
                       fit: BoxFit.cover,
                       width: 100,
                       height: 100,
@@ -88,7 +88,7 @@ class ForgotPasswordView extends GetView<AuthController> {
               onPressed: () {
                 Get.offAllNamed(Routes.ROOT);
               },
-              color: Get.theme.accentColor,
+              color: Get.theme.buttonColor,
               text: Text(
                 "Send Reset Link".tr,
                 style: Get.textTheme.headline6.merge(TextStyle(color: Get.theme.primaryColor)),
@@ -101,21 +101,11 @@ class ForgotPasswordView extends GetView<AuthController> {
                   onPressed: () {
                     Get.offAllNamed(Routes.REGISTER);
                   },
-                  child: Text("You don't have an account?".tr),
+                  child: Text("You don't have an account?".tr,style: Get.textTheme.button,),
                 ),
               ],
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                TextButton(
-                  onPressed: () {
-                    Get.offAllNamed(Routes.REGISTER);
-                  },
-                  child: Text("You remember my password!".tr),
-                ),
-              ],
-            ),
+
           ],
         ));
   }

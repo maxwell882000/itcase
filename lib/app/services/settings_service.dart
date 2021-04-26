@@ -29,6 +29,8 @@ class SettingsService extends GetxService {
         primaryColor: Colors.white,
         floatingActionButtonTheme: FloatingActionButtonThemeData(elevation: 0, foregroundColor: Colors.white),
         brightness: Brightness.light,
+        bottomAppBarColor: Ui.parseColor(setting.value.app_bar),
+        buttonColor: Ui.parseColor(setting.value.button_color),
         accentColor: Ui.parseColor(setting.value.mainColor),
         dividerColor: Ui.parseColor(setting.value.accentColor, opacity: 0.1),
         focusColor: Ui.parseColor(setting.value.accentColor),
@@ -53,6 +55,7 @@ class SettingsService extends GetxService {
             bodyText2: TextStyle(fontSize: 13.0, fontWeight: FontWeight.w600, color: Ui.parseColor(setting.value.secondColor), height: 1.2),
             bodyText1: TextStyle(fontSize: 12.0, fontWeight: FontWeight.w400, color: Ui.parseColor(setting.value.secondColor), height: 1.2),
             caption: TextStyle(fontSize: 12.0, fontWeight: FontWeight.w300, color: Ui.parseColor(setting.value.accentColor), height: 1.2),
+            button: TextStyle(fontSize: 12.0, fontWeight: FontWeight.w300, color: Ui.parseColor(setting.value.link_color), height: 1.2),
           ),
         ));
   }
@@ -102,6 +105,7 @@ class SettingsService extends GetxService {
 
   ThemeMode getThemeMode() {
     String _themeMode = GetStorage().read<String>('theme_mode');
+    print(_themeMode);
     switch (_themeMode) {
       case 'ThemeMode.light':
         SystemChrome.setSystemUIOverlayStyle(

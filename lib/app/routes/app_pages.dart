@@ -1,10 +1,31 @@
-  import 'package:get/get.dart' show GetPage, Transition;
+import 'package:get/get.dart' show GetPage, Transition;
+import 'package:itcase/app/modules/account/bindings/account_binding.dart';
+import 'package:itcase/app/modules/account/bindings/become_contractor_binding.dart';
+import 'package:itcase/app/modules/account/views/account_view.dart';
+import 'package:itcase/app/modules/account/views/setttings_view.dart';
+import 'package:itcase/app/modules/auth/bindings/fill_account_bindings.dart';
+import 'package:itcase/app/modules/auth/bindings/verify_bindings.dart';
+import 'package:itcase/app/modules/auth/controllers/auth_controller.dart';
+import 'file:///C:/Projects/newest/itcase/lib/app/modules/account/views/become_constractor.dart';
+import 'package:itcase/app/modules/auth/views/register/become_consumer.dart';
+import 'package:itcase/app/modules/auth/views/register/after_registartion.dart';
+import 'package:itcase/app/modules/auth/views/register/fill_account.dart';
+import 'package:itcase/app/modules/messages/bindings/message_bindings.dart';
+import 'package:itcase/app/modules/messages/views/messages_view.dart';
+import 'package:itcase/app/modules/search/bindings/search_binding.dart';
+import 'package:itcase/app/modules/search/views/search_view_map.dart';
+import 'package:itcase/app/modules/search/views/search_view_tenders.dart';
 import 'package:itcase/app/modules/tasks/bindings/task_binding.dart';
+import 'package:itcase/app/modules/tasks/views/guest_tasks.dart';
+import 'package:itcase/app/modules/tasks/views/map.dart';
+import 'package:itcase/app/modules/tasks/views/my_task.dart';
+import 'package:itcase/app/modules/tasks/views/requested_tasks.dart';
+import 'package:itcase/app/modules/tasks/views/take_offer.dart';
 import 'package:itcase/app/modules/tasks/views/task_create.dart';
 import 'package:itcase/app/modules/tasks/views/tasks_view.dart';
+import 'package:itcase/app/modules/tasks/views/tender_view.dart';
 import '../modules/account/views/image_upload.dart';
-import '../modules/favorites/bindings/favorites_binding.dart';
-import '../modules/favorites/views/favorites_view.dart';
+
 import '../modules/help_privacy/bindings/help_privacy_binding.dart';
 import '../modules/help_privacy/views/help_view.dart';
 import '../modules/help_privacy/views/privacy_view.dart';
@@ -15,7 +36,7 @@ import '../modules/auth/bindings/auth_binding.dart';
 import '../modules/auth/views/forgot_password_view.dart';
 import '../modules/auth/views/login_view.dart';
 import '../modules/auth/views/phone_verification_view.dart';
-import '../modules/auth/views/register_view.dart';
+import '../modules/auth/views/register/register_view.dart';
 import '../modules/book_e_service/bindings/book_e_service_binding.dart';
 import '../modules/book_e_service/views/book_e_service_view.dart';
 import '../modules/category/bindings/category_binding.dart';
@@ -39,22 +60,54 @@ import '../modules/settings/views/language_view.dart';
 import '../modules/settings/views/settings_view.dart';
 import '../modules/settings/views/theme_mode_view.dart';
 import '../modules/tasks/views/task_intro.dart';
-
+import '../modules/account/views/guest_view.dart';
+import 'package:itcase/common/dynamic_link.dart';
 part 'app_routes.dart';
 
 class AppPages {
-  static const INITIAL = Routes.ROOT;
+  static const INITIAL = Routes.LOGIN;
 
   static final routes = [
+    GetPage(name: Routes.DYNAMIC_URL, page: () => DynamicLinks()),
     GetPage(name: Routes.ROOT, page: () => RootView(), binding: RootBinding()),
-
-
-    GetPage(name: Routes.TINDERS_VIEW, page: () => TasksView(), binding: TaskBindings()),
+    GetPage(
+      name: Routes.AFTER_REGISTRATION,
+      binding: AuthBinding(),
+      page: () => AfterRegistration(),
+    ),
+    GetPage(
+      name: Routes.GUEST,
+      page: () => GuestView(),
+      binding: AccountBinding(),
+    ),
+    GetPage(
+      name: Routes.ACCOUNT,
+      binding: AccountBinding(),
+      page: () => AccountView(),
+    ),
+    GetPage(
+      name: Routes.MAP,
+      binding: TaskBindings(),
+      page: () => SearchMap(),
+    ),
+    GetPage(
+        name: Routes.TINDERS_VIEW,
+        page: () => TasksView(),
+        binding: TaskBindings()),
+    GetPage(
+        name: Routes.MY_TASKS, page: () => MyTasks()),
+    GetPage(
+        name: Routes.REQUESTED_TASKS, page: () => RequestedTasks()),
     GetPage(
         name: Routes.RATING,
         page: () => RatingView(),
         binding: RatingBinding()),
-    // GetPage(name: Routes.CHAT, page: () => ChatsView()),
+    GetPage(
+        name: Routes.CHAT, page: () => ChatsView(), binding: MessageBindings()),
+    GetPage(
+        name: Routes.CHATS_ALL,
+        page: () => MessagesView(),
+        binding: MessageBindings()),
     GetPage(
         name: Routes.SETTINGS,
         page: () => SettingsView(),
@@ -82,9 +135,20 @@ class AppPages {
     GetPage(
         name: Routes.LOGIN, page: () => LoginView(), binding: AuthBinding()),
     GetPage(
+        name: Routes.BECOME_CONSUMER,
+        page: () => BecomeConsumer(),
+        binding: FillAccountBindings()),
+    GetPage(
+        name: Routes.BECOME_CONSTRUCTOR,
+        page: () => BecomeConstructor(),
+        binding: BecomeContractorBinding()),
+    GetPage(
         name: Routes.REGISTER,
         page: () => RegisterView(),
-        binding: AuthBinding()),
+        binding: VerifyBindings()),
+    GetPage(name: Routes.FILL_ACCOUNT,
+        page: () => CreateAccount(),
+        binding: FillAccountBindings() ),
     GetPage(
         name: Routes.FORGOT_PASSWORD,
         page: () => ForgotPasswordView(),
@@ -92,7 +156,7 @@ class AppPages {
     GetPage(
         name: Routes.PHONE_VERIFICATION,
         page: () => PhoneVerificationView(),
-        binding: AuthBinding()),
+        binding: VerifyBindings()),
     GetPage(
         name: Routes.E_SERVICE,
         page: () => EServiceView(),
@@ -123,17 +187,38 @@ class AppPages {
     //     name: Routes.FAVORITES,
     //     page: () => FavoritesView(),
     //     binding: FavoritesBinding()),
+    GetPage(name: Routes.GUEST_TASKS, page: () => GuestTasks()),
     GetPage(
         name: Routes.PRIVACY,
         page: () => PrivacyView(),
         binding: HelpPrivacyBinding()),
+
     GetPage(
         name: Routes.HELP,
         page: () => HelpView(),
         binding: HelpPrivacyBinding()),
+    GetPage(name: Routes.SETTINGS_PROFILE, page: () => SettingsProfileView()),
     GetPage(name: Routes.UPLOAD, page: () => ImageUpload()),
     GetPage(name: Routes.TASKS, page: () => TaskIntro()),
-    GetPage(name: Routes.CREATE_TASK, page: () => TaskCreate()),
-
+    GetPage(
+        name: Routes.TENDER_VIEW,
+        page: () => TenderView(),
+        binding: TaskBindings()),
+    GetPage(
+        name: Routes.TAKE_OFFER,
+        page: () => TakeOffer(),
+        binding: TaskBindings()),
+    GetPage(
+        name: Routes.TENDER_SEARCH,
+        page: () => SearchViewTenders(),
+        binding: RootBinding()),
+    GetPage(
+        name: Routes.TENDER_SEARCH_MAP,
+        page: () => SearchMapFilter(),
+        binding: SearchBinding()),
+    GetPage(
+        name: Routes.CREATE_TASK,
+        page: () => TaskCreate(),
+        binding: TaskBindings()),
   ];
 }

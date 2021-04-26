@@ -1,83 +1,36 @@
 import 'package:itcase/app/models/parents/model.dart';
-
+import 'package:get/get.dart';
 import 'user_model.dart';
 
 class Message extends Model {
-  String id;
+  int user_id;
+  String text;
+  final whenSended = "".obs;
+  final isRead = false.obs;
+  final isSend = false.obs;
 
-  // conversation name for example chat with market name
-  String name;
+  Message({this.user_id, this.text});
 
-  // Chats messages
-  String lastMessage;
-
-  int lastMessageTime;
-
-  // Ids of users that read the chat message
-  List<String> readByUsers;
-
-  // Ids of users in this conversation
-  List<String> visibleToUsers;
-
-  // users in the conversation
-  List<User> users;
-
-  Message(this.users, {this.id = null, this.name = ''}) {
-    visibleToUsers = this.users.map((user) => user.id).toList();
-    readByUsers = [];
+  Message.fromJson(Map json) {
+    user_id = json['user_id'];
+    text = json['text'];
+    whenSended.value = json['created_at'];
+    isRead.value = json['read'] == 1;
+    isSend.value = true;
+    super.fromJson({'id': json['id'].toString()});
   }
 
-  Message.fromDocumentSnapshot(jsonMap) {
-    try {
-      id = jsonMap.id;
-      name = jsonMap.get('name') != null ? jsonMap.get('name').toString() : '';
-      readByUsers = jsonMap.get('read_by_users') != null
-          ? List.from(jsonMap.get('read_by_users'))
-          : [];
-      visibleToUsers = jsonMap.get('visible_to_users') != null
-          ? List.from(jsonMap.get('visible_to_users'))
-          : [];
-      lastMessage = jsonMap.get('message') != null
-          ? jsonMap.get('message').toString()
-          : '';
-      lastMessageTime = jsonMap.get('time') != null ? jsonMap.get('time') : 0;
-      users = jsonMap.get('users') != null
-          ? List.from(jsonMap.get('users')).map((element) {
-              element['media'] = [
-                {'thumb': element['thumb']}
-              ];
-              return User.fromJson(element);
-            }).toList()
-          : [];
-    } catch (e) {
-      id = '';
-      name = '';
-      readByUsers = [];
-      users = [];
-      lastMessage = '';
-      lastMessageTime = 0;
-    }
+   fromJsonSend(Map json) {
+    whenSended.value = json['created_at'];
+    isSend.value = true;
+    super.fromJson({'id':json['id'].toString()});
   }
+
   @override
   Map<String, dynamic> toJson() {
-    var map = new Map<String, dynamic>();
-    map["id"] = id;
-    map["name"] = name;
-    map["users"] =
-        users.map((element) => element.toRestrictMap()).toSet().toList();
-    map["visible_to_users"] =
-        users.map((element) => element.id).toSet().toList();
-    map["read_by_users"] = readByUsers;
-    map["message"] = lastMessage;
-    map["time"] = lastMessageTime;
-    return map;
+    return {
+      "text": text,
+    };
   }
 
-  Map toUpdatedMap() {
-    var map = new Map<String, dynamic>();
-    map["message"] = lastMessage;
-    map["time"] = lastMessageTime;
-    map["read_by_users"] = readByUsers;
-    return map;
-  }
 }

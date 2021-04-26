@@ -1,8 +1,14 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
 import 'package:itcase/app/models/category_model.dart';
 import 'package:itcase/app/models/tenders.dart';
 import 'package:itcase/app/modules/category/controllers/categories_controller.dart';
+import 'package:itcase/app/modules/search/controllers/search_controller.dart';
+import 'package:itcase/app/providers/api.dart';
 import 'package:itcase/app/repositories/category_repository.dart';
+import 'package:itcase/common/pagination_helper.dart';
+import 'package:itcase/common/pagination_tasks.dart';
 import '../../../models/e_service_model.dart';
 import '../../../models/task_model.dart';
 import '../../../repositories/task_repository.dart';
@@ -10,11 +16,14 @@ import '../../../../common/ui.dart';
 
 class TenderController extends GetxController {
   TaskRepository _taskRepository;
-
-  var ongoingTasks = List<Tenders>().obs;
-  var completedTasks = List<Tenders>().obs;
-  var archivedTasks = List<Tenders>().obs;
+  var my_tasks = List<Tenders>().obs;
+  var allTasks = List<Tenders>().obs;
+  var availableTasks = List<Tenders>().obs;
+  var currentTasks = List<Tenders>().obs;
   final task = new Tenders().obs;
+  final PaginationTasks paginationHelper = new PaginationTasks();
+  final isClicked = false.obs;
+  Function showMore;
 
   // final selectedOngoingTask = Task().obs;
   // final selectedCompletedTask = Task().obs;
@@ -23,23 +32,41 @@ class TenderController extends GetxController {
   @override
   void onInit() async {
     _taskRepository = new TaskRepository();
-    await getOngoingTasks();
+    showMore = getTenders;
+    paginationHelper.addingListener(controller: this);
+    await getTenders();
     super.onInit();
-    Get.lazyPut(() => TenderController());
+
   }
 
-  Future refreshTasks({bool showMessage = false}) async {
-    await getOngoingTasks();
-    await getCompletedTasks();
-    await getArchivedTasks();
+  void setShowMore(Function showMore) {
+    this.showMore = showMore;
+    update();
+  }
+
+  Function getMore() {
+    return this.showMore();
+  }
+
+
+  Future refreshTasks({bool showMessage = false, bool refresh = true}) async {
+    await getTenders();
+    await getAvailableTenders();
     if (showMessage) {
       Get.showSnackbar(
           Ui.SuccessSnackBar(message: "Task page refreshed successfully".tr));
     }
   }
 
-  Future<void> getOngoingTasks({bool showMessage = false}) async {
-    ongoingTasks.value = await _taskRepository.getAll();
+
+
+
+
+  Future<void> getTenders(
+      {bool showMessage = false, bool refresh = true}) async {
+    List data = await _taskRepository.getTenders(
+        page: refresh ? '1' : paginationHelper.currentPage.value.toString());
+    currentTasks.value = paginationHelper.getTasks(refresh: refresh,task: allTasks, data: data);
     if (showMessage) {
       Get.showSnackbar(
           Ui.SuccessSnackBar(message: "Task page refreshed successfully".tr));
@@ -47,22 +74,18 @@ class TenderController extends GetxController {
     //selectedOngoingTask.value = ongoingTasks.isNotEmpty ? ongoingTasks.first : new Task();
   }
 
-  Future<void> getCompletedTasks({bool showMessage = false}) async {
-    completedTasks.value = await _taskRepository.getAll();
-    if (showMessage) {
-      Get.showSnackbar(
-          Ui.SuccessSnackBar(message: "Task page refreshed successfully".tr));
-    }
-    //selectedCompletedTask.value = completedTasks.isNotEmpty ? completedTasks.first : new Task();
-  }
 
-  Future<void> getArchivedTasks({bool showMessage = false}) async {
-    archivedTasks.value = await _taskRepository.getAll();
+
+  Future<void> getAvailableTenders(
+      {bool showMessage = false, bool refresh = true}) async {
+    List data = await _taskRepository.getAvailableTenders(
+        page: refresh ? '1' : paginationHelper.currentPage.value.toString());
+    currentTasks.value = paginationHelper.getTasks(refresh: refresh,task: availableTasks, data: data);
+
     if (showMessage) {
       Get.showSnackbar(
           Ui.SuccessSnackBar(message: "Task page refreshed successfully".tr));
     }
     //selectedArchivedTask.value = archivedTasks.isNotEmpty ? archivedTasks.first : new Task();
   }
-
 }
