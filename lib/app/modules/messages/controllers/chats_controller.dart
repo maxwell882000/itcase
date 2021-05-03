@@ -3,7 +3,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:itcase/app/modules/home/controllers/home_controller.dart';
 import 'package:itcase/app/providers/api.dart';
+import 'package:itcase/common/pagination_messages.dart';
 import 'package:itcase/common/ui.dart';
 import '../../../models/chat_model.dart';
 import '../../../services/auth_service.dart';
@@ -18,6 +20,7 @@ class ChatController extends GetxController {
   final text = "".obs;
   final messageLastRead = 0.obs;
   final isFetched = false.obs;
+  final PaginationMessages paginationMessages = new PaginationMessages();
 
   // AuthService _authService;
 
@@ -31,13 +34,15 @@ class ChatController extends GetxController {
     // _authService = Get.find<AuthService>();
   }
 
+  void showMore({bool refresh}) {
+    getMessagesOfChat(refresh: refresh);
+  }
+
   @override
   void onInit() async {
-    //await createMessage(new Message([_authService.user.value], id: UniqueKey().toString(), name: 'First Chat'));
     Chat chat = Get.arguments as Chat;
-
-    print("EnTERED CHATS");
-    this.chat.value = chat;
+    this.chat(chat);
+    print('INITIALIZED');
     this
         .chat
         .value
@@ -48,13 +53,21 @@ class ChatController extends GetxController {
     await getMessagesOfChat();
     await readAllMessages();
     periodicTask();
-
+    final controller = Get.find<HomeController>();
+    paginationMessages.addingListener(controller: this);
+    controller.timer.value.cancel();
+    controller.periodicTask(chatId: this.chat.value.chatId.toString());
     super.onInit();
   }
 
   @override
   void onClose() {
-    timer.value.cancel();
+    if (timer != null) {
+      timer.value.cancel();
+    }
+    final controller = Get.find<HomeController>();
+    controller.timer.value.cancel();
+    controller.periodicTask();
     super.onClose();
     // chatTextController.dispose();
   }
@@ -107,7 +120,6 @@ class ChatController extends GetxController {
             !e.isRead.value && int.parse(chat.value.user.id) != e.user_id)
         .toList();
     if (message.isNotEmpty) {
-
       List<String> messages_id = message.map((e) => e.id).toList();
       try {
         List result = await _chatRepository
@@ -120,7 +132,7 @@ class ChatController extends GetxController {
             element.isRead.value = elem['read'] == 1;
           });
         });
-        if(result.every((element) => element['read'] ==1)){
+        if (result.every((element) => element['read'] == 1)) {
           messageLastRead.value =
               chat.value.message.value.indexOf(message.last);
         }
@@ -140,17 +152,26 @@ class ChatController extends GetxController {
     }
   }
 
-  Future getMessagesOfChat() async {
+  Future getMessagesOfChat({bool refresh = true}) async {
     try {
-      List result =
-          await _chatRepository.getMessagesOfChat(chat.value.chatId.toString());
-      List<Message> message = result[0] as List<Message>;
-      chat.value.message.value = chat.value.message.value + message;
+      List result = await _chatRepository.getMessagesOfChat(
+          chat.value.chatId.toString(),
+          page:
+              refresh ? '1' : paginationMessages.currentPage.value.toString());
+      paginationMessages.getMessages(
+          refresh: refresh, message: chat.value.message, data: result);
+      if (chat.value.message.length <30 && refresh ){
+        paginationMessages.isLast.value = true;
+      }
+      // List<Message> message = result[0] as List<Message>;
+      // chat.value.message.value = chat.value.message.value + message;
     } catch (e) {
-      print(e);
+      // if (e == 0)
+      //   getMessagesOfChat();
       if (e.isNotEmpty)
         Get.showSnackbar(
-            Ui.ErrorSnackBar(title: "Error", message: e.toString()));
+            Ui.ErrorSnackBar(title: "Error".tr, message: e.toString()));
+
     }
     isFetched.value = true;
   }

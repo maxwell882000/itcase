@@ -5,6 +5,8 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:itcase/app/modules/root/controllers/root_controller.dart';
+import 'package:itcase/app/modules/search/controllers/search_controller.dart';
 
 import '../../../global_widgets/home_search_bar_widget.dart';
 import '../../../models/slide_model.dart';
@@ -45,7 +47,16 @@ class Home2View extends GetView<HomeController> {
                   icon: new Icon(Icons.sort, color: Colors.black87),
                   onPressed: () => {Scaffold.of(context).openDrawer()},
                 ),
-                bottom: HomeSearchBarWidget(),
+                bottom:  HomeSearchBarWidget(
+                    heroTag: 'tender_search',
+                    onSubmit: (SearchController controller) {
+                      controller.tenders.value =
+                          this.controller.tenders;
+                      controller.setShowMore(controller.searchTenders);
+                      controller.paginationTasks
+                          .addingListener(controller: controller);
+                      Get.toNamed(Routes.TENDER_SEARCH);
+                    }),
                 flexibleSpace: FlexibleSpaceBar(
                   collapseMode: CollapseMode.parallax,
                   background: Obx(() {
@@ -152,7 +163,7 @@ class Home2View extends GetView<HomeController> {
                             },
                             shape: StadiumBorder(),
                             color: Get.theme.accentColor.withOpacity(0.1),
-                            child: Text("View all".tr, style: Get.textTheme.subtitle1),
+                            child: Text("View All".tr, style: Get.textTheme.subtitle1),
                           ),
                         ],
                       ),
@@ -167,7 +178,7 @@ class Home2View extends GetView<HomeController> {
 
                           FlatButton(
                             onPressed: () {
-                              Get.toNamed(Routes.TINDERS_VIEW);
+                              Get.find<RootController>().changePage(1);
                             },
                             shape: StadiumBorder(),
                             color: Get.theme.accentColor.withOpacity(0.1),

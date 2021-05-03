@@ -75,7 +75,7 @@ class SearchMapFilter extends GetView<SearchMapController> {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10)),
                 color: Get.theme.accentColor,
-                child: Text("Enter radius".tr,
+                child: Text("Radius".tr,
                     style: Get.textTheme.bodyText2
                         .merge(TextStyle(color: Get.theme.primaryColor))),
               ),
@@ -107,7 +107,7 @@ class SearchMapFilter extends GetView<SearchMapController> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Text(
-                                'Location',
+                                'Location'.tr,
                                 style: Theme.of(context).textTheme.caption,
                               ),
                               if (controller.currentPosition.value != null &&

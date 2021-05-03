@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:itcase/app/global_widgets/block_button_widget.dart';
 import 'package:itcase/app/global_widgets/circular_loading_widget.dart';
+import 'package:itcase/app/models/user_model.dart';
 import 'package:itcase/app/modules/auth/views/register/fill_account.dart';
 
-class BecomeConsumer extends CreateAccount {
+class BecomeConsumer extends FillAccount {
   @override
   Widget build(BuildContext context) {
+
     return Obx(
       ()=> Stack(
         children: [

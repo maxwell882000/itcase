@@ -62,10 +62,10 @@ class SearchView extends GetView<SearchController> {
                   style: Get.textTheme.bodyText2,
                   onSubmitted: (value) {
                     controller.typed.value =value;
-                    onSubmit == null? controller.searchEServices(keywords: value): onSubmit();
+                    onSubmit(refresh:true);
                   },
                   onChanged: (value) {
-                    controller.typed.value =value;
+                    controller.typed.value = value;
                   },
                   autofocus: true,
                   cursorColor: Get.theme.focusColor,

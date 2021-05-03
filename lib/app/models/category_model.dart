@@ -87,7 +87,7 @@ class Category {
 
 
     position = json['position'].toString();
-    color = Ui.parseColor("#0abde3").withOpacity(1);
+    color = Colors.orangeAccent;
     lft = json['lft'].toString();
     rgt = json['rgt'].toString();
     parent_id = json['parent_id'].toString();

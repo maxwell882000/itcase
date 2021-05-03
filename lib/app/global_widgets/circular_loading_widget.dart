@@ -19,7 +19,7 @@ class _CircularLoadingWidgetState extends State<CircularLoadingWidget> with Sing
 
   void initState() {
     super.initState();
-    animationController = AnimationController(duration: Duration(milliseconds: 300), vsync: this);
+    animationController = AnimationController(duration: Duration(seconds: 20), vsync: this);
     CurvedAnimation curve = CurvedAnimation(parent: animationController, curve: Curves.easeOut);
     animation = Tween<double>(begin: widget.height, end: 0).animate(curve)
       ..addListener(() {

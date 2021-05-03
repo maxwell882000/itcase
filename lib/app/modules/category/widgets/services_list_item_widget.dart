@@ -137,7 +137,7 @@ class ServicesListItemWidget extends StatelessWidget {
                           ),
                         ],
                       ),
-                      Ui.getPrice(_service.pivot.priceFrom?.toDouble() ?? 0.0, style: Get.textTheme.headline6),
+                      Ui.getPrice(_service?.pivot?.priceFrom?.toDouble() ?? 0.0, style: Get.textTheme.headline6),
                     ],
                   ),
                   Row(

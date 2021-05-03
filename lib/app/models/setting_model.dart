@@ -37,6 +37,38 @@ class Setting {
   String link_color;
   String app_bar;
   String enable_color;
+
+  String textMainColor;
+  String textHintColor;
+  String textInputColor;
+  String textSearchColor;
+  String textVerifyColor;
+  String textSecondColor;
+  String textButtonGreenColor;
+  String textHyperLinkColor;
+  String textTaskHelperColor;
+  String textGreyColor;
+
+
+  String buttonMainColor;
+  String buttonFloatingColor;
+
+  String borderGreenColor;
+  String borderGreyColor;
+  String borderSearchField;
+
+  String iconDisableNavColor;
+  String iconActiveNavColor;
+  String iconSearchColor;
+
+  String messageColorOwn;
+  String messageColorOther;
+  String messageColorTime;
+  String messageColorIcon;
+  String messageColorInputBackGroundColor;
+
+
+
   Setting(
       {this.appName,
       this.enableStripe,
@@ -114,7 +146,37 @@ class Setting {
     link_color = json['link_color'];
     app_bar = json['app_bar'];
     enable_color = json['enable_color'];
+
+    textMainColor = json['text_main_color'];
+    textHintColor = json['text_hint_color_input'];
+    textInputColor = json['text_input_color'];
+    textSearchColor = json['text_search_input_helper_color'] ;
+    textVerifyColor = json['text_verify_color'];
+    textSecondColor = json['text_second_color'];
+    textButtonGreenColor = json['text_button_green_color'];
+    textTaskHelperColor = json['text_task_helper_color'];
+    textHyperLinkColor = json['text_hyper_link_color'];
+    textGreyColor = json['text_grey_color'];
+
+    buttonMainColor= json['button_main_color'];
+    buttonFloatingColor= json['button_floating_color'];
+
+    borderGreenColor= json['border_green_color'];
+    borderGreyColor= json['border_grey_color'];
+    borderSearchField= json['border_search_field'];
+
+    iconDisableNavColor= json['icon_disable_nav_color'];
+    iconActiveNavColor= json['icon_active_nav_color'];
+    iconSearchColor = json['icon_search_color'];
+
+    messageColorOwn = json['message_color_own'];
+    messageColorOther = json['message_color_other'];
+    messageColorTime = json['message_color_time'];
+    messageColorIcon= json['message_color_icon'];
+    messageColorInputBackGroundColor= json['message_color_input_back_ground'];
   }
+
+
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = Map<String, dynamic>();

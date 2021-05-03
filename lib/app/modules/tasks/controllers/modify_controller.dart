@@ -6,6 +6,7 @@ import 'package:itcase/app/models/cateroies_drop_down.dart';
 import 'package:itcase/app/models/global_model.dart';
 import 'package:itcase/app/models/tenders.dart';
 import 'package:itcase/app/modules/category/controllers/categories_controller.dart';
+import 'package:itcase/app/modules/tasks/views/map.dart';
 import 'package:itcase/app/repositories/category_repository.dart';
 import 'package:itcase/app/routes/app_pages.dart';
 import '../../../models/e_service_model.dart';
@@ -35,16 +36,21 @@ class ModifyController extends GetxController {
   }
   @override
   void onInit() async {
-    tenders.value = Get.arguments as Tenders;
+    Tenders _temp = Get.arguments as Tenders;
+    tenders.update((val) {
+      val.fromJson(_temp.toJson());
+      val.work_start_at = _temp.work_start_at;
+      val.work_end_at = _temp.work_end_at;
+      val.deadline = _temp.deadline;
+      val.opened.value = _temp.opened.value;
+    });
     fill_data();
-    categoriesDropDown = new CategoriesDropDown();
+
     super.onInit();
   }
 
   validation(){
-    if (tenders.value.categories.isEmpty){
-      return Get.showSnackbar(Ui.ErrorSnackBar(title: "Categories".tr, message: "Choose Category".tr));
-    }
+
     if (tenders.value.work_start_at == null || tenders.value.work_start_at.isEmpty){
       return Get.showSnackbar(Ui.ErrorSnackBar(title: "Start Date".tr, message: "Choose Start Date".tr));
     }
@@ -73,8 +79,7 @@ class ModifyController extends GetxController {
       if (validation() != true) {
         return validation();
       }
-      await Get.toNamed(Routes.MAP, arguments: tenders.value);
-      Get.back();
+      Get.toNamed(Routes.MAP, arguments: tenders.value);
     }
 
   }

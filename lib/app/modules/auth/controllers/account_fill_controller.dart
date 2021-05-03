@@ -27,7 +27,7 @@ class AuthFillController extends GetxController {
   final Map<String, dynamic> data = Map<String, dynamic>();
 
   final UserRepository _userRepository = new UserRepository();
-  var user = new User().obs;
+  final user = new User().obs;
 
   var tempUser = new TempUser().obs;
 
@@ -52,12 +52,16 @@ class AuthFillController extends GetxController {
     if (user.value.image_gotten?.isNotEmpty ?? false) {
       initialAvatar.value = true;
     }
+    if (user.value.user_role != null) {
+      role.value = user.value.user_role;
+      if (role.value == TypeUser.constractor) {
+
+      }
+    }
     if (user.value.customer_type != null) {
       type.value = user.value.customer_type;
     }
-    if (user.value.user_role != null) {
-      role.value = user.value.user_role;
-    }
+
     if (user.value.birthday_date != null) {
       birthday.value = user.value.birthday_date;
       tempUser.value.birthday = birthday.value;
@@ -66,11 +70,17 @@ class AuthFillController extends GetxController {
 
   @override
   void onInit() {
-    user = Get.find<AuthService>().user;
+    user(Get.find<AuthService>().user.value);
+
     if (Get.arguments != null) {
-      user.value = Get.arguments as User;
+
+      User _userArgument = Get.arguments as User;
+      user.update(
+          (current) => current.fromJson(_userArgument.toJson())
+      );
     }
     print(user.value.toJson());
+    print(user.value.token);
     start();
     super.onInit();
   }
@@ -141,6 +151,7 @@ class AuthFillController extends GetxController {
   }
 
   modify_account(GlobalKey<FormState> password) async {
+    loading.value = true;
     if (formKey.value.currentState.validate() &&
         password.currentState.validate()) {
       password.currentState.save();
@@ -160,17 +171,21 @@ class AuthFillController extends GetxController {
         Map account =
             await _userRepository.getAccount(id: currentUser.value.id);
         user.value.fromJson(account['user']);
-        Get.showSnackbar(Ui.SuccessSnackBar(message: message['message']));
+      await  Get.showSnackbar(Ui.SuccessSnackBar(message: message['message']));
+        loading.value = false;
       } catch (e) {
         print(e);
+        loading.value = false;
         Map body = jsonDecode(e.toString());
         body['error'].forEach((key, value) =>
             Get.showSnackbar(Ui.ErrorSnackBar(message: value[0])));
       }
     } else {
+      loading.value = false;
       Get.showSnackbar(Ui.ErrorSnackBar(
           message: "There are errors in some fields please correct them!".tr));
     }
+    loading.value = false;
   }
 
   modify_passwords() {}

@@ -52,31 +52,15 @@ class SettingsProfileView extends GetView<AccountController> {
                             color: Get.theme.accentColor),
                         text: Text("Profile".tr),
                         onTap: (e) {
-                          Get.toNamed(Routes.PROFILE, arguments: _currentUser.value);
+                          Get.toNamed(Routes.PROFILE, arguments: null);
                         },
                       ),
                       AccountLinkWidget(
-                        icon: Icon(Icons.assignment_outlined,
+                        icon: Icon(Icons.vpn_key,
                             color: Get.theme.accentColor),
-                        text: Text("My Bookings".tr),
+                        text: Text("Change Password".tr),
                         onTap: (e) {
-                          Get.find<RootController>().changePageInRoot(1);
-                        },
-                      ),
-                      AccountLinkWidget(
-                        icon: Icon(Icons.notifications_outlined,
-                            color: Get.theme.accentColor),
-                        text: Text("Notifications".tr),
-                        onTap: (e) {
-                          Get.toNamed(Routes.NOTIFICATIONS);
-                        },
-                      ),
-                      AccountLinkWidget(
-                        icon:
-                        Icon(Icons.chat_outlined, color: Get.theme.accentColor),
-                        text: Text("Messages".tr),
-                        onTap: (e) {
-                          Get.find<RootController>().changePageInRoot(2);
+                          Get.toNamed(Routes.CHANGE_PASSWORD, arguments: null);
                         },
                       ),
                     ],
@@ -89,27 +73,11 @@ class SettingsProfileView extends GetView<AccountController> {
                   child: Column(
                     children: [
                       AccountLinkWidget(
-                        icon: Icon(Icons.settings_outlined,
-                            color: Get.theme.accentColor),
-                        text: Text("Settings App".tr),
-                        onTap: (e) {
-                          Get.toNamed(Routes.SETTINGS);
-                        },
-                      ),
-                      AccountLinkWidget(
                         icon: Icon(Icons.translate_outlined,
                             color: Get.theme.accentColor),
                         text: Text("Languages".tr),
                         onTap: (e) {
                           Get.toNamed(Routes.SETTINGS_LANGUAGE);
-                        },
-                      ),
-                      AccountLinkWidget(
-                        icon: Icon(Icons.brightness_6_outlined,
-                            color: Get.theme.accentColor),
-                        text: Text("Theme Mode".tr),
-                        onTap: (e) {
-                          Get.toNamed(Routes.SETTINGS_THEME_MODE);
                         },
                       ),
                     ],

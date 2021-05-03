@@ -35,7 +35,8 @@ class EServiceController extends GetxController {
   void onInit() async {
     userConractor.value = Get.arguments as User;
     newComment();
-    await getComments();
+    getOwnedTenders();
+    getComments();
     super.onInit();
   }
 
@@ -56,7 +57,7 @@ class EServiceController extends GetxController {
      newComment();
      }
     catch(e){
-      print("CREATE COMMENT");
+
       print(e);
       // comments.value.remove(comment.value);
     }

@@ -21,7 +21,7 @@ class PhoneVerificationView extends GetView<VerifyController> {
     return Scaffold(
         appBar: AppBar(
           title: Text(
-            "Forgot Password".tr,
+            "Сode verification".tr,
             style: Get.textTheme.headline6
                 .merge(TextStyle(color: context.theme.primaryColor)),
           ),
@@ -115,7 +115,7 @@ class PhoneVerificationView extends GetView<VerifyController> {
                           ],
                         ),
                         Text(
-                          "We sent the OTP code to your email, please check it and enter below"
+                          "We sent the OTP code to your phone, please check it and enter below"
                               .tr,
                           style: Get.textTheme.bodyText1,
                           textAlign: TextAlign.center,

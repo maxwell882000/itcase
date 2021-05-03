@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 import 'package:get/get.dart';
 import 'package:itcase/app/global_widgets/format.dart';
@@ -13,12 +13,11 @@ import 'package:itcase/app/modules/tasks/controllers/create_task_controller.dart
 import 'package:itcase/app/modules/tasks/views/images.dart';
 
 import 'package:itcase/common/ui.dart';
-import 'package:intl/intl.dart';
+
 import '../../../global_widgets/text_field_widget.dart';
 
 class TaskCreate extends GetView<CreateTasksController> {
   final GlobalKey<FormState> _profileForm = new GlobalKey<FormState>();
-
 
   File file;
   final length_valid = 5;
@@ -27,42 +26,47 @@ class TaskCreate extends GetView<CreateTasksController> {
     var data = {};
   }
 
-
-
-  storeCategories(String text){
+  storeCategories(String text) {
     controller.categoriesDropDown.id.clear();
     controller.categoriesDropDown.subCategoriesList.clear();
     controller.categoriesDropDown.categories.value = text;
-    controller.categoriesDropDown.categoriesList.where((element) => element[0][0] == text).forEach((e) => e[1].forEach((e) {
-      controller.categoriesDropDown.id.add(e[1]);
-      controller.categoriesDropDown.subCategoriesList.add(e[0]);
-    }));
-    controller.categoriesDropDown.subCategories.value= "";
+    controller.categoriesDropDown.categoriesList
+        .where((element) => element[0][0] == text)
+        .forEach((e) => e[1].forEach((e) {
+              controller.categoriesDropDown.id.add(e[1]);
+              controller.categoriesDropDown.subCategoriesList.add(e[0]);
+            }));
+    controller.categoriesDropDown.subCategories.value = "";
     controller.tenders.value.categories = [];
   }
-  storeSubCategories(String text){
 
+  storeSubCategories(String text) {
     int index = getChoosen(text);
     if (!checkChoosen(text)) {
       controller.tenders.value.categories.add(index);
-    }
-    else {
+    } else {
       controller.tenders.value.categories.remove(index);
     }
-    controller.categoriesDropDown.subCategories.value = controller.tenders.value.categories.length.toString();
+    controller.categoriesDropDown.subCategories.value =
+        controller.tenders.value.categories.length.toString();
   }
-  int getChoosen(String text){
+
+  int getChoosen(String text) {
     int index = controller.categoriesDropDown.subCategoriesList.indexOf(text);
-    if (index == -1){
+    if (index == -1) {
       return index;
     }
     return controller.categoriesDropDown.id[index];
   }
-  bool checkChoosen(String text){
-   return controller.tenders.value.categories.indexOf(getChoosen(text)) == -1 ? false : true;
+
+  bool checkChoosen(String text) {
+    return controller.tenders.value.categories.indexOf(getChoosen(text)) == -1
+        ? false
+        : true;
   }
 
-  Widget getCategories(String text, List<String> input, Function onChanged , final controller) {
+  Widget getCategories(
+      String text, List<String> input, Function onChanged, final controller) {
     return Expanded(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -70,28 +74,28 @@ class TaskCreate extends GetView<CreateTasksController> {
         children: [
           Text(
             text,
-            style: Get.textTheme.bodyText1,
+            style: Get.textTheme.bodyText2,
           ),
           DropdownButton<String>(
-            style: Get.textTheme.bodyText2,
+            style: Get.textTheme.bodyText1,
             icon: Icon(Icons.arrow_drop_down),
             isExpanded: true,
-            hint: Text(
-              controller.value
-            ),
+            hint: Text(controller.value),
             onChanged: (v) {
               // controller.te.value = v;
               onChanged(v);
             },
-            items: input
-                .map((String value) {
-                  bool choosen = checkChoosen(value);
+            items: input.map((String value) {
+              bool choosen = checkChoosen(value);
               return new DropdownMenuItem<String>(
                 value: value,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Flexible(child: Text(value)),
+                    Flexible(child: Text(
+                      value,
+                      style: Get.textTheme.bodyText1,
+                    )),
                     Visibility(
                       visible: choosen,
                       child: Icon(
@@ -108,7 +112,8 @@ class TaskCreate extends GetView<CreateTasksController> {
     );
   }
 
-  Widget subCategories(String text, List<String> input, Function onChanged , final controller) {
+  Widget subCategories(
+      String text, List<String> input, Function onChanged, final controller) {
     return Expanded(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -122,14 +127,12 @@ class TaskCreate extends GetView<CreateTasksController> {
             style: Get.textTheme.bodyText2,
             icon: Icon(Icons.arrow_drop_down),
             isExpanded: true,
-            value: controller.value.isEmpty? null: controller.value,
+            value: controller.value.isEmpty ? null : controller.value,
             onChanged: (v) {
               // controller.te.value = v;
               onChanged(v);
             },
-            items: input
-                .map((String value) {
-
+            items: input.map((String value) {
               return new DropdownMenuItem<String>(
                 value: value,
                 child: Text(value),
@@ -268,7 +271,8 @@ class TaskCreate extends GetView<CreateTasksController> {
                                         ? "Should be more than 25 letters".tr
                                         : null,
                                 style: Get.textTheme.bodyText2,
-                                initialValue: controller.tenders.value.description,
+                                initialValue:
+                                    controller.tenders.value.description,
                                 decoration: Ui.getInputDecoration(
                                   hintText: "Write description".tr,
                                   iconData: Icons.description,
@@ -307,7 +311,8 @@ class TaskCreate extends GetView<CreateTasksController> {
                                         ? "Should be more than 25 letters".tr
                                         : null,
                                 style: Get.textTheme.bodyText2,
-                                initialValue: controller.tenders.value.additional_info,
+                                initialValue:
+                                    controller.tenders.value.additional_info,
                                 decoration: Ui.getInputDecoration(
                                   hintText:
                                       "Please enter additional information".tr,
@@ -346,7 +351,8 @@ class TaskCreate extends GetView<CreateTasksController> {
                                         ? "Should be more than 25 letters".tr
                                         : null,
                                 style: Get.textTheme.bodyText2,
-                                initialValue: controller.tenders.value.other_info,
+                                initialValue:
+                                    controller.tenders.value.other_info,
                                 decoration: Ui.getInputDecoration(
                                   hintText:
                                       "Please enter ways of communication".tr,
@@ -370,8 +376,10 @@ class TaskCreate extends GetView<CreateTasksController> {
                                 Icon(Icons.album, color: Get.theme.accentColor),
                             text: Text("Pictures".tr),
                             onTap: (e) async {
-                              controller.tenders.value.files =
-                                  (await Get.to(Img(), fullscreenDialog: true)) ?? [];
+                              controller.tenders.value.files = (await Get.to(
+                                      Img(),
+                                      fullscreenDialog: true)) ??
+                                  [];
                               print(controller.tenders.value.files.length);
                               print(controller.tenders.value.files);
                             },
@@ -423,31 +431,40 @@ class TaskCreate extends GetView<CreateTasksController> {
                           style: Get.textTheme.bodyText2,
                           icon: Icon(Icons.arrow_drop_down),
                           isExpanded: true,
-                          value: controller.place.value.isEmpty ? null :controller.place.value,
+                          value: controller.place.value.isEmpty
+                              ? null
+                              : controller.place.value,
                           onChanged: (v) {
                             print(v);
                             controller.place.value = v;
-
                           },
-                          items: controller.placeItems.map<DropdownMenuItem<String>>((value) {
+                          items: controller.placeItems
+                              .map<DropdownMenuItem<String>>((value) {
                             return new DropdownMenuItem<String>(
                               value: value,
                               child: Text(value),
                             );
-                          }
-                          ).toList(),
+                          }).toList(),
                         ),
                       ],
                     ),
                   ),
-                  box(
-                    Row(
-                      children: [
-                         getCategories("Categories".tr,controller.categoriesDropDown.categoriesList.map<String>((e) => e[0][0]).toList(), storeCategories , controller.categoriesDropDown.categories),
-                        getCategories("SubCategories".tr, controller.categoriesDropDown.subCategoriesList, storeSubCategories, controller.categoriesDropDown.subCategories)
-                      ],
-                    )
-                  ),
+                  box(Row(
+                    children: [
+                      getCategories(
+                          "Categories".tr,
+                          controller.categoriesDropDown.categoriesList
+                              .map<String>((e) => e[0][0])
+                              .toList(),
+                          storeCategories,
+                          controller.categoriesDropDown.categories),
+                      getCategories(
+                          "SubCategories".tr,
+                          controller.categoriesDropDown.subCategoriesList,
+                          storeSubCategories,
+                          controller.categoriesDropDown.subCategories)
+                    ],
+                  )),
                   box(
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -457,40 +474,131 @@ class TaskCreate extends GetView<CreateTasksController> {
                           style: Get.textTheme.bodyText1,
                         ),
                         Row(
-                          // crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Expanded(
-                              child: DateTimePicker(
-                                type: DateTimePickerType.dateTime,
-                                onSaved: (val) {
-                                  controller.tenders.value.work_start_at = Format.parseDate(val,Format.outputFormat);
+                              child: InkWell(
+                                onTap: () async {
+                                  DatePicker.showDateTimePicker(context,
+                                      showTitleActions: true,
+                                      minTime: DateTime(2018, 3, 5),
+                                      maxTime: DateTime(2030, 6, 7),
+                                       onChanged: (date) {
+
+                                      }, onConfirm: (date) {
+                                        controller.tenders.update((val) {
+                                          val.work_start_at = Format.parseDate(
+                                              date.toString(),
+                                              Format.outputFormat);
+                                        });
+
+                                        return date;
+                                      },
+                                      currentTime: DateTime.now(),
+                                      locale: LocaleType.ru);
                                 },
-                                dateMask: 'd MMM, yyyy',
-                                firstDate: DateTime(2000),
-                                lastDate: DateTime(2100),
-                                icon: Icon(Icons.event_available),
-                                dateLabelText: 'Start Date'.tr,
-                                style: Get.textTheme.bodyText1,
-                                use24HourFormat: true,
-                                //locale: Locale('pt', 'BR'),
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 20, horizontal: 10),
+                                  decoration: BoxDecoration(
+                                      color: Get.theme.primaryColor,
+                                      borderRadius: BorderRadius.circular(10),
+                                      boxShadow: [
+                                        BoxShadow(
+                                            color: Get.theme.focusColor
+                                                .withOpacity(0.1),
+                                            blurRadius: 10,
+                                            offset: Offset(0, 5)),
+                                      ],
+                                      border: Border.all(
+                                          color: Get.theme.focusColor
+                                              .withOpacity(0.05))),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: [
+                                      Text(
+                                        'Start Date'.tr,
+                                        style: Get.textTheme.bodyText1,
+                                        textAlign: TextAlign.start,
+                                      ),
+                                      Row(
+                                        children: [
+                                          Icon(
+                                            Icons.event_available,
+                                            color: Get.theme.focusColor,
+                                          ).paddingOnly(right: 15),
+                                          Text(controller.tenders.value.work_start_at,
+                                            style: TextStyle(
+                                              fontSize: 10,
+                                            ),),
+                                        ],
+                                      ).marginSymmetric(vertical: 10),
+                                    ],
+                                  ),
+                                ),
                               ),
                             ),
                             Expanded(
-                              child: DateTimePicker(
-                                type: DateTimePickerType.dateTime,
-                                onSaved: (val) {
-                                  controller.tenders.value.work_end_at = Format.parseDate(val,Format.outputFormat);
+                              child: InkWell(
+                                onTap: () async {
+                                  DatePicker.showDateTimePicker(context,
+                                      showTitleActions: true,
+                                      minTime: DateTime(2018, 3, 5),
+                                      maxTime: DateTime(2030, 6, 7),
+                                      onChanged: (date) {
+
+                                      }, onConfirm: (date) {
+                                        controller.tenders.update((val) {
+                                          val.work_end_at = Format.parseDate(
+                                              date.toString(),
+                                              Format.outputFormat);
+                                        });
+                                      },
+                                      currentTime: DateTime.now(),
+                                      locale: LocaleType.ru);
                                 },
-                                dateMask: 'd MMM, yyyy',
-                                firstDate: DateTime(2000),
-                                lastDate: DateTime(2100),
-                                icon: Icon(Icons.event),
-                                dateLabelText: 'End Date'.tr,
-                                style: Get.textTheme.bodyText1,
-                                timeLabelText: "Hour".tr,
-                                use24HourFormat: true,
-                                //locale: Locale('pt', 'BR'),
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 20, horizontal: 10),
+                                  decoration: BoxDecoration(
+                                      color: Get.theme.primaryColor,
+                                      borderRadius: BorderRadius.circular(10),
+                                      boxShadow: [
+                                        BoxShadow(
+                                            color: Get.theme.focusColor
+                                                .withOpacity(0.1),
+                                            blurRadius: 10,
+                                            offset: Offset(0, 5)),
+                                      ],
+                                      border: Border.all(
+                                          color: Get.theme.focusColor
+                                              .withOpacity(0.05))),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: [
+                                      Text(
+                                        'End Date'.tr,
+                                        style: Get.textTheme.bodyText1,
+                                        textAlign: TextAlign.start,
+                                      ),
+                                      Row(
+                                        children: [
+                                          Icon(
+                                            Icons.event_available,
+                                            color: Get.theme.focusColor,
+                                          ).paddingOnly(right: 15),
+                                          Text(controller.tenders.value.work_end_at,
+                                            style: TextStyle(
+                                              fontSize: 10,
+                                            ),
+                                          ),
+                                        ],
+                                      ).marginSymmetric(vertical: 10),
+                                    ],
+                                  ),
+                                ),
                               ),
                             ),
                           ],
@@ -498,29 +606,65 @@ class TaskCreate extends GetView<CreateTasksController> {
                         Row(
                           children: [
                             Expanded(
-                              child: DateTimePicker(
-                                type: DateTimePickerType.dateTime,
-                                onSaved: (val) {
-                                  if (val.isNotEmpty) {
-                                    controller.tenders.value.deadline =
-                                       Format.parseDate(val, Format.outputFormatDeadline);
-                                  }
-                                },
-                                dateMask: 'd.M.yyyy',
-                                firstDate: DateTime(2000),
-                                lastDate: DateTime(2100),
+                              child: InkWell(
+                                onTap: () async {
+                                  DatePicker.showDateTimePicker(context,
+                                      showTitleActions: true,
+                                      minTime: DateTime(2018, 3, 5),
+                                      maxTime: DateTime(2030, 6, 7),
+                                      onChanged: (date) {
 
-                                icon: Icon(Icons.event),
-                                validator: (val) {
-                                  print(val);
-                                  return null;
+                                      }, onConfirm: (date) {
+                                        controller.tenders.update((val) {
+                                          val.deadline = Format.parseDate(
+                                              date.toString(),
+                                              Format.outputFormatDeadline);
+                                        });
+                                      },
+                                      currentTime: DateTime.now(),
+                                      locale: LocaleType.ru);
                                 },
-                                dateLabelText:
-                                    'Deadline of accepting applications'.tr,
-                                style: Get.textTheme.bodyText1,
-                                timeLabelText: "Hour".tr,
-                                use24HourFormat: true,
-                                //locale: Locale('pt', 'BR'),
+                                child: Container(
+                                  padding: EdgeInsets.all(20),
+                                  decoration: BoxDecoration(
+                                      color: Get.theme.primaryColor,
+                                      borderRadius: BorderRadius.circular(10),
+                                      boxShadow: [
+                                        BoxShadow(
+                                            color: Get.theme.focusColor
+                                                .withOpacity(0.1),
+                                            blurRadius: 10,
+                                            offset: Offset(0, 5)),
+                                      ],
+                                      border: Border.all(
+                                          color: Get.theme.focusColor
+                                              .withOpacity(0.05))),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: [
+                                      Text(
+                                        'Deadline of accepting applications'.tr,
+                                        style: Get.textTheme.bodyText1,
+                                        textAlign: TextAlign.start,
+                                      ),
+                                      Row(
+                                        children: [
+                                          Icon(
+                                            Icons.event_available,
+                                            color: Get.theme.focusColor,
+                                          ).paddingOnly(right: 15),
+                                          Text(controller
+                                              .tenders.value.deadline,
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                          ),
+                                          ),
+                                        ],
+                                      ).marginSymmetric(vertical: 10),
+                                    ],
+                                  ),
+                                ),
                               ),
                             ),
                           ],
@@ -538,7 +682,9 @@ class TaskCreate extends GetView<CreateTasksController> {
                           child: DropdownButton<String>(
                             hint: Text(
                               "Choose cost of work".tr,
-                              style: Get.textTheme.bodyText1,
+                              style: Get.textTheme.bodyText1.merge(TextStyle(
+                                fontSize: 12,
+                              )),
                             ),
                             style: Get.textTheme.bodyText2,
                             icon: Icon(Icons.arrow_drop_down),
@@ -575,8 +721,7 @@ class TaskCreate extends GetView<CreateTasksController> {
                                 controller.tenders.value.budget = input;
                             },
                             hintText: "Enter cost".tr,
-                            keyboardType: TextInputType.phone,
-                            initialValue: controller.tenders.value.budget,
+                            keyboardType: TextInputType.number,
                             labelText: "Cost of work".tr,
                             iconData: Icons.phone_iphone,
                           ),

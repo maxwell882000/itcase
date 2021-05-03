@@ -23,7 +23,7 @@ class TakeOfferController extends GetxController {
   final dayFrom = "".obs;
   final dayTo = "".obs;
   final currentUser = Get.find<AuthService>().user;
-
+  final loading = false.obs;
   // final selectedOngoingTask = Task().obs;
   // final selectedCompletedTask = Task().obs;
   // final selectedArchivedTask = Task().obs;
@@ -37,6 +37,7 @@ class TakeOfferController extends GetxController {
   }
 
   void send(GlobalKey<FormState> form) async {
+    loading.value = true;
     if (form.currentState.validate()) {
       form.currentState.save();
       try {
@@ -46,10 +47,12 @@ class TakeOfferController extends GetxController {
         Get.back();
       } catch (e) {
         print(e);
+        loading.value = false;
         Get.showSnackbar(
             Ui.ErrorSnackBar(message: e['errors'], title: "Error".tr));
       }
     }
+    loading.value = false;
   }
 
   toJson() {

@@ -1,11 +1,14 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
+import 'package:itcase/app/models/notifications/notification.dart';
 
 import '../../../../common/ui.dart';
-import '../../../models/notification_model.dart';
+
 import '../../../repositories/notification_repository.dart';
 
 class NotificationsController extends GetxController {
-  final notifications = List<Notification>().obs;
+  final notifications = <NotificationBase>[].obs;
   NotificationRepository _notificationRepository;
 
   NotificationsController() {
@@ -21,15 +24,40 @@ class NotificationsController extends GetxController {
   Future refreshNotifications({bool showMessage}) async {
     await getNotifications();
     if (showMessage == true) {
-      Get.showSnackbar(Ui.SuccessSnackBar(message: "List of notifications refreshed successfully".tr));
+      Get.showSnackbar(Ui.SuccessSnackBar(
+          message: "List of notifications refreshed successfully".tr));
     }
   }
 
   Future getNotifications() async {
     try {
-      notifications.value = await _notificationRepository.getAll();
+      notifications.value = await _notificationRepository.getNotificationAll();
+      notificationMarkAsRead();
     } catch (e) {
       Get.showSnackbar(Ui.ErrorSnackBar(message: e.toString()));
+    }
+  }
+
+  Future notificationMarkAsRead() async {
+    try {
+      await _notificationRepository.markAsReadNotification();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future notificationDelete(
+      {NotificationBase notificationBase, int index}) async {
+    notifications.removeAt(index);
+    Map data = {'id': notificationBase.id};
+    try {
+      print(data);
+      await _notificationRepository.deleteNotification(jsonEncode(data));
+
+    } catch (e) {
+      print(e);
+      Get.showSnackbar(
+          Ui.ErrorSnackBar(message: "Try later".tr, title: "Error".tr));
     }
   }
 }

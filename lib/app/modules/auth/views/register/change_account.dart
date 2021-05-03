@@ -5,7 +5,7 @@ import 'package:itcase/app/global_widgets/block_button_widget.dart';
 import 'package:itcase/app/modules/auth/views/register/fill_account.dart';
 
 
-class ChangeAccount extends CreateAccount{
+class ChangeAccount extends FillAccount{
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class ChangeAccount extends CreateAccount{
           Padding(
             padding: const EdgeInsets.all(15.0),
             child: Text(
-              'Исполнитель',
+              'Contractor',
             ),
           ),
         ],
@@ -63,7 +63,7 @@ class ChangeAccount extends CreateAccount{
                   },
                   color: Get.theme.accentColor,
                   text: Text(
-                    "Стать исполнителем".tr,
+                    "Become contractor".tr,
                     style: Get.textTheme.headline6
                         .merge(TextStyle(color: Get.theme.primaryColor)),
                   ),

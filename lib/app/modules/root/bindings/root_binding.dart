@@ -32,8 +32,8 @@ class RootBinding extends Bindings {
     );
     Get.lazyPut<TenderController>(
       () => TenderController(),
+      fenix: true
     );
-
 
     Get.lazyPut<AccountController>(
       () => AccountController(),

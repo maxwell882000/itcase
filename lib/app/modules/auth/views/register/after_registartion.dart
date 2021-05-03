@@ -81,7 +81,7 @@ class AfterRegistration extends GetView<AuthController> {
             Opacity(
               opacity: 0.3,
               child: Text(
-                "Your account has been successfully created, you will be able to perform any actions.",
+                "Your account has been successfully created, you will be able to perform any actions".tr,
                 textAlign: TextAlign.center,
                 style: Get.textTheme.headline4,
               ),

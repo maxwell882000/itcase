@@ -48,13 +48,18 @@ class RegisterController extends GetxController {
       try{
         print(user.value.toJsonSingup());
       var token = await _userRepository.registerAccount(jsonEncode(user.value.toJsonSingup()));
-      print("THERE IS TOKER");
-      print(token);
+        user.value.auth = true;
         user.value.token = token;
-        currentUser.value.auth = true;
-        currentUser.value.email = user.value.email;
-        currentUser.value.password = user.value.password;
-        currentUser.value.token = token;
+        print(user.value.toJson());
+        currentUser.update((current) {
+          current.token = user.value.token;
+          current.auth = true;
+          current.name = user.value.name;
+          current.phone_number = user.value.phone_number;
+          current.password = user.value.password;
+          current.email = user.value.email;
+        });
+        print(currentUser.value.toJson());
         Get.toNamed(Routes.BECOME_CONSUMER, arguments: user.value);
       } catch(e) {
         print(e);

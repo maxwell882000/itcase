@@ -50,17 +50,12 @@ class AddContractorToTender extends GetView<EServiceController> {
             child: ListView(
               padding: EdgeInsets.only(top: 20, bottom: 25, left: 4, right: 4),
               children: [
-                GetX(initState: (_) {
-                  print("initState");
-                  if (controller.tenders.value.isEmpty) {
-                    controller.getOwnedTenders();
-                  }
-                }, builder: (_) {
+                Obx(() {
                   if (controller.isLoadingTenders.value) {
                     return CircularLoadingWidget(height: 100);
                   }
                   return ExpansionTile(
-                    title: Text("Add to Tenders".tr,
+                    title: Text("Add to tender".tr,
                         style: Get.textTheme.bodyText2),
                     children: List.generate(controller.tenders.length, (index) {
                       var _category = controller.tenders.elementAt(index);

@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:itcase/app/global_widgets/format.dart';
 import 'package:itcase/app/models/message_model.dart';
@@ -30,6 +31,49 @@ class ChatMessageItem extends GetView<ChatController> {
           Flexible(
             child: new Container(
               margin: const EdgeInsets.only(top: 5.0),
+              child: new Text(message.text,
+                  style: Get.textTheme.bodyText1
+                      .merge(TextStyle(color: Colors.white))),
+            ),
+          ),
+          Align(
+            heightFactor: 2,
+            child: SizedBox(
+              height: 5,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Obx(
+                    () => Text(
+                      !message.isSend.value
+                          ? ""
+                          : Format.parseDate(message.whenSended.value,
+                              Format.outputFormatMessages),
+                      textAlign: TextAlign.start,
+                      overflow: TextOverflow.visible,
+                      style: Get.textTheme.bodyText1
+                          .merge(TextStyle(color: Colors.white, fontSize: 10)),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          child,
+        ],
+      ),
+    );
+  }
+
+  Widget myLayout({Widget child = const SizedBox()}) {
+    return new Flexible(
+      child: new Row(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: <Widget>[
+          Flexible(
+            child: new Container(
+              margin: const EdgeInsets.only(top: 5.0),
               child: new Text(message.text),
             ),
           ),
@@ -48,7 +92,8 @@ class ChatMessageItem extends GetView<ChatController> {
                               Format.outputFormatMessages),
                       textAlign: TextAlign.start,
                       overflow: TextOverflow.visible,
-                      style: Get.textTheme.bodyText1.merge(TextStyle()),
+                      style: Get.textTheme.bodyText1
+                          .merge(TextStyle(fontSize: 10)),
                     ),
                   ),
                 ],
@@ -78,18 +123,20 @@ class ChatMessageItem extends GetView<ChatController> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            layout(
+            myLayout(
               child: Align(
                 heightFactor: 0.05,
                 child: Obx(
-                  () => Icon(
-                    !message.isSend.value
-                        ? Icons.refresh
-                        : !message.isRead.value
-                            ? Icons.check
-                            : Icons.send,
-                    size: 12,
-                  ),
+                  () => !message.isSend.value
+                      ? Icon(Icons.refresh, size: 12)
+                      : !message.isRead.value
+                          ? Icon(Icons.check, size: 12)
+                          : SvgPicture.asset(
+                              "assets/icon/messages/double_check.svg",
+                              height: Get.height*0.015,
+                              width: Get.width*0.015,
+                              color: Get.theme.accentColor,
+                            ),
                 ),
               ),
             )

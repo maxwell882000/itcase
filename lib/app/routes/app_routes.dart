@@ -36,6 +36,7 @@ abstract class Routes {
   static const BECOME_CONSTRUCTOR = "/become-constructor";
   static const MY_TASKS = "/my-task";
   static const GUEST_TASKS = '/guest-task';
+  static const GUEST_REQUESTED_TASKS = "/guest-requested-tasks";
   static const AFTER_REGISTRATION = "/created-account";
   static const MAP = "/map";
   static const TENDER_VIEW = '/tinder-view';
@@ -47,4 +48,7 @@ abstract class Routes {
   static const DYNAMIC_URL = '/dynamic_url';
 
   static const REQUESTED_TASKS = '/requested_tasks';
+  static const TASK_MODIFY = '/task/modify';
+  static const CHANGE_PASSWORD = '/account/change/password';
+  static const CONTRACTOR_SEARCH = 'contractor/search';
 }

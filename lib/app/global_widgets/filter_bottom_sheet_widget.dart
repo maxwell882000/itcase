@@ -74,12 +74,7 @@ class FilterBottomSheetWidget extends GetView<SearchController> {
                   ],
                   initiallyExpanded: true,
                 ),
-                GetX(initState: (_) {
-                  print("initState");
-                  if (controller.categories.value.isEmpty) {
-                    controller.getCategories();
-                  }
-                }, builder: (_) {
+                Obx(() {
                   if (controller.categories.isEmpty) {
                     return CircularLoadingWidget(height: 100);
                   }
@@ -114,7 +109,7 @@ class FilterBottomSheetWidget extends GetView<SearchController> {
               hintText: "Filter".tr,
               buttonName: "Apply".tr,
               onPressed: () async {
-                await controller.onSubmit();
+                controller.onSubmit(refresh: true);
                 Get.back();
               }),
           Align(

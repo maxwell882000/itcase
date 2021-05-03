@@ -9,7 +9,7 @@
 // import 'package:itcase/app/repositories/user_repository.dart';
 // import 'package:itcase/app/services/auth_service.dart';
 //
-// import 'package:itcase/common/pagination_tasks.dart';
+// import 'package:itcase/common/pagination_tenders.dart';
 // import 'package:itcase/common/ui.dart';
 // import 'package:itcase/app/models/account_see.dart';
 // class RequestsController extends GetxController {

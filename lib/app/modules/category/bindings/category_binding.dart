@@ -16,5 +16,6 @@ class CategoryBinding extends Bindings {
     Get.lazyPut<SearchController>(
       () => SearchController(),
     );
+
   }
 }

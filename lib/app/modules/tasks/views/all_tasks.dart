@@ -32,7 +32,7 @@ class AllTaskView extends GetView<CategoryController> {
               iconTheme: IconThemeData(color: Get.theme.primaryColor),
               title: Text(
                 // controller.category.value.ru_title,
-                "TASKS",
+                "Tasks".tr,
                 style: Get.textTheme.headline6
                     .merge(TextStyle(color: Get.theme.primaryColor)),
               ),

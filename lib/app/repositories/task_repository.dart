@@ -7,32 +7,34 @@ import 'package:itcase/app/providers/api.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:itcase/app/services/auth_service.dart';
+import 'package:itcase/common/loading.dart';
 import '../models/task_model.dart';
 import '../providers/mock_provider.dart';
 
 class TaskRepository {
-
   final currentUser = Get.find<AuthService>().user;
 
-
-    Future<List<Tenders>> searchMap(String json) async{
+  Future<List<Tenders>> searchMap(String json) async {
     print(json);
     final result = await API().post(json, 'tenders/maps-filter');
     final body = jsonDecode(result.body);
     print(body);
-    if (result.statusCode == 200){
-      return body.map<Tenders>((e)=> new Tenders.fromJson(e)).toList();
+    if (result.statusCode == 200) {
+      return body.map<Tenders>((e) => new Tenders.fromJson(e)).toList();
     }
     throw "Error Occured".tr;
   }
-  Future<List> getTenders({String page = "1" , String url = "tenders"}) async {
+
+  Future<List> getTenders({String page = "1", String url = "tenders", String json = ""}) async {
     String paginate = "?page=" + page;
-    final result = await API().getData(url + paginate);
-    Map body = jsonDecode(result.body);
+    var result;
+    if (json.isEmpty)
+      result = await API().getData(url + paginate);
+    else
+      result = await API().post(json, "$url$paginate");
     if (result.statusCode == 200) {
+      Map body = jsonDecode(result.body);
       try {
-        print("THERESI BODY");
-        print(body);
         List response = [
           body['tenders']['data']
               .map<Tenders>((obj) => Tenders.fromJson(obj))
@@ -40,12 +42,11 @@ class TaskRepository {
           body['tenders']['last_page'],
           body['tenders']['current_page'],
         ];
-        if (body.containsKey('tendersCount')){
+        if (body.containsKey('tendersCount')) {
           response.add(body['tendersCount']);
         }
         return response;
-      }
-      catch(e) {
+      } catch (e) {
         print(e);
         print("sddasdsa");
         List<Tenders> result = [];
@@ -56,91 +57,132 @@ class TaskRepository {
           body['tenders']['last_page'],
           body['tenders']['current_page'],
         ];
-        if (body.containsKey('tendersCount')){
+        if (body.containsKey('tendersCount')) {
           response.add(body['tendersCount']);
         }
         return response;
       }
     }
-    print(body);
     throw "Error Occured".tr;
   }
 
-  Future<List> searchTender(String json, {String url = "tenders/text-filter"}) async{
+  Future<List> searchTender(String json,
+      {String url = "tenders/text-filter", String page='1'}) async {
     print(json);
-    final result = await API().post(json, url);
-    Map body = jsonDecode(result.body);
-    if(result.statusCode == 200) {
-      List<Tenders> result = [];
-      print(body);
-      body['tenders']['data'].forEach((obj) => result.add(new Tenders.fromJson(obj)));
-      return [
-        result,
-        body['tenders']['last_page'],
-        body['tenders']['current_page'],
+    return getTenders(page: page, url: url, json:json);
+    // final result = await API().post(json, "$url?page=");
+    // Map body = jsonDecode(result.body);
+    // if (result.statusCode == 200) {
+    //   List<Tenders> result = [];
+    //   print(body);
+    //   body['tenders']['data']
+    //       .forEach((obj) => result.add(new Tenders.fromJson(obj)));
+    //   return [
+    //     result,
+    //     body['tenders']['last_page'],
+    //     body['tenders']['current_page'],
+    //   ];
+    // } else {
+    //   throw body;
+    // }
+  }
 
-      ];
+  Future<Map> acceptRequests(
+      String json, String tenderId, String requestsId) async {
+    print('tenders/$tenderId/accept/$requestsId');
+    final response =
+        await API().post(json, 'tenders/$tenderId/accept/$requestsId');
+    if (response.statusCode != 401) {
+      return {
+        'success':
+            'Исполнитель на этот конкурс назначен! Администратор сайта с вами свяжется и вы получите инструкции, необходимые для того, чтобы исполнитель приступил к работе.'
+      };
     }
-    else {
+    throw response.body;
+  }
 
-      throw body;
-    }
-    }
-
-    Future<Map> acceptRequests(String json,String tenderId, String requestsId)async{
-
-      final response = await API().post(json, 'tenders/$tenderId/accept/$requestsId');
-      if (response.statusCode != 401){
-        return {'success': 'Исполнитель на этот конкурс назначен! Администратор сайта с вами свяжется и вы получите инструкции, необходимые для того, чтобы исполнитель приступил к работе.'};
-      }
-      throw response.body;
-
-    }
-  Future<Map> declineRequests(String json) async{
+  Future<Map> declineRequests(String json) async {
     final response = await API().post(json, 'tenders/cancelRequest');
-    if (response.statusCode == 200){
+    if (response.statusCode == 200) {
       return jsonDecode(response.body);
     }
     throw response.body;
   }
+
   Future<Map> createTender(Map json) async {
     final response = await API().multipart(json, 'tenders/create');
     return jsonDecode(response);
   }
 
-  Future<Map> modifyTender(Map json, String id) async {
-    final response = await API().multipart(json, '/tenders/$id/update');
+  Future<Map> updateTender({Map json, String id}) async {
+    final response = await API().multipart(json, 'tenders/update/$id');
+    print(response);
     return jsonDecode(response);
   }
+
   Future<Map> deleteTender(String json, String id) async {
-      final response = await API().delete('/tenders/$id/delete', data: json);
-      print(response.body);
-    if(response.statusCode == 200){
+    final response = await API().delete('tenders/delete/$id', data: json);
+    print(response.body);
+    if (response.statusCode == 200) {
       return jsonDecode(response.body);
     }
-     throw "Delete Tender".tr;
+    throw "Delete Tender".tr;
   }
+
   Future<List> getMyOpenedTenders({String page}) async {
     return await getTenders(page: page, url: "account/tenders");
   }
-  Future<List> getGuestTenders(String id,{String page}) async {
-      return await getTenders(page: page, url: "account/guest/tenders/$id");
+
+  Future<List> getGuestTenders(String id, {String page}) async {
+    return await getTenders(page: page, url: "account/guest/tenders/$id");
   }
-  Future<List> getArchivedTasks({String page}) async{
-      return await getTenders(page: page, url: "account/myTenders/finishedTenders");
+
+  Future<List> getInvitationTenders({String page}) async {
+    return await getTenders(page: page, url: "account/invitation/get");
   }
-  Future<List> getAvailableTenders({String page}) async{
+
+  Future<Map> acceptInvitation(String json) async {
+    final result = await API().post(json, "contractors/accept/invitation");
+    print(result.body);
+    if (result.statusCode == 200) {
+      Map body = jsonDecode(result.body);
+      return body;
+    }
+    return result.body;
+  }
+  Future<Map> declineInvitation(String json) async {
+    final result = await API().post(json, "contractors/reject/invitation");
+    print(result.body);
+    if (result.statusCode == 200) {
+      Map body = jsonDecode(result.body);
+      return body;
+    }
+    return result.body;
+  }
+
+  Future<List> getArchivedTasks({String page}) async {
+    return await getTenders(
+        page: page, url: "account/myTenders/finishedTenders");
+  }
+
+  Future<List> getAvailableTenders({String page}) async {
     return await getTenders(page: page, url: "tenders/show/opened");
   }
-  Future<List> getModificationTasks({String page}) async{
-     return await getTenders(page: page, url: "account/myTenders/onModerationTenders");
+
+  Future<List> getModificationTasks({String page}) async {
+    return await getTenders(
+        page: page, url: "account/myTenders/onModerationTenders");
   }
-  Future<List> getAcceptedTenders({String page}) async{
-    return await getTenders(page: page, url: "account/myRequest/requestsAccepted");
+
+  Future<List> getAcceptedTenders({String page}) async {
+    return await getTenders(
+        page: page, url: "account/myRequest/requestsAccepted");
   }
-  Future<List> getRequestedTenders({String page}) async{
+
+  Future<List> getRequestedTenders({String page}) async {
     return await getTenders(page: page, url: "account/myRequest/requestsSend");
   }
+
   Future<Map> sendRequest(json) async {
     final result = await API().post(json, "tenders/makeRequest");
     Map body = jsonDecode(result.body);
@@ -173,12 +215,14 @@ class TaskRepository {
     }
   }
 
-  Future<List<TenderRequests>> getTenderRequests(String json) async{
+  Future<List<TenderRequests>> getTenderRequests(String json) async {
     final response = await API().post(json, 'tenders/showOffered');
     Map body = jsonDecode(response.body);
-    if (response.statusCode == 200){
-        return body['requested'].map<TenderRequests>((e)=> TenderRequests.fromJson(e)).toList();
+    if (response.statusCode == 200) {
+      return body['requested']
+          .map<TenderRequests>((e) => TenderRequests.fromJson(e))
+          .toList();
     }
     print(body);
-    }
+  }
 }

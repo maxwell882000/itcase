@@ -23,7 +23,6 @@ class SearchMapController extends GetxController {
   final currentPosition = new Position().obs;
   final currentAddress = "".obs;
 
-  final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
 
   Yandex.Placemark _mapPlacemark;
   Yandex.YandexMapController _mapController;
@@ -64,15 +63,16 @@ class SearchMapController extends GetxController {
       onTap: (point) {
         Get.toNamed(Routes.TENDER_VIEW, arguments: tenders);
       },
-      rawImageData: imageBundle,
+        rawImageData: imageBundle,
+
     ));
     mapController.addPlacemark(placemarks.last);
   }
 
   void searchMap() async {
     Map data = {
-      "center_lat":currentPosition.value.longitude,
-      "center_lng":  currentPosition.value.latitude,
+      "center_lng":currentPosition.value.longitude,
+      "center_lat":  currentPosition.value.latitude,
       "radius": radius.value,
       "categories": categories.value,
     };
@@ -84,12 +84,12 @@ class SearchMapController extends GetxController {
       });
     } catch (e) {
       print(e);
-      Get.showSnackbar(Ui.ErrorSnackBar(message: e, title: "Error"));
+      Get.showSnackbar(Ui.ErrorSnackBar(message: e, title: ""));
     }
   }
 
   getCurrentLocation() {
-    geolocator
+    Geolocator
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
         .then((Position position) async {
       print(position.latitude);

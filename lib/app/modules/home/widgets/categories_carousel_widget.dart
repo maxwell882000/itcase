@@ -26,7 +26,7 @@ class CategoriesCarouselWidget extends GetWidget<HomeController> {
                   Get.toNamed(Routes.CATEGORY, arguments: _category);
                 },
                 child: Container(
-                  width: 100,
+                  width: 150,
                   height: 100,
                   margin: EdgeInsetsDirectional.only(end: 20, start: index == 0 ? 20 : 0),
                   padding: EdgeInsets.symmetric(vertical: 10),

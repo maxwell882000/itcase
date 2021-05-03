@@ -107,7 +107,8 @@ class AccountView extends GetView<AccountController> {
                           Text(controller.accountSee.value.email.value ?? " ",
                               style: Get.textTheme.caption
                                   .merge(TextStyle(color: Get.theme
-                                  .primaryColor))),
+                                  .primaryColor,
+                                  fontSize: 12))),
                     ),
                     SizedBox(height: 5),
                     Visibility(
@@ -117,7 +118,9 @@ class AccountView extends GetView<AccountController> {
                             Text(controller.accountSee.value.phone.value ?? " ",
                                 style: Get.textTheme.caption
                                     .merge(TextStyle(color: Get.theme
-                                    .primaryColor))),
+                                    .primaryColor,
+                                    fontSize: 12
+                                ))),
                       ),
                     ),
                   ],
@@ -145,7 +148,8 @@ class AccountView extends GetView<AccountController> {
                         ),
                         Text("created tasks".tr,
                             style: Get.textTheme.caption.merge(
-                                TextStyle(color: Get.theme.primaryColor))),
+                                TextStyle(color: Get.theme.primaryColor,
+                                fontSize: 12))),
                       ],
                     ),
                     onTap: () => tasks(),
@@ -166,7 +170,8 @@ class AccountView extends GetView<AccountController> {
                           ),
                           Text("taken tasks".tr,
                               style: Get.textTheme.caption.merge(
-                                  TextStyle(color: Get.theme.primaryColor))),
+                                  TextStyle(color: Get.theme.primaryColor,
+                                  fontSize: 12))),
                         ],
                       ),
                       onTap: () => takenTasks(),
@@ -175,31 +180,25 @@ class AccountView extends GetView<AccountController> {
                 ],
               ),
             ),
-            Container(
-              decoration: Ui.getBoxDecoration(
-                radius: 14,
-                border: Border.all(width: 5, color: Get.theme.primaryColor),
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-                child: Obx(
-                      () =>
-                      CachedNetworkImage(
-                        height: 100,
-                        width: 100,
-                        fit: BoxFit.cover,
-                        imageUrl: controller.accountSee.value.image.value,
-                        placeholder: (context, url) =>
-                            Image.asset(
-                              'assets/img/loading.gif',
-                              fit: BoxFit.cover,
-                              width: double.infinity,
-                              height: 100,
-                            ),
-                        errorWidget: (context, url, error) =>
-                            Icon(Icons.error_outline),
-                      ),
-                ),
+            ClipRRect(
+              borderRadius: BorderRadius.all(Radius.circular(100)),
+              child: Obx(
+                    () =>
+                    CachedNetworkImage(
+                      height: 100,
+                      width: 100,
+                      fit: BoxFit.cover,
+                      imageUrl: controller.accountSee.value.image.value,
+                      placeholder: (context, url) =>
+                          Image.asset(
+                            'assets/img/loading.gif',
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                            height: 100,
+                          ),
+                      errorWidget: (context, url, error) =>
+                          Icon(Icons.error_outline),
+                    ),
               ),
             ),
             Container(

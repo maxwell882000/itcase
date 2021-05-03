@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:itcase/app/modules/account/controllers/guest_controller.dart';
 import 'package:itcase/app/modules/tasks/views/my_task.dart';
-class GuestTasks extends GetView<GuestController> {
 
+class GuestTasks extends GetView<GuestController> {
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
+    return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Задания от ${controller.accountSee.value.name.value}".tr,
+          "Tasks from".tr + " " + controller.accountSee.value.name.value,
           style: Get.textTheme.headline6,
         ),
         centerTitle: true,
@@ -25,9 +25,13 @@ class GuestTasks extends GetView<GuestController> {
         padding: const EdgeInsets.only(top: 20),
         child: RefreshIndicator(
           onRefresh: () async {
-            await controller.refreshAccount(showMessage: true);
+            controller.paginationHelper.update();
+            await controller.showMore(refresh:true);
           },
-          child: Obx(()=> MyTasks().list_my_tasks(controller,tenders: controller.guestTenders)),
+          child: Obx(() => MyTasks().list_my_tasks(
+              controller,
+              tenders: controller.guestTenders,
+              child: MyTasks().Published)),
         ),
       ),
     );

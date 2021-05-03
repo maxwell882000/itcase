@@ -12,6 +12,8 @@ import 'package:itcase/app/modules/e_service/widgets/e_service_title_bar_widget.
 import 'package:itcase/app/modules/home/widgets/address_widget.dart';
 import 'package:itcase/app/modules/tasks/controllers/tender_controller.dart';
 import 'package:itcase/app/modules/tasks/controllers/tender_view_controller.dart';
+import 'package:itcase/app/modules/tasks/views/tender_modification.dart';
+import 'package:itcase/app/modules/tasks/widgets/delete_tender.dart';
 import 'package:itcase/app/modules/tasks/widgets/offers_list_widget.dart';
 import '../../../global_widgets/block_button_widget.dart';
 import '../../../global_widgets/circular_loading_widget.dart';
@@ -43,19 +45,20 @@ class TenderView extends GetView<TenderViewController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      var _tender = controller.tender.value;
-      if (_tender.id.isNull || controller.loading.value) {
+      var _tender = controller.tender;
+      if (_tender.value.id.isNull || controller.loading.value) {
         return Scaffold(
           body: CircularLoadingWidget(height: Get.height),
         );
       } else {
         return Scaffold(
           bottomNavigationBar:
-              !controller.currentUser.value.isContractor.value ||
-                      controller.isOwner.value ||
-                      !controller.tender.value.opened.value
+              controller.isOwner.value && controller.tender.value.opened.value
                   ? edditOrDelete(_tender)
-                  : takingOfferWidget(_tender),
+                  : !controller.currentUser.value.isContractor.value ||
+                          !controller.tender.value.opened.value
+                      ? null
+                      : takingOfferWidget(_tender.value),
           body: RefreshIndicator(
               onRefresh: () async {
                 controller.refreshTasks(showMessage: true);
@@ -77,7 +80,8 @@ class TenderView extends GetView<TenderViewController> {
                     leading: new IconButton(
                       icon: new Icon(Icons.arrow_back_ios,
                           color: Get.theme.hintColor),
-                      onPressed: () => {Get.back()},
+                      onPressed: () =>
+                          {Get.back(result: controller.tender.value)},
                     ),
                     bottom:
                         buildEServiceTitleBarWidget(controller.tender.value),
@@ -146,13 +150,24 @@ class TenderView extends GetView<TenderViewController> {
           content: Text(controller.tender.value.description,
               style: Get.textTheme.bodyText1),
         ),
+        EServiceTilWidget(
+          title: Text("Additional info".tr, style: Get.textTheme.subtitle2),
+          content: Text(controller.tender.value.additional_info ?? "",
+              style: Get.textTheme.bodyText1),
+        ),
+        EServiceTilWidget(
+          title: Text("Ways of communication".tr, style: Get.textTheme.subtitle2),
+          content: Text(controller.tender.value.other_info ?? "",
+              style: Get.textTheme.bodyText1),
+        ),
+
       ],
     );
   }
 
   offers() {
     // controller.getOffers();
-    return OffersListWidget(offers: controller.tenderRequests.value);
+    return Obx(() => OffersListWidget(offers: controller.tenderRequests.value));
   }
 
   CarouselSlider buildCarouselSlider(Tenders _eService) {
@@ -169,21 +184,18 @@ class TenderView extends GetView<TenderViewController> {
       items: List.generate(1, (media) {
         return Builder(
           builder: (BuildContext context) {
-            return Hero(
-              tag: _eService.id,
-              child: CachedNetworkImage(
-                width: double.infinity,
-                height: 350,
+            return CachedNetworkImage(
+              width: double.infinity,
+              height: 350,
+              fit: BoxFit.cover,
+              imageUrl:
+                  "https://i.pinimg.com/originals/80/8c/0f/808c0faeff1173563adb93d4162d6a0f.jpg",
+              placeholder: (context, url) => Image.asset(
+                'assets/img/loading.gif',
                 fit: BoxFit.cover,
-                imageUrl:
-                    "https://i.pinimg.com/originals/80/8c/0f/808c0faeff1173563adb93d4162d6a0f.jpg",
-                placeholder: (context, url) => Image.asset(
-                  'assets/img/loading.gif',
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                ),
-                errorWidget: (context, url, error) => Icon(Icons.error_outline),
+                width: double.infinity,
               ),
+              errorWidget: (context, url, error) => Icon(Icons.error_outline),
             );
           },
         );
@@ -215,7 +227,7 @@ class TenderView extends GetView<TenderViewController> {
 //controller.currentSlide.value == _eService.media.indexOf(media) ? : Get.theme.primaryColor.withOpacity(0.4)
   EServiceTitleBarWidget buildEServiceTitleBarWidget(Tenders _tender) {
     return EServiceTitleBarWidget(
-      height: 140,
+      height: 130,
       title: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -233,8 +245,8 @@ class TenderView extends GetView<TenderViewController> {
           Wrap(
             direction: Axis.horizontal,
             children: [
-              text("Start from".tr, _tender.budget + "cум"),
-              text("Published".tr, _tender.created_at),
+              text("Start from".tr, _tender.budget + "cум" + " "),
+              text("Published".tr, _tender.work_start_at),
               text("Deadline".tr, _tender.deadline),
             ],
           )
@@ -246,7 +258,9 @@ class TenderView extends GetView<TenderViewController> {
   text(String key, String value) {
     return Text(
       key + ": " + value,
-      style: Get.textTheme.headline6,
+      style: Get.textTheme.caption.merge(TextStyle(
+        fontSize: 12
+      )),
     );
   }
 
@@ -303,7 +317,7 @@ class TenderView extends GetView<TenderViewController> {
     );
   }
 
-  Widget edditOrDelete(Tenders _tenders) {
+  Widget edditOrDelete(final _tenders) {
     return ContainerForButtons(
         child: Row(
       children: [
@@ -320,8 +334,14 @@ class TenderView extends GetView<TenderViewController> {
                 ),
               ),
               color: Get.theme.accentColor,
-              onPressed: () {
-
+              onPressed: () async {
+                final result = await Get.toNamed(Routes.TASK_MODIFY,
+                    arguments: _tenders.value);
+                if (result != null) {
+                  _tenders(result);
+                  controller.getLocation();
+                  print(_tenders.value.toJson());
+                }
               }).paddingOnly(right: 20, left: 20),
         ),
         Expanded(
@@ -337,8 +357,11 @@ class TenderView extends GetView<TenderViewController> {
                 ),
               ),
               color: Get.theme.accentColor,
-              onPressed: () {
-                controller.deleteTender();
+              onPressed: () async {
+                final result = await Get.bottomSheet(
+                  DeleteTender(),
+                  isScrollControlled: true,
+                );
               }).paddingOnly(right: 20, left: 20),
         ),
       ],

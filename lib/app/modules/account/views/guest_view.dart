@@ -13,7 +13,7 @@ class GuestView extends GetView<GuestController> {
         controller.refreshAccount(showMessage: true);
       },
       child: Obx(
-        ()=> Scaffold(
+        () => Scaffold(
           appBar: AppBar(
             title: Text(
               "Guest".tr,
@@ -31,14 +31,18 @@ class GuestView extends GetView<GuestController> {
           ),
           body: AccountView().account(
             controller,
-            child: Obx(()=> AccountView().validated(controller.user)),
-            tasks: () async=> {
+            child: Obx(() => AccountView().validated(controller.user)),
+            tasks: () async => {
+              controller.paginationHelper.update(),
               controller.getTenders(),
+              controller.setShowMore(controller.getTenders),
               Get.toNamed(Routes.GUEST_TASKS)
             },
-            takenTasks: () async=> {
-
-              Get.toNamed(Routes.GUEST_TASKS),
+            takenTasks: () async => {
+              controller.paginationHelper.update(),
+              controller.getAcceptedTenders(),
+              controller.setShowMore(controller.getAcceptedTenders),
+              Get.toNamed(Routes.GUEST_REQUESTED_TASKS),
             },
           ),
         ),

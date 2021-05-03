@@ -206,7 +206,7 @@ class BecomeConstructor extends GetView<BecomeContractorController> {
               resizeToAvoidBottomInset: false,
               appBar: AppBar(
                 title: Text(
-                  "Become Contractor".tr,
+                  "Choose categories".tr,
                   style: Get.textTheme.headline6
                       .merge(TextStyle(color: context.theme.primaryColor)),
                 ),
@@ -368,7 +368,7 @@ class BecomeConstructor extends GetView<BecomeContractorController> {
                           },
                           color: Get.theme.accentColor,
                           text: Text(
-                            "Become contractor".tr,
+                            "Save".tr,
                             style: Get.textTheme.headline6
                                 .merge(TextStyle(color: Get.theme.primaryColor)),
                           ),

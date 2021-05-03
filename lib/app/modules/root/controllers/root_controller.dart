@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:itcase/app/models/chat_model.dart';
 import 'package:itcase/app/models/message_model.dart';
+import 'package:itcase/app/modules/account/controllers/account_controller.dart';
 import 'package:itcase/app/modules/category/views/categories_view.dart';
 import 'package:itcase/app/modules/home/views/home2_view.dart';
 import 'package:itcase/app/modules/home/views/home_view.dart';

@@ -17,31 +17,30 @@ class ChatRepository {
     throw "Chat cannot be created".tr;
   }
   Future<List<Chat>> getAllChats() async {
-    final response = await API().getData("messages/all_chats");
-    final result = jsonDecode(response.body);
-    print('sadsaddsdsadsadadasdas');
-    print(result);
+    final response = await API().getData("chats/all/get");
+    print(response.body);
     if (response.statusCode ==200){
-
+      final result = jsonDecode(response.body);
       return result.map<Chat>((e) => new Chat.fromJson(e)).toList();
     }
 
     throw "get All Chats";
   }
+
   Future<List<Message>> updatingChats(String chatId, String lastMessageGotten) async {
     final response = await API().getData("messages/" + chatId + "/" + lastMessageGotten);
     final body = jsonDecode(response.body);
-    print(body);
-    print(response.statusCode == 200);
+
+
     if (response.statusCode == 200) {
       return body.map<Message>((e) => new Message.fromJson(e)).toList().reversed.toList();
     }
-    print(body);
+
     throw "updating Chats";
   }
 
-  Future<List<Chat>> notificationChats()async{
-    final response = await API().getData('messages/notificationLastMessages');
+  Future<List<Chat>> notificationChats({String chatId = '0'})async{
+    final response = await API().getData('messages/notificationLastMessages?chat_id=$chatId');
     final body = jsonDecode(response.body);
 
     if(response.statusCode == 200){
@@ -51,7 +50,7 @@ class ChatRepository {
   }
   Future<bool> readSomeMessages(String messagesId) async{
     final response = await API().put(messagesId, "messages/read/messagesIsRead");
-    print(response.body);
+
     if (response.statusCode ==200){
       return true;
     }
@@ -76,21 +75,37 @@ class ChatRepository {
     return false;
   }
 
-  Future<List> getMessagesOfChat(String chatId) async {
-    final response = await API().getData('account/chats/' + chatId);
+  Future<List> getMessagesOfChat(String chatId, {String page = '1'}) async {
+    final response = await API().getData('account/chats/$chatId?page=$page' );
+    if (response == null)
+      throw 0;
     final body = jsonDecode(response.body);
+    print(body);
     if (response.statusCode == 200) {
-      if (body['chat']['data'].isEmpty){
+        if (body['chat']['data'].isEmpty){
         throw "";
       }
-
-      List<Message> messages =
-          body['chat']['data'].map<Message>((e) => new Message.fromJson(e)).toList();
-      return [
-        messages.reversed.toList(),
-        body['chat']['last_page'],
-        body['chat']['current_page']
-      ];
+      try {
+        List<Message> messages =
+        body['chat']['data']
+            .map<Message>((e) => new Message.fromJson(e))
+            .toList();
+        return [
+          messages.reversed.toList(),
+          body['chat']['last_page'],
+          body['chat']['current_page']
+        ];
+      }
+      catch(e){
+        List<Message> messages = [];
+        body['chat']['data']
+            .forEach<Message>((k,e) => messages.add(new Message.fromJson(e)));
+        return [
+          messages.reversed.toList(),
+          body['chat']['last_page'],
+          body['chat']['current_page']
+        ];
+      }
     }
     print(body);
     throw "Get message of chat Error";

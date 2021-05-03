@@ -26,6 +26,7 @@ class TenderViewController extends GetxController {
   final status = true.obs;
   final chatId = 0.obs;
   final loading = false.obs;
+
   // final selectedOngoingTask = Task().obs;
   // final selectedCompletedTask = Task().obs;
   // final selectedArchivedTask = Task().obs;
@@ -53,8 +54,8 @@ class TenderViewController extends GetxController {
   }
 
   getTender({bool showMessage = false}) async {
-    tender.value = await _taskRepository.getTender(tender.value.id.toString());
-    status.value = tender.value.opened == 1;
+    tender(await _taskRepository.getTender(tender.value.id.toString()));
+    status.value = tender.value.opened.value;
     if (showMessage) {
       Get.showSnackbar(
           Ui.SuccessSnackBar(message: "Task page refreshed successfully".tr));
@@ -91,14 +92,17 @@ class TenderViewController extends GetxController {
   }
 
   void accepts(String id) async {
+
     Map data = {'redirect_to': 'some'};
+    tenderRequests.value.removeWhere((element) => element.id != id);
+    tender.update((val) {
+      val.contractor_id =  int.parse(tenderRequests.value.first.user.id);
+    });
+    status.value = false;
     try {
       final response = await _taskRepository.acceptRequests(
           jsonEncode(data), tender.value.id.toString(), id);
-      tenderRequests.value.removeWhere((element) => element.id != id);
-      tender.value.contractor_id =
-          int.parse(tenderRequests.value.first.user.id);
-        await _chatRepository.createChats(
+      await _chatRepository.createChats(
           jsonEncode({'with_user_id': tenderRequests.value.first.user.id}));
       Get.showSnackbar(Ui.SuccessSnackBar(
           message: response['success'], title: "Success".tr));
@@ -108,17 +112,22 @@ class TenderViewController extends GetxController {
   }
 
   Future sendMessage(Chat chat) async {
+    loading.value = true;
     try {
+      print("HERE USER ID");
+      print(chat.user.id);
       final result = await _chatRepository.createChats(
-          jsonEncode({'with_user_id': tenderRequests.value.first.user.id}));
+          jsonEncode({'with_user_id': chat.user.id}));
       chat.chatId = result['chat_id'];
       print(chat.chatId);
       Get.toNamed(Routes.CHAT, arguments: chat);
     } catch (e) {
+      loading.value = false;
       Get.showSnackbar(Ui.ErrorSnackBar(
-          message: "Sorry, now is impossible send message", title: "Error".tr));
+          message: "Sorry, now is impossible send message".tr, title: "Error".tr));
       return false;
     }
+    loading.value = false;
   }
 
   Future refreshTasks({bool showMessage = false}) async {
@@ -132,11 +141,30 @@ class TenderViewController extends GetxController {
     }
   }
 
-  Future deleteTender()async{
+  Future deleteTender() async {
     loading.value = true;
+    try{
+
+
+      print(tender.value.delete_reason);
+          tender.update((val) {
+            val.opened.value = false;
+          });
+      final response = await _taskRepository.deleteTender(
+          jsonEncode({'delete_reason': tender.value.delete_reason}), tender.value.id.toString());
+     await Get.showSnackbar(
+          Ui.SuccessSnackBar(message: response['success']));
+
+      Get.back();
+      Get.back(result: tender.value);
+    }
+    catch(e){
+      print("DELETE TENDER");
+      print(e);
+    }
+    loading.value = false;
 
   }
-  Future updateTender() async {
 
-  }
+  Future updateTender() async {}
 }

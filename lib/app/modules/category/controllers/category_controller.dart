@@ -1,11 +1,11 @@
 import 'package:get/get.dart';
 import 'package:itcase/app/models/user_model.dart';
+import 'package:itcase/app/services/auth_service.dart';
+import 'package:itcase/common/pagination_contractors.dart';
 
 import '../../../../common/ui.dart';
 import '../../../models/category_model.dart';
-import '../../../models/e_service_model.dart';
-import '../../../models/e_service_model.dart';
-import '../../../models/subcategory_model.dart';
+
 import '../../../repositories/e_service_repository.dart';
 
 class CategoryFilter {
@@ -26,6 +26,9 @@ class CategoryController extends GetxController {
   final caregoryFilter = new CategoryFilter().obs;
   final eServices = List<User>().obs;
   final isLoading = true.obs;
+  final currentUser = Get.find<AuthService>().user;
+  PaginationContractors pagination;
+
   EServiceRepository _eServiceRepository;
 
   CategoryController() {
@@ -36,23 +39,25 @@ class CategoryController extends GetxController {
   Future<void> onInit() async {
     category.value = Get.arguments as Category;
     selected.value = category.value.id;
-    caregoryFilter.value.setChoices([category.value.id, "Все пользователи"]);
-
+    caregoryFilter.value.setChoices([category.value.id, "All".tr]);
+    pagination = new PaginationContractors();
     category.value.categories.forEach((e) => caregoryFilter.value.setChoices([
           e.id,
           e.title,
         ]));
 
-    print(caregoryFilter.value.choices);
-    await refreshEServices();
+    print("IS ACTIVTED");
+    pagination.addingListener(controller: this);
+    await refreshEServices(showMessage: true);
+
     super.onInit();
   }
 
   Future refreshEServices({bool showMessage}) async {
-    await getEServicesOfCategory(id: selected.value);
+    await getEServicesOfCategory(refresh: showMessage);
     if (showMessage == true) {
       Get.showSnackbar(Ui.SuccessSnackBar(
-          message: "List of services refreshed successfully".tr));
+          message: "List of contractors refreshed successfully".tr));
     }
   }
 
@@ -60,20 +65,27 @@ class CategoryController extends GetxController {
 
   void toggleSelected(int filter) {
     selected.value = filter;
-
-    // if (isSelected(filter)) {
-    //   selected.value.selected = 0;
-    // } else {
-    //
-    // }
   }
 
-  Future getEServicesOfCategory({int id}) async {
-    try {
-      isLoading.value = true;
-      eServices.assignAll([]);
-      eServices.value = await _eServiceRepository.getAllCategories(id.toString());
+  Future showMore({bool refresh}) async {
+    await getEServicesOfCategory(refresh: refresh);
+  }
 
+  Future getEServicesOfCategory({bool refresh = false}) async {
+    try {
+      if (refresh) {
+
+        isLoading.value = true;
+      }
+
+      List data = await _eServiceRepository.getContractors(
+          id:selected.value.toString(),
+          page: refresh ? '1' : pagination.currentPage.value.toString());
+      pagination.processData(
+          refresh: refresh,
+          data: data,
+          contractors: eServices
+      );
     } catch (e) {
       Get.showSnackbar(Ui.ErrorSnackBar(message: e.toString()));
     }

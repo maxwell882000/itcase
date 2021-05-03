@@ -36,11 +36,14 @@ class MainDrawerWidget extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Добро пожаловать".tr,
+                  Text("Welcome".tr,
                       style: Get.textTheme.headline5.merge(
                           TextStyle(color: Theme
                               .of(context)
                               .accentColor))),
+                  SizedBox(
+                    height: 20,
+                  ),
                   Row(
                     children: [
                       Container(
@@ -73,10 +76,12 @@ class MainDrawerWidget extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(width: 5),
+                      SizedBox(width: 10),
                       if(controller.currentUser.value.auth)
                         Text("${controller.currentUser.value.name}".tr,
-                            style: Get.textTheme.bodyText1),
+                            style: Get.textTheme.bodyText1.merge(TextStyle(
+                              fontSize: 12
+                            ))),
                     ],
                   ),
 
@@ -141,7 +146,7 @@ class MainDrawerWidget extends StatelessWidget {
           SizedBox(height: 20),
           DrawerLinkWidget(
             icon: Icons.home_outlined,
-            text: "Home",
+            text: "Home".tr,
             onTap: (e) {
               Get.back();
               Get.find<RootController>().changePage(0);
@@ -149,14 +154,14 @@ class MainDrawerWidget extends StatelessWidget {
           ),
           DrawerLinkWidget(
             icon: Icons.folder_special_outlined,
-            text: "Categories",
+            text: "Categories".tr,
             onTap: (e) {
               Get.offAndToNamed(Routes.CATEGORIES);
             },
           ),
           DrawerLinkWidget(
             icon: Icons.assignment_outlined,
-            text: "Bookings",
+            text: "Bookings".tr,
             onTap: (e) {
               Get.back();
               Get.find<RootController>().changePage(1);
@@ -173,14 +178,14 @@ class MainDrawerWidget extends StatelessWidget {
 
             icon: Icons.favorite_outline,
 
-            text: "My tasks",
+            text: "My tasks".tr,
             onTap: (e) {
               Get.toNamed(Routes.MY_TASKS);
             },
           ),
           DrawerLinkWidget(
             icon: Icons.chat_outlined,
-            text: "Messages",
+            text: "Messages".tr,
             onTap: (e) {
               Get.back();
               Get.toNamed(Routes.CHATS_ALL);
@@ -189,7 +194,7 @@ class MainDrawerWidget extends StatelessWidget {
           if(controller.currentUser.value.auth && !controller.currentUser.value.isContractor.value)
             DrawerLinkWidget(
               icon: Icons.check,
-              text: "Become contractor".tr,
+              text: "Become a contractor".tr,
               onTap: (e) {
                Get.toNamed(Routes.BECOME_CONSTRUCTOR);
               },
@@ -214,30 +219,17 @@ class MainDrawerWidget extends StatelessWidget {
             },
           ),
           DrawerLinkWidget(
-            icon: Icons.settings_outlined,
-            text: "Settings App",
-            onTap: (e) {
-              Get.offAndToNamed(Routes.SETTINGS);
-            },
-          ),
-          DrawerLinkWidget(
             icon: Icons.translate_outlined,
             text: "Languages",
             onTap: (e) {
               Get.offAndToNamed(Routes.SETTINGS_LANGUAGE);
             },
           ),
-          DrawerLinkWidget(
-            icon: Icons.brightness_6_outlined,
-            text: Get.isDarkMode ? "Light Theme" : "Dark Theme",
-            onTap: (e) {
-              Get.offAndToNamed(Routes.SETTINGS_THEME_MODE);
-            },
-          ),
+
           ListTile(
             dense: true,
             title: Text(
-              "Help & Privacy",
+              "Help & Privacy".tr,
               style: Get.textTheme.caption,
             ),
             trailing: Icon(
@@ -247,23 +239,23 @@ class MainDrawerWidget extends StatelessWidget {
           ),
           DrawerLinkWidget(
             icon: Icons.help_outline,
-            text: "Help & FAQ",
+            text: "Help & FAQ".tr,
             onTap: (e) {
               Get.offAndToNamed(Routes.HELP);
             },
           ),
           DrawerLinkWidget(
             icon: Icons.privacy_tip_outlined,
-            text: "Privacy Policy",
+            text: "Privacy Policy".tr,
             onTap: (e) {
               Get.offAndToNamed(Routes.PRIVACY);
             },
           ),
           DrawerLinkWidget(
             icon: Icons.logout,
-            text: "Logout",
+            text: "Logout".tr,
             onTap: (e) {
-              controller.currentUser.value = new User();
+              controller.currentUser(new User());
               Get.offAllNamed(Routes.LOGIN);
             },
           ),

@@ -39,7 +39,7 @@ class CategoriesView extends GetView<CategoriesController> {
                 child: Row(children: [
                   Expanded(
                     child: Text(
-                      "Categories of services".tr,
+                      "Categories of contractors".tr,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.headline5,
@@ -123,20 +123,7 @@ class CategoriesView extends GetView<CategoriesController> {
                   ),
                 );
               }),
-              // Container(
-              //   child: ListView(
-              //       primary: false,
-              //       shrinkWrap: true,
-              //       children: List.generate(controller.categories.length, (index) {
-              //         return Obx(() {
-              //           var _category = controller.categories.elementAt(index);
-              //           return Padding(
-              //             padding: const EdgeInsetsDirectional.only(start: 20),
-              //             child: Text(_category.name),
-              //           );
-              //         });
-              //       })),
-              // ),
+
             ],
           ),
         ));

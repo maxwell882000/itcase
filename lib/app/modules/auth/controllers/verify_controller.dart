@@ -54,7 +54,6 @@ class VerifyController extends GetxController {
         "password": currentUser.value.password
       }));
       var body = jsonDecode(login.body);
-      print("Ответ пришел ");
       print(body);
       currentUser.value.token = body['token'];
       print(code.value);
@@ -65,7 +64,8 @@ class VerifyController extends GetxController {
     loading.value = true;
     if (validateForm.currentState.validate()) {
       validateForm.currentState.save();
-
+      print(currentUser.value.password);
+      print(currentUser.value.email);
       await login();
 
       var response =
@@ -75,7 +75,7 @@ class VerifyController extends GetxController {
       if (response.statusCode == 200) {
         print(jsonDecode(response.body));
         make_payment();
-        Get.offAllNamed(Routes.AFTER_REGISTRATION);
+        Get.toNamed(Routes.AFTER_REGISTRATION);
       } else {
         Get.showSnackbar(Ui.ErrorSnackBar(message: "Incorrect code".tr));
       }

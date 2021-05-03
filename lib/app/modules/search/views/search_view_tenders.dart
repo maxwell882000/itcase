@@ -26,7 +26,9 @@ import 'package:itcase/app/modules/search/widgets/search_tenders_list_widget.dar
       body: ListView(
         children: [
           SearchView().buildSearchBar(heroTag: true, onSubmit: controller.searchTenders),
-          SearchTendersListWidget(tenders: controller.tenders),
+          Container(
+            height: Get.height*0.8,
+              child: SearchTendersListWidget()),
         ],
       ),
     );

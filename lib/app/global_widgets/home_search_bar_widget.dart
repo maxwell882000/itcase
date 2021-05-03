@@ -8,6 +8,11 @@ import 'filter_bottom_sheet_widget.dart';
 
 class HomeSearchBarWidget extends StatelessWidget implements PreferredSize {
   final controller = Get.find<SearchController>();
+  final String heroTag;
+  final Function onSubmit;
+
+   HomeSearchBarWidget({Key key, this.heroTag, this.onSubmit}) : super(key: key);
+
 
   Widget buildSearchBar({String heroTag = "home_search", Function onSubmit}) {
     controller.heroTag.value = heroTag;
@@ -41,7 +46,7 @@ class HomeSearchBarWidget extends StatelessWidget implements PreferredSize {
               ),
               Expanded(
                 child: Text(
-                  "Search for home service...".tr,
+                  "Search".tr,
                   maxLines: 1,
                   softWrap: false,
                   overflow: TextOverflow.fade,
@@ -86,7 +91,7 @@ class HomeSearchBarWidget extends StatelessWidget implements PreferredSize {
 
   @override
   Widget build(BuildContext context) {
-    return buildSearchBar();
+    return buildSearchBar(heroTag: heroTag,onSubmit: onSubmit);
   }
 
   @override

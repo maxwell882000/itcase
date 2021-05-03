@@ -1,4 +1,4 @@
-import 'dart:convert';
+  import 'dart:convert';
 
 import 'package:get/get.dart';
 import 'package:itcase/app/models/category_model.dart';
@@ -8,7 +8,7 @@ import 'package:itcase/app/modules/search/controllers/search_controller.dart';
 import 'package:itcase/app/providers/api.dart';
 import 'package:itcase/app/repositories/category_repository.dart';
 import 'package:itcase/common/pagination_helper.dart';
-import 'package:itcase/common/pagination_tasks.dart';
+import 'package:itcase/common/pagination_tenders.dart';
 import '../../../models/e_service_model.dart';
 import '../../../models/task_model.dart';
 import '../../../repositories/task_repository.dart';
@@ -21,7 +21,7 @@ class TenderController extends GetxController {
   var availableTasks = List<Tenders>().obs;
   var currentTasks = List<Tenders>().obs;
   final task = new Tenders().obs;
-  final PaginationTasks paginationHelper = new PaginationTasks();
+  final PaginationTenders paginationHelper = new PaginationTenders();
   final isClicked = false.obs;
   Function showMore;
 
@@ -36,7 +36,6 @@ class TenderController extends GetxController {
     paginationHelper.addingListener(controller: this);
     await getTenders();
     super.onInit();
-
   }
 
   void setShowMore(Function showMore) {
@@ -66,7 +65,7 @@ class TenderController extends GetxController {
       {bool showMessage = false, bool refresh = true}) async {
     List data = await _taskRepository.getTenders(
         page: refresh ? '1' : paginationHelper.currentPage.value.toString());
-    currentTasks.value = paginationHelper.getTasks(refresh: refresh,task: allTasks, data: data);
+    currentTasks.value = paginationHelper.processData(refresh: refresh,tenders: allTasks, data: data);
     if (showMessage) {
       Get.showSnackbar(
           Ui.SuccessSnackBar(message: "Task page refreshed successfully".tr));
@@ -80,7 +79,7 @@ class TenderController extends GetxController {
       {bool showMessage = false, bool refresh = true}) async {
     List data = await _taskRepository.getAvailableTenders(
         page: refresh ? '1' : paginationHelper.currentPage.value.toString());
-    currentTasks.value = paginationHelper.getTasks(refresh: refresh,task: availableTasks, data: data);
+    currentTasks.value = paginationHelper.processData(refresh: refresh,tenders: availableTasks, data: data);
 
     if (showMessage) {
       Get.showSnackbar(

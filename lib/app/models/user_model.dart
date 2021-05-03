@@ -95,9 +95,11 @@ class User extends Model {
 
   // User.
   User.fromJsonRequests(Map<String , dynamic> json){
-    name = json['first_name'] + " " +  json['last_name'];
+    String firstName = json['first_name'] ?? "";
+    String lastName = json['last_name'] ?? "";
+    name = firstName + " " +  lastName;
     lastSeen = Format.parseDate(json['last_online_at'], Format.outputFormatLastSeen);
-    image_gotten = API().getLink(json['image']);
+    image_gotten = API().getLink(json['image'] ?? "");
     Map<String, dynamic> id = {
       'id': json['id'].toString()
     };
@@ -134,7 +136,6 @@ class User extends Model {
     foundation_year = json['foundation_year'];
     customer_type = json['customer_type'];
     contractor_type = json['contractor_type'];
-
     gender = json['gender'];
     birthday_date = json['birthday_date'];
     specialization = json['specialization'];
@@ -145,7 +146,7 @@ class User extends Model {
     whatsapp = json['whatsapp'];
     instagram = json['instagram'];
     phone_number = json['phone_number'];
-    about_myself = Category.parseHtmlString(json['about_myself']);
+    about_myself = Category.parseHtmlString(json['about_myself'] ?? "");
     slug = json['slug'];
     telegram_id = json['telegram_id'];
     telegram_username = json['telegram_username'];
@@ -154,14 +155,16 @@ class User extends Model {
     meta_title = json['meta_title'];
     user_role = json['role'];
     isContractor.value =  user_role == TypeUser.constractor;
-    image_gotten = API().getLink(json['image']);
+    image_gotten = json['image'] != null? API().getLink(json['image']): null;
     city = json['city'];
     account_paid = json['account_paid_at'];
     passportConfirmed = true;
-    Map<String, dynamic> id = {
-      'id': json['id'].toString()
-    };
-    super.fromJson(id);
+    if (json['id'] != null) {
+      Map<String, dynamic> id = {
+        'id': json['id'].toString()
+      };
+      super.fromJson(id);
+    }
   }
   void setRole(String role){
     user_role = role;
@@ -174,7 +177,9 @@ class User extends Model {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = Map<String, dynamic>();
     data['id'] = this.id;
-    data['name'] = this.name;
+    List names = name.split(" ");
+    data['first_name'] = names[0];
+    data['last_name'] = names[1];
     data['email'] = this.email;
     data['password'] = this.password;
     data['company_name'] = this.company_name;
@@ -246,8 +251,6 @@ class TempUser{
 
   String resume;
 
-  String newPassword;
-  String currentPassword;
   static final  List roles = [
     'contractor',
     'customer',
@@ -274,8 +277,6 @@ class TempUser{
     this.city,
     this.resume,
     this.language,
-    this.newPassword,
-    this.currentPassword,
     this.user_role="contractor",
   });
 
@@ -293,7 +294,7 @@ class TempUser{
     data['${additional}city'] = city;
     data['${additional}company_name'] = company_name ?? 0;
     data['language'] = language ?? 0;
-    if (gender != null) data['${user_role}_gender'] = gender;
+    if (gender != null) data['gender'] = gender;
 
     data['${additional}about_myself'] = about_myself;
     data['${additional}type'] = type;
@@ -307,9 +308,6 @@ class TempUser{
   Map<String, dynamic> toModify(){
     final Map<String, dynamic> data = this.toJson(modify: true);
     data['resume'] = resume;
-    data['newPassword'] = newPassword;
-    data['newPasswordRepeat'] = newPassword;
-    data['currentPassword'] = currentPassword;
     data['telegram'] = telegram;
     data['whatsapp'] = whatsapp;
     data['facebook'] = facebook;
@@ -320,94 +318,3 @@ class TempUser{
   }
 }
 
-// class Contractor {
-//   String name,
-//       phone_number,
-//       contractor_type,
-//       gender,
-//       email,
-//       about_myself,
-//       company_name,
-//       birthday;
-//   bool agree_personal_data = false;
-//   String city;
-//   File image;
-//
-//   Contractor({
-//     this.name,
-//     this.phone_number,
-//     this.contractor_type = "individual",
-//     this.gender = "male",
-//     this.email,
-//     this.about_myself,
-//     this.company_name,
-//     this.image,
-//     this.birthday,
-//     this.agree_personal_data = false,
-//     this.city,
-//   });
-//
-//   Map<String, dynamic> toJson() {
-//     // var list = {
-//     //   'user_role': 'contractor',
-//     //   'contractor_name': name,
-//     //   'contractor_phone_number': phone_number
-//     // }
-//     final Map<String, dynamic> data = Map<String, dynamic>();
-//     data['user_role'] = 'contractor';
-//     List names = name.split(" ");
-//     data['contractor_first_name'] = names[0];
-//     data['contractor_last_name'] = names[1];
-//     data['contractor_phone_number'] = phone_number;
-//     data['contractor_email'] = email;
-//     data['contractor_city'] = city;
-//     if (gender != null) data['contractor_gender'] = gender;
-//     data['contractor_about_myself'] = about_myself;
-//     data['contractor_type'] = contractor_type;
-//     if (birthday != null) data['contractor_birthday_date'] = birthday;
-//     data['im'] = image.path;
-//     data['agree_personal_data_processing'] = agree_personal_data;
-//     return data;
-//   }
-// }
-//
-// class Customer {
-//   String name,
-//       phone_number,
-//       customer_type = "legal_entity",
-//       email,
-//       about_myself,
-//       company_name,
-//       city;
-//   File image;
-//
-//   bool agree_personal_data = false;
-//
-//   Customer({
-//     this.name,
-//     this.phone_number,
-//     this.customer_type,
-//     this.email,
-//     this.about_myself,
-//     this.company_name,
-//     this.image,
-//     this.agree_personal_data,
-//     this.city,
-//   });
-//
-//   Map<String, dynamic> toJson() {
-//     final Map<String, dynamic> data = Map<String, dynamic>();
-//     data['user_role'] = 'customer';
-//     List names = name.split(" ");
-//     data['customer_first_name'] = names[0];
-//     data['customer_last_name'] = names[1];
-//     data['customer_phone_number'] = this.phone_number;
-//     data['customer_email'] = this.email;
-//     data['customer_about_myself'] = this.about_myself;
-//     data['customer_type'] = this.customer_type;
-//     data['im'] = this.image.path;
-//     data['agree_personal_data_processing'] = this.agree_personal_data;
-//     data['customer_city'] = this.city;
-//     return data;
-//   }
-// }

@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart' show DateFormat;
+import 'package:itcase/app/models/notifications/notification.dart';
 
 import '../../../../common/ui.dart';
 import '../../../models/notification_model.dart' as model;
 
 class NotificationItemWidget extends StatelessWidget {
-  NotificationItemWidget({Key key, this.notification, this.onDismissed}) : super(key: key);
-  final model.Notification notification;
-  final ValueChanged<model.Notification> onDismissed;
+  NotificationItemWidget({Key key, this.notification,this.child, this.title, this.body,this.onDismissed}) : super(key: key);
+  final NotificationBase notification;
+  final String title;
+  final String body;
+  final Widget child;
+  final ValueChanged<NotificationBase> onDismissed;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +42,7 @@ class NotificationItemWidget extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.all(12),
         margin: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-        decoration: Ui.getBoxDecoration(color: this.notification.read ? Get.theme.primaryColor : Get.theme.focusColor.withOpacity(0.15)),
+        decoration: Ui.getBoxDecoration(color: this.notification.isRead ? Get.theme.primaryColor : Get.theme.focusColor.withOpacity(0.15)),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
@@ -93,15 +97,22 @@ class NotificationItemWidget extends StatelessWidget {
                 mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
                   Text(
-                    this.notification.type.tr,
+                    title,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 3,
-                    style: Theme.of(context).textTheme.bodyText1.merge(TextStyle(fontWeight: notification.read ? FontWeight.w300 : FontWeight.w600)),
+                    style: Get.textTheme.bodyText1.merge(TextStyle(fontWeight: FontWeight.w600)),
+                  ),
+                  Text(
+                    body,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 3,
+                    style: Get.textTheme.bodyText1.merge(TextStyle(fontWeight:FontWeight.w300)),
                   ),
                   Text(
                     DateFormat('d, MMMM y | HH:mm').format(this.notification.createdAt),
                     style: Theme.of(context).textTheme.caption,
-                  )
+                  ),
+                 SizedBox(child: child)
                 ],
               ),
             )

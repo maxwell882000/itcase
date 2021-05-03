@@ -19,9 +19,8 @@ class Chat {
 
     user = User.fromJsonRequests(json['user']);
     unread.value = json['unread'];
-    lastMessage = json['last_message'] != null
-        ? Message.fromJson(json['last_message'])
-        : null;
+    if (json['last_message'] != null)
+    lastMessage = Message.fromJson(json['last_message']);
   }
 
   @override

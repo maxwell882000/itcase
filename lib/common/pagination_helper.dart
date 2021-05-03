@@ -19,14 +19,19 @@ class PaginationHelper{
   }
 
   void addingListener({controller}){
+    print("CONTROLLER IS ADDDED");
     scrollController.value.addListener((){
+      print(scrollController.value.position.pixels);
       if (scrollController.value.position.pixels ==
           scrollController.value.position.maxScrollExtent){
+        print("IS MOVING ${isLast.value.toString()}");
           if(!isLast.value) {
-            print("START SEARCHing");
             controller.showMore(refresh: false);
           }
-      }
+        }
     });
+  }
+  void removeListener(){
+    scrollController.value.removeListener(() { });
   }
 }

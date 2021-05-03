@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:date_time_picker/date_time_picker.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -21,10 +22,13 @@ import 'package:url_launcher/url_launcher.dart';
 class AuthController extends GetxController {
   String confirm;
   GetStorage _box;
+
   final currentUser = Get.find<AuthService>().user;
   final formKey = GlobalKey<FormState>().obs;
   final tempKey = GlobalKey<FormState>().obs;
   final Map<String, dynamic> data = Map<String, dynamic>();
+
+  FirebaseMessaging firebaseMessaging;
 
   final UserRepository _userRepository = new UserRepository();
   var user = new User().obs;
@@ -38,15 +42,13 @@ class AuthController extends GetxController {
   @override
   void onInit() {
     user = Get.find<AuthService>().user;
-    // start();
+    firebaseMessaging = FirebaseMessaging.instance;
     super.onInit();
   }
 
   validate() async {
     try {
       Map body = await _userRepository.getAccount();
-      print("THIS IS THE PASSWORD");
-      print(user.value.password);
       body['user']['password'] = user.value.password;
       print(body);
       currentUser.value.fromJson(body['user']);
@@ -58,13 +60,12 @@ class AuthController extends GetxController {
           Get.showSnackbar(Ui.ErrorSnackBar(
               message:
                   "You did not pay for your account. Please make payment at first. Web site for making payment will open in 5 seconds".tr
-                      .tr));
+                      .tr)
+          );
           return false;
         }
       } else {
           _userRepository.resendPhoneCode().then((value) {
-            print("TRUUUUUUU");
-            print(value);
             if(value){
 
               Get.toNamed(Routes.PHONE_VERIFICATION);
@@ -108,6 +109,7 @@ class AuthController extends GetxController {
           var body = jsonDecode(response.body);
           currentUser.value.auth = true;
           currentUser.value.token = body['token'];
+          print(currentUser.value.token);
           currentUser.value.password = user.value.password;
           if (await validate()) {
             _box.write('current_user', jsonEncode(user));

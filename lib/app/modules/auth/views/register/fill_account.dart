@@ -12,7 +12,7 @@ import 'package:itcase/app/modules/auth/controllers/account_fill_controller.dart
 import 'package:itcase/app/modules/auth/widgets/fill_data.dart';
 
 // ignore: must_be_immutable
-class CreateAccount extends GetView<AuthFillController> {
+class FillAccount extends GetView<AuthFillController> {
   // final _currentUser = Get.find<AuthService>().user;
   File image;
 
@@ -21,7 +21,7 @@ class CreateAccount extends GetView<AuthFillController> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Создать аккаунт".tr,
+          "Create account".tr,
           style: Get.textTheme.headline6
               .merge(TextStyle(color: context.theme.primaryColor)),
         ),

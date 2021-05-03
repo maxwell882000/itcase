@@ -20,7 +20,6 @@ class Format{
     DateTime firstDate = DateTime.parse(first);
     DateTime secondDate = DateTime.parse(second);
     bool returning = firstDate.isAfter(secondDate);
-    print("FIRST DATE : $first // $firstDate \n Second DATE : $second // $secondDate \n RESULT : $returning");
     return !returning;
   }
 }

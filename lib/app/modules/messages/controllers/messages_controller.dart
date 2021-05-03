@@ -47,7 +47,7 @@ class MessagesController extends GetxController {
     } catch (e) {
       chats.value = [];
       return Get.showSnackbar(
-          Ui.ErrorSnackBar(title: "Error", message: e.toString()));
+          Ui.ErrorSnackBar(title: "Error".tr, message: e.toString()));
     }
   }
 }

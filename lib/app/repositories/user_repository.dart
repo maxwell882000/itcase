@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:dio/dio.dart';
 import 'package:itcase/app/providers/api.dart';
 import 'package:itcase/app/services/auth_service.dart';
+import 'package:itcase/common/loading.dart';
 
 import '../models/address_model.dart';
 import '../models/user_model.dart';
@@ -73,14 +74,23 @@ class UserRepository {
     return body;
   }
 
+  Future<Map> changePassword(String json) async {
+    final response = await Loading.response(()=>API().post(json, 'account/password/change/save'));
+    print(response.body);
+    if (response.statusCode == 200){
+      Map body = jsonDecode(response.body);
+      return body;
+    }
+    throw response.body;
+  }
+
   Future<Map> saveProfessional(String json) async{
-    final result = await API().post(json, 'account/professional');
+    final result = await Loading.response(()=>API().post(json, 'account/professional'));
     print(result.body);
     if (result.statusCode ==200){
       Map body = jsonDecode(result.body);
       return body;
     }
-
     throw result.body;
   }
 }

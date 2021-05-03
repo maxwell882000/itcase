@@ -57,7 +57,7 @@ class CategoryView extends GetView<CategoryController> {
                             checkmarkColor: Get.theme.primaryColor,
                             onSelected: (bool value) {
                               controller.toggleSelected(_filter[0]);
-                              controller.getEServicesOfCategory(id: controller.selected.value);
+                              controller.getEServicesOfCategory();
                             },
                           ),
                         );

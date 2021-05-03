@@ -4,7 +4,9 @@ import 'package:get/get.dart';
 import 'package:itcase/app/models/tenders.dart';
 import 'package:itcase/app/models/user_model.dart';
 import 'package:itcase/app/repositories/task_repository.dart';
+import 'package:itcase/common/pagination_contractors.dart';
 import 'package:itcase/common/pagination_helper.dart';
+import 'package:itcase/common/pagination_tenders.dart';
 
 import '../../../../common/ui.dart';
 import '../../../models/category_model.dart';
@@ -19,14 +21,46 @@ class SearchController extends GetxController {
   final eServices = List<User>().obs;
   final typed = "".obs;
   final tenders = List<Tenders>().obs;
+  final loading = false.obs;
   Function onSubmit = () {};
+  final selected = 0.obs;
   EServiceRepository _eServiceRepository;
   CategoryRepository _categoryRepository;
   TaskRepository _taskRepository;
-  final PaginationHelper paginationHelper = new PaginationHelper();
+  Function showMore;
+  final PaginationTenders paginationTasks = new PaginationTenders();
+  final PaginationContractors paginationContractors = new PaginationContractors();
 
-  void searchTenders() async {
+  Future searchEServices({bool refresh = true}) async {
+    Map<String, dynamic> data = {
+      'contractorSearch' : typed.value,
+    };
+    if (selected.value != 0)
+       data['category_id'] = selected.value;
+    String json = jsonEncode(data);
+    if (refresh) {
+      loading.value = true;
+      paginationContractors.update();
+    }
+    try{
+      final result = await _eServiceRepository.searchContractors(page:  refresh ? '1' : paginationContractors.currentPage.value.toString(), json: json);
+      print(result);
+      paginationContractors.processData(refresh: refresh,contractors: eServices,data: result);
+    }
+    catch(e){
+      print(e);
+      loading.value = false;
+      e['errors'].forEach((key, object) =>
+          Get.showSnackbar(Ui.ErrorSnackBar(message: object[0], title: key)));
+    }
+    loading.value = false;
+  }
+  void searchTenders({bool refresh = true}) async {
     Map<String, dynamic> data = {};
+    if (refresh) {
+      loading.value = true;
+      paginationTasks.update();
+    }
     try {
       if (choosenCategories().isNotEmpty) {
         data.addAll({
@@ -38,33 +72,37 @@ class SearchController extends GetxController {
           });
         }
         String json = jsonEncode(data);
-        print('asdsadsadsasadasdasd');
-        print(data);
-        final result = await _taskRepository.searchTender(json);
-        tenders.value = result[0];
-        paginationHelper.lastPage.value = result[1];
-        paginationHelper.currentPage.value = result[2] + 1;
+        final result = await _taskRepository.searchTender(json,page: refresh ? '1' : paginationTasks.currentPage.value.toString());
+        paginationTasks.processData(
+            refresh: refresh, tenders: tenders, data: result);
       } else {
         if (typed.value.isNotEmpty) {
           data.addAll({
             'search': typed.value,
           });
           String json = jsonEncode(data);
-          final result = await _taskRepository.searchTender(json,url: 'tenders/search');
-          tenders.value = result[0];
-          paginationHelper.lastPage.value = result[1];
-          paginationHelper.currentPage.value = result[2] + 1;
+          final result =
+              await _taskRepository.searchTender(json, url: 'tenders/search',page: refresh ? '1' : paginationTasks.currentPage.value.toString());
+          print(result);
+          paginationTasks.processData(
+              refresh: refresh, tenders: tenders, data: result);
         }
       }
+
     } catch (e) {
-      print(e);
+      loading.value = false;
       e['errors'].forEach((key, object) =>
           Get.showSnackbar(Ui.ErrorSnackBar(message: object[0], title: key)));
     }
+    loading.value = false;
   }
 
   void setOnSubmut(Function onSubmit) {
     this.onSubmit = onSubmit;
+    update();
+  }
+  void setShowMore(Function showMore) {
+    this.showMore = showMore;
     update();
   }
 
@@ -77,13 +115,14 @@ class SearchController extends GetxController {
   @override
   void onInit() async {
     heroTag.value = Get.arguments as String;
+    await getCategories();
     await refreshSearch();
     super.onInit();
   }
 
   @override
   void onReady() {
-    // tenders.value = Get.arguments[1] as List<Tenders>;
+
     super.onReady();
   }
 
@@ -93,9 +132,11 @@ class SearchController extends GetxController {
         .map((e) => e.id)
         .toList();
   }
-  List allIdCategories(){
+
+  List allIdCategories() {
     return categories.value.map((e) => e.id).toList();
   }
+
   Future refreshSearch({bool showMessage}) async {
     await searchEServices();
     if (showMessage == true) {
@@ -104,18 +145,6 @@ class SearchController extends GetxController {
     }
   }
 
-  Future searchEServices({String keywords}) async {
-    // try {
-    //   eServices.assignAll(await _eServiceRepository.getAll());
-    //   if (keywords != null && keywords.isNotEmpty) {
-    //     eServices.assignAll( eServices.where((EService _service) {
-    //       return _service.title.toLowerCase().contains(keywords.toLowerCase());
-    //     }).toList());
-    //   }
-    // } catch (e) {
-    //   Get.showSnackbar(Ui.ErrorSnackBar(message: e.toString()));
-    // }
-  }
 
   Future getCategories() async {
     try {

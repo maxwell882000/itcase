@@ -1,23 +1,21 @@
-import 'dart:async';
-import 'dart:convert';
+
 import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http;
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:itcase/app/global_widgets/circular_loading_widget.dart';
 import 'package:itcase/app/modules/tasks/controllers/map_conroller.dart';
-import 'package:itcase/app/modules/tasks/views/finish.dart';
-import 'package:itcase/app/modules/tasks/views/page.dart';
+
 import 'package:yandex_mapkit/yandex_mapkit.dart' as Yandex;
 import 'package:geolocator/geolocator.dart';
 
-class SearchMap extends GetView<MapsController> {
+class Map extends GetView<MapsController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Create a task".tr,
+          "Select location".tr,
           style: TextStyle(color: Get.theme.primaryColor),
         ),
         centerTitle: true,
@@ -43,15 +41,15 @@ class SearchMap extends GetView<MapsController> {
           ],
         ),
         child: Obx(
-          ()=> Visibility(
+          () => Visibility(
             visible: !controller.loading.value,
             child: Row(
               children: [
                 Expanded(
                   child: FlatButton(
-                    onPressed: ()  async {
-                    controller.loading.value =  (await controller.submit());
-                     },
+                    onPressed: () async {
+                      controller.loading.value = (await controller.submit());
+                    },
                     padding: EdgeInsets.symmetric(horizontal: 30, vertical: 12),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),
@@ -67,7 +65,7 @@ class SearchMap extends GetView<MapsController> {
         ),
       ),
       body: Obx(
-        ()=> Stack(
+        () => Stack(
           children: [
             Visibility(
               visible: controller.loading.value,
@@ -87,7 +85,8 @@ class SearchMap extends GetView<MapsController> {
                           color: Theme.of(context).canvasColor,
                         ),
                         height: Get.height,
-                        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                         child: Column(
                           children: <Widget>[
                             Row(
@@ -98,16 +97,21 @@ class SearchMap extends GetView<MapsController> {
                                 ),
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: <Widget>[
                                       Text(
-                                        'Location',
-                                        style: Theme.of(context).textTheme.caption,
+                                        'Location'.tr,
+                                        style:
+                                            Theme.of(context).textTheme.caption,
                                       ),
-                                      if (controller.currentPosition.value != null &&
-                                          controller.currentAddress.value != null)
+                                      if (controller.currentPosition.value !=
+                                              null &&
+                                          controller.currentAddress.value !=
+                                              null)
                                         Obx(
-                                          () => Text(controller.currentAddress.value,
+                                          () => Text(
+                                              controller.currentAddress.value,
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .bodyText2),
@@ -128,7 +132,8 @@ class SearchMap extends GetView<MapsController> {
                                 onMapCreated: (controller) {
                                   controller.move(
                                       point: Yandex.Point(
-                                          latitude: 41.2995, longitude: 69.2401),
+                                          latitude: 41.2995,
+                                          longitude: 69.2401),
                                       zoom: 10.0);
 
                                   this.controller.setController(controller);
@@ -138,18 +143,22 @@ class SearchMap extends GetView<MapsController> {
                                     controller.mapController
                                         .removePlacemark(controller.mark);
                                   }
-                                  controller.setMark(new Yandex.Placemark(
-                                      point: point,
-                                      rawImageData: (await rootBundle
-                                              .load("assets/icon/place.png"))
-                                          .buffer
-                                          .asUint8List()));
+                                  controller.setMark(
+                                    new Yandex.Placemark(
+                                        point: point,
+                                            rawImageData: (await rootBundle.load(
+                                                    "assets/icon/place.png"))
+                                                .buffer
+                                                .asUint8List()));
+
                                   controller.mapController
                                       .addPlacemark(controller.mark);
 
-                                  this.controller.currentPosition.value = Position(
-                                      latitude: point.latitude,
-                                      longitude: point.longitude);
+                                  this.controller.currentPosition.value =
+                                      Position(
+                                          latitude: point.latitude,
+                                          longitude: point.longitude);
+
                                   controller.getAddressFromLatLng();
                                 },
                               ),

@@ -13,8 +13,9 @@ import 'package:itcase/app/modules/auth/views/register/fill_account.dart';
 
 class FillData extends StatelessWidget {
   final controller = Get.find<AuthFillController>();
-  final String  role;
-  FillData({Key key,this.role}) : super(key: key);
+  final String role;
+
+  FillData({Key key, this.role}) : super(key: key);
 
   // user = Get.find<AuthService>().user;
   Last(child) {
@@ -134,8 +135,7 @@ class FillData extends StatelessWidget {
     final GlobalKey<FormState> temp = GlobalKey<FormState>();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       controller.formKey.value = temp;
-    }
-        );
+    });
     return Obx(
       () => Form(
         key: temp,
@@ -143,7 +143,7 @@ class FillData extends StatelessWidget {
           child: Column(
             children: [
               Text(
-                "Выберите вашу роль и заполните данные",
+                "Fill Form".tr,
                 style: TextStyle(
                     fontSize: 14,
                     color: Get.theme.focusColor,
@@ -168,16 +168,15 @@ class FillData extends StatelessWidget {
                             )
                           : controller.initialAvatar.value
                               ? ClipRRect(
-                                  borderRadius: BorderRadius.all(
-                                      Radius.circular(75)),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(75)),
                                   child: CachedNetworkImage(
                                     height: 140,
                                     width: 140,
                                     fit: BoxFit.cover,
-                                    imageUrl: controller
-                                        .user.value.image_gotten,
-                                    placeholder: (context, url) =>
-                                        Image.asset(
+                                    imageUrl:
+                                        controller.user.value.image_gotten,
+                                    placeholder: (context, url) => Image.asset(
                                       'assets/img/loading.gif',
                                       fit: BoxFit.cover,
                                       width: double.infinity,
@@ -201,15 +200,15 @@ class FillData extends StatelessWidget {
                 ),
               ),
               TextFieldWidget(
-                labelText: "Введите полное имя".tr,
-                hintText: "Введите ваше имя".tr,
+                labelText: "Full name".tr,
+                hintText: "Enter name".tr,
                 onSaved: (val) {
                   controller.tempUser.value.name = val;
                 },
                 validator: (val) => val.length == 0
-                    ? "Введите правильно имя".tr
+                    ? "Please, fill the field".tr
                     : val.split(" ").length != 2
-                        ? "Введите Фамилию и Имя через пробел".tr
+                        ? "Enter your surname and name separated by a space".tr
                         : null,
                 initialValue: controller.user.value.name,
                 iconData: Icons.person_outline,
@@ -217,20 +216,19 @@ class FillData extends StatelessWidget {
                 isFirst: false,
               ),
               TextFieldWidget(
-                labelText: "Номер телефона".tr,
+                labelText: "Phone number".tr,
                 hintText: "+99899 1234567".tr,
                 iconData: Icons.phone_android_outlined,
                 keyboardType: TextInputType.phone,
-                onSaved: (val) =>
-                    controller.tempUser.value.phone_number = val,
+                onSaved: (val) => controller.tempUser.value.phone_number = val,
                 validator: (val) =>
-                    val.length == 0 ? "Введите  номер телефона".tr : null,
+                    val.length == 0 ? "Enter phone number".tr : null,
                 initialValue: controller.user.value.phone_number,
                 isLast: false,
                 isFirst: false,
               ),
               TextFieldWidget(
-                labelText: "Введите e-mail".tr,
+                labelText: "Email".tr,
                 hintText: "johndoe@gmail.com".tr,
                 iconData: Icons.alternate_email,
                 initialValue: controller.user.value.email,
@@ -239,17 +237,16 @@ class FillData extends StatelessWidget {
                     RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                             .hasMatch(val)
                         ? null
-                        : "Введите e-mail".tr,
+                        : "Enter email".tr,
                 isFirst: false,
                 isLast: false,
               ),
               TextFieldWidget(
-                labelText: "Город".tr,
-                hintText: "Введите аддресс".tr,
+                labelText: "City".tr,
+                hintText: "Enter city".tr,
                 iconData: Icons.map,
                 initialValue: controller.user.value.city,
-                validator: (val) =>
-                    val.length == 0 ? "Введите аддресс".tr : null,
+                validator: (val) => val.length == 0 ? "Enter city".tr : null,
                 isLast: false,
                 isFirst: false,
                 onSaved: (val) => controller.tempUser.value.city = val,
@@ -257,12 +254,12 @@ class FillData extends StatelessWidget {
               box(Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Вы являетесь:"),
+                  Text("You are".tr + ":"),
                   Row(
                     children: [
                       Expanded(
                         child: RadioListTile(
-                          title: Text("Частное",
+                          title: Text("Individual".tr,
                               style: TextStyle(color: Colors.black)),
                           value: "individual",
                           groupValue: controller.type.value,
@@ -275,7 +272,7 @@ class FillData extends StatelessWidget {
                       Expanded(
                         child: RadioListTile(
                           title: Text(
-                            "Юридическое",
+                            "Legal Entity".tr,
                             style: TextStyle(color: Colors.black),
                           ),
                           value: "legal_entity",
@@ -296,38 +293,34 @@ class FillData extends StatelessWidget {
                         box(Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Пол:"),
+                            Text("Gender".tr + ":"),
                             Row(
                               children: [
                                 Expanded(
                                   child: RadioListTile(
                                     title: Text(
-                                      "Мужчина",
-                                      style:
-                                          TextStyle(color: Colors.black),
+                                      "Male".tr,
+                                      style: TextStyle(color: Colors.black),
                                     ),
                                     value: "male",
                                     groupValue: controller.gender.value,
                                     onChanged: (val) {
                                       controller.gender.value = val;
-                                      controller.tempUser.value.gender =
-                                          val;
+                                      controller.tempUser.value.gender = val;
                                     },
                                   ),
                                 ),
                                 Expanded(
                                   child: RadioListTile(
                                     title: Text(
-                                      "Женщина",
-                                      style:
-                                          TextStyle(color: Colors.black),
+                                      "Female".tr,
+                                      style: TextStyle(color: Colors.black),
                                     ),
                                     value: "female",
                                     groupValue: controller.gender.value,
                                     onChanged: (val) {
                                       controller.gender.value = val;
-                                      controller.tempUser.value.gender =
-                                          val;
+                                      controller.tempUser.value.gender = val;
                                     },
                                   ),
                                 ),
@@ -342,18 +335,17 @@ class FillData extends StatelessWidget {
                               context,
                               initialDate: DateTime(1994),
                               firstDate: DateTime(1960),
-                              lastDate: DateTime(2012),
+                              lastDate: DateTime.now(),
                               dateFormat: "dd-MMMM-yyyy",
                               locale: DateTimePickerLocale.en_us,
                               looping: true,
                             );
-                            print(datePicked);
-                            controller.birthday.value =
-                                DateFormat('dd.MM.yyyy')
-                                    .format(datePicked);
-                            controller.tempUser.value.birthday =
-                                DateFormat('dd.MM.yyyy')
-                                    .format(datePicked);
+                            if (datePicked != null) {
+                              controller.birthday.value =
+                                  DateFormat('dd.MM.yyyy').format(datePicked);
+                              controller.tempUser.value.birthday =
+                                  DateFormat('dd.MM.yyyy').format(datePicked);
+                            }
                             print(controller.tempUser.value.birthday);
                           },
                           child: Container(
@@ -365,8 +357,8 @@ class FillData extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(10),
                                 boxShadow: [
                                   BoxShadow(
-                                      color: Get.theme.focusColor
-                                          .withOpacity(0.1),
+                                      color:
+                                          Get.theme.focusColor.withOpacity(0.1),
                                       blurRadius: 10,
                                       offset: Offset(0, 5)),
                                 ],
@@ -374,11 +366,10 @@ class FillData extends StatelessWidget {
                                     color: Get.theme.focusColor
                                         .withOpacity(0.05))),
                             child: Column(
-                              crossAxisAlignment:
-                                  CrossAxisAlignment.stretch,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                                 Text(
-                                  "Дата рождения",
+                                  "Date of birth".tr,
                                   style: Get.textTheme.bodyText1,
                                   textAlign: TextAlign.start,
                                 ),
@@ -400,26 +391,24 @@ class FillData extends StatelessWidget {
                   : Column(children: [
                       TextFieldWidget(
                         labelText: "Company".tr,
-                        hintText: "Название компании".tr,
+                        hintText: "Name of company".tr,
                         iconData: Icons.home_repair_service,
-                        initialValue:
-                            controller.tempUser.value.company_name,
-                        validator: (val) => val.length == 0
-                            ? "Введите название компании".tr
-                            : null,
+                        initialValue: controller.user.value.company_name,
+                        validator: (val) =>
+                            val.length == 0 ? "Enter name of company".tr : null,
                         isLast: false,
                         isFirst: false,
                         onSaved: (val) =>
-                            controller.tempUser.value.company_name = val,
+                              controller.tempUser.value.company_name = val,
                       ),
                     ]),
               TextFieldWidget(
                 labelText: controller.type.value == "individual"
-                    ? "О себе".tr
-                    : "О компании".tr,
+                    ? "About yourself".tr
+                    : "About company".tr,
                 hintText: controller.type.value == "individual"
-                    ? "О себе".tr
-                    : "О компании".tr,
+                    ? "Write about yourself".tr
+                    : "Write about company".tr,
                 iconData: Icons.info,
                 isLast: false,
                 isFirst: false,
@@ -427,26 +416,21 @@ class FillData extends StatelessWidget {
                 initialValue: controller.user.value.about_myself,
                 maxLine: 3,
                 height: 10,
-                onSaved: (val) =>
-                    controller.tempUser.value.about_myself = val,
-                validator: (val) =>
-                    val.length > 6 ? null : "Введите о себе".tr,
+                onSaved: (val) => controller.tempUser.value.about_myself = val,
+                validator: (val) => val.length > 6 ? null : "Fill the field".tr,
               ),
               Visibility(
                   visible: !controller.accountRegistered.value,
                   child: Last(Row(
                     children: [
                       Expanded(
-                        child: Text(
-                            "Я соглашаюсь поделиться своими дан   ным"
-                                .tr),
+                        child: Text("I agree to share with my data".tr),
                       ),
                       Switch(
                         value: controller.agree.value,
                         onChanged: (val) {
                           print(val);
-                          controller.tempUser.value.agree_personal_data =
-                              val;
+                          controller.tempUser.value.agree_personal_data = val;
                           controller.agree.value = val;
                         },
                       ),

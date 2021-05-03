@@ -8,14 +8,11 @@ import 'package:itcase/app/modules/e_service/widgets/add_contractor_to_tender.da
 import 'package:itcase/app/modules/e_service/widgets/remain_comment.dart';
 import '../../../global_widgets/block_button_widget.dart';
 import '../../../global_widgets/circular_loading_widget.dart';
-import '../../../models/e_service_model.dart';
-import '../widgets/e_provider_item_widget.dart';
+
 import '../widgets/e_service_til_widget.dart';
 import '../widgets/review_item_widget.dart';
-import '../../../routes/app_pages.dart';
 
 import '../../../../common/ui.dart';
-import '../../../models/media_model.dart';
 import '../controllers/e_service_controller.dart';
 import '../widgets/e_service_title_bar_widget.dart';
 
@@ -382,7 +379,6 @@ class EServiceView extends GetView<EServiceController> {
                         ),
                       ),
                     ),
-                    Icon(Icons.arrow_forward_ios, color: Get.theme.primaryColor, size: 20)
                   ],
                 ),
                 color: Get.theme.accentColor,

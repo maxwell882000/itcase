@@ -16,7 +16,7 @@ class Img extends StatefulWidget {
 
 class _ImgState extends State<Img> {
   List<Asset> images = List<Asset>();
-  String _error = 'No Error Dectected';
+  String _error = 'No Error Dectected'.tr;
   List<List<int>> base = [];
   @override
   void initState() {
@@ -44,7 +44,7 @@ class _ImgState extends State<Img> {
 
   Future<void> loadAssets() async {
     List<Asset> resultList = List<Asset>();
-    String error = 'No Error Dectected';
+    String error = 'No Error Dectected'.tr;
 
     try {
       resultList = await MultiImagePicker.pickImages(
@@ -54,8 +54,8 @@ class _ImgState extends State<Img> {
         cupertinoOptions: CupertinoOptions(takePhotoIcon: "chat"),
         materialOptions: MaterialOptions(
           // actionBarColor: Get..,
-          actionBarTitle: "Choose photos",
-          allViewTitle: "All Photos",
+          actionBarTitle: "Choose photos".tr,
+          allViewTitle: "All Photos".tr,
           useDetailsView: false,
           selectCircleStrokeColor: "#000000",
         ),
@@ -111,7 +111,7 @@ class _ImgState extends State<Img> {
       body: Column(
         children: <Widget>[
           RaisedButton(
-            child: Text("Pick images"),
+            child: Text("Pick images".tr),
             onPressed: loadAssets,
           ),
           Expanded(

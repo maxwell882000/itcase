@@ -59,10 +59,13 @@ class NotificationsView extends GetView<NotificationsController> {
               // Message _message = _messages.elementAt(index);
               // printInfo(info: _message.toMap().toString());
               return NotificationItemWidget(
+                body: controller.notifications.elementAt(index).body(),
+                title: controller.notifications.elementAt(index).title(),
                 notification: controller.notifications.elementAt(index),
                 onDismissed: (conversation) {
-                  controller.notifications.removeAt(index);
+                  controller.notificationDelete(notificationBase: conversation,index: index);
                 },
+                child: SizedBox(),
               );
             });
       }

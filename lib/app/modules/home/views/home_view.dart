@@ -67,7 +67,7 @@ class HomeView extends GetView<CategoriesController> {
                 child: Row(children: [
                   Expanded(
                       child:
-                          Text("Конкурсы".tr, style: Get.textTheme.headline5)),
+                          Text("Tasks".tr, style: Get.textTheme.headline5)),
                   FlatButton(
                     onPressed: () {},
                     shape: StadiumBorder(),

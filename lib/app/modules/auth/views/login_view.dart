@@ -1,5 +1,6 @@
 import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:itcase/app/global_widgets/circular_loading_widget.dart';
 import 'file:///C:/Projects/newest/itcase/lib/app/modules/auth/views/register/register_view.dart';
@@ -23,7 +24,7 @@ class LoginView extends GetView<AuthController> {
     return Scaffold(
         appBar: AppBar(
           title: Text(
-            "Вход".tr,
+            "Login".tr,
             style: Get.textTheme.headline6
                 .merge(TextStyle(color: context.theme.primaryColor)),
           ),
@@ -53,23 +54,23 @@ class LoginView extends GetView<AuthController> {
                         alignment: AlignmentDirectional.bottomCenter,
                         children: [
                           Container(
-                            height: 180,
+                            height: 80,
                             width: Get.width,
-                            decoration: BoxDecoration(
-                              color: Get.theme.accentColor,
-                              image: DecorationImage(
-                                image: AssetImage("assets/icon/itcase.jpg"),
-                                fit: BoxFit.cover,
-                              ),
-                              borderRadius:
-                                  BorderRadius.vertical(bottom: Radius.circular(10)),
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Get.theme.focusColor.withOpacity(0.2),
-                                    blurRadius: 10,
-                                    offset: Offset(0, 5)),
-                              ],
-                            ),
+                            // decoration: BoxDecoration(
+                            //   color: Get.theme.accentColor,
+                            //   image: DecorationImage(
+                            //     image: AssetImage("assets/icon/itcase.jpg"),
+                            //     fit: BoxFit.cover,
+                            //   ),
+                            //   borderRadius:
+                            //       BorderRadius.vertical(bottom: Radius.circular(10)),
+                            //   boxShadow: [
+                            //     BoxShadow(
+                            //         color: Get.theme.focusColor.withOpacity(0.2),
+                            //         blurRadius: 10,
+                            //         offset: Offset(0, 5)),
+                            //   ],
+                            // ),
                             margin: EdgeInsets.only(bottom: 50),
                             child: Padding(
                               padding: const EdgeInsets.all(20),
@@ -77,15 +78,15 @@ class LoginView extends GetView<AuthController> {
                             ),
                           ),
                           Container(
-                            decoration: Ui.getBoxDecoration(
-                              radius: 100,
-                              border:
-                                  Border.all(width: 5, color: Get.theme.primaryColor),
-                            ),
+                            // decoration: Ui.getBoxDecoration(
+                            //   radius: 100,
+                            //   border:
+                            //       Border.all(width: 5, color: Get.theme.primaryColor),
+                            // ),
                             child: ClipRRect(
-                              borderRadius: BorderRadius.all(Radius.circular(100000000)),
-                              child: Image.asset(
-                                'assets/icon/logo_itcase.png',
+                              // borderRadius: BorderRadius.all(Radius.circular(100000000)),
+                              child: SvgPicture.asset(
+                                'assets/icon/logo_itcase_svg.svg',
                                 fit: BoxFit.cover,
                                 width: 100,
                                 height: 100,
@@ -105,7 +106,7 @@ class LoginView extends GetView<AuthController> {
                             ),
                             SizedBox(height: 5),
                             Text(
-                              "Добро пожаловать, надеждные исполнители для решения любых задач".tr,
+                              "Welcome, reliable contractors for solving any tasks".tr,
                               style: Get.textTheme.caption.merge(
                                   TextStyle(color: Get.theme.accentColor)),
                               textAlign: TextAlign.center,
@@ -115,7 +116,7 @@ class LoginView extends GetView<AuthController> {
                         ),
                       ),
                       TextFieldWidget(
-                        labelText: "Введите e-mail".tr,
+                        labelText: "Email".tr,
                         hintText: "johndoe@gmail.com".tr,
                         iconData: Icons.alternate_email,
                         onSaved: (val) => controller.user.value.email = val,
@@ -124,7 +125,7 @@ class LoginView extends GetView<AuthController> {
                                       r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                                   .hasMatch(val)
                               ? null
-                              : "Пожалуйста введите правильный mail";
+                              : "Please, enter correct e-mail".tr;
                         },
                       ),
                       Obx(() {
@@ -134,7 +135,7 @@ class LoginView extends GetView<AuthController> {
                           obscureText: controller.hidePassword.value,
                           onSaved: (val) => controller.user.value.password = val,
                           validator: (val) =>
-                              val.length == 0 ? "Пожалуйста введите пароль" : null,
+                              val.length == 0 ? "Fill the field".tr : null,
                           iconData: Icons.lock_outline,
                           keyboardType: TextInputType.visiblePassword,
                           suffixIcon: IconButton(
@@ -183,7 +184,7 @@ class LoginView extends GetView<AuthController> {
                             onPressed: () {
                               Get.toNamed(Routes.REGISTER);
                             },
-                            child: Text("У вас ещё нету аккаунта?".tr, style: Get.textTheme.button,),
+                            child: Text("You do not have an account?".tr, style: Get.textTheme.button,),
                           ),
                         ],
                       ).paddingSymmetric(vertical: 20),

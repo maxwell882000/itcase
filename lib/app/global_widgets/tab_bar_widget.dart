@@ -7,7 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class TabBarController extends GetxController {
-  final selected = Rx<ChipWidget>();
+  //////////////////////////////
+  final selected = new ChipWidget(text: "", id: 0).obs;
 
   @override
   void onInit() {

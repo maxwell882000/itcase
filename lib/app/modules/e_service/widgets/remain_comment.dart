@@ -11,7 +11,7 @@ import 'package:itcase/app/modules/search/controllers/search_controller_map.dart
 
 
 class RemainComment extends GetView<EServiceController> {
-  GlobalKey<FormState> _key = new GlobalKey<FormState>();
+  final GlobalKey<FormState> _key = new GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Container(

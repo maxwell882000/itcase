@@ -1,23 +1,26 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:date_time_picker/date_time_picker.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+
 
 import 'package:get/get.dart';
 import 'package:itcase/app/global_widgets/format.dart';
 
 import 'package:itcase/app/modules/account/widgets/account_link_widget.dart';
-import 'package:itcase/app/modules/tasks/controllers/create_task_controller.dart';
+
+import 'package:itcase/app/modules/tasks/controllers/modify_controller.dart';
 import 'package:itcase/app/modules/tasks/views/images.dart';
 import 'package:itcase/app/modules/tasks/views/task_page.dart';
 
 import 'package:itcase/common/ui.dart';
-import 'package:intl/intl.dart';
+
 import '../../../global_widgets/text_field_widget.dart';
 
-class TaskModification extends GetView<CreateTasksController> {
+class TaskModification extends GetView<ModifyController> {
   final GlobalKey<FormState> _profileForm = new GlobalKey<FormState>();
 
   File file;
@@ -58,7 +61,7 @@ class TaskModification extends GetView<CreateTasksController> {
                       // print(imgs[0]);
 
                       controller.submit_task(_profileForm);
-                      // Get.toNamed(Routes.MAP);
+                        // Get.toNamed(Routes.MAP);
                     },
                     padding: EdgeInsets.symmetric(horizontal: 30, vertical: 12),
                     shape: RoundedRectangleBorder(
@@ -335,44 +338,130 @@ class TaskModification extends GetView<CreateTasksController> {
                           style: Get.textTheme.bodyText1,
                         ),
                         Row(
-                          // crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Expanded(
-                              child: DateTimePicker(
-                                type: DateTimePickerType.dateTime,
-                                onSaved: (val) {
-                                  controller.tenders.value.work_start_at =
-                                      Format.parseDate(
-                                          val, Format.outputFormat);
+                              child: InkWell(
+                                onTap: () async {
+                                  DatePicker.showDateTimePicker(context,
+                                      showTitleActions: true,
+                                      minTime: DateTime(2018, 3, 5),
+                                      maxTime: DateTime(2030, 6, 7),
+                                      onChanged: (date) {
+
+                                      }, onConfirm: (date) {
+                                        controller.tenders.update((val) {
+                                          val.work_start_at = Format.parseDate(
+                                              date.toString(),
+                                              Format.outputFormat);
+                                        });
+
+                                        return date;
+                                      },
+                                      currentTime: DateTime.now(),
+                                      locale: LocaleType.ru);
                                 },
-                                dateMask: 'd MMM, yyyy',
-                                firstDate: DateTime(2000),
-                                lastDate: DateTime(2100),
-                                icon: Icon(Icons.event_available),
-                                dateLabelText: 'Start Date'.tr,
-                                style: Get.textTheme.bodyText1,
-                                use24HourFormat: true,
-                                //locale: Locale('pt', 'BR'),
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 20, horizontal: 10),
+                                  decoration: BoxDecoration(
+                                      color: Get.theme.primaryColor,
+                                      borderRadius: BorderRadius.circular(10),
+                                      boxShadow: [
+                                        BoxShadow(
+                                            color: Get.theme.focusColor
+                                                .withOpacity(0.1),
+                                            blurRadius: 10,
+                                            offset: Offset(0, 5)),
+                                      ],
+                                      border: Border.all(
+                                          color: Get.theme.focusColor
+                                              .withOpacity(0.05))),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.stretch,
+                                    children: [
+                                      Text(
+                                        'Start Date'.tr,
+                                        style: Get.textTheme.bodyText1,
+                                        textAlign: TextAlign.start,
+                                      ),
+                                      Row(
+                                        children: [
+                                          Icon(
+                                            Icons.event_available,
+                                            color: Get.theme.focusColor,
+                                          ).paddingOnly(right: 15),
+                                          Text(controller.tenders.value.work_start_at,
+                                            style: TextStyle(
+                                                fontSize: 12
+                                            ),),
+                                        ],
+                                      ).marginSymmetric(vertical: 10),
+                                    ],
+                                  ),
+                                ),
                               ),
                             ),
                             Expanded(
-                              child: DateTimePicker(
-                                type: DateTimePickerType.dateTime,
-                                onSaved: (val) {
-                                  controller.tenders.value.work_end_at =
-                                      Format.parseDate(
-                                          val, Format.outputFormat);
+                              child: InkWell(
+                                onTap: () async {
+                                  DatePicker.showDateTimePicker(context,
+                                      showTitleActions: true,
+                                      minTime: DateTime(2018, 3, 5),
+                                      maxTime: DateTime(2030, 6, 7),
+                                      onChanged: (date) {
+
+                                      }, onConfirm: (date) {
+                                        controller.tenders.update((val) {
+                                          val.work_end_at = Format.parseDate(
+                                              date.toString(),
+                                              Format.outputFormat);
+                                        });
+                                      },
+                                      currentTime: DateTime.now(),
+                                      locale: LocaleType.ru);
                                 },
-                                dateMask: 'd MMM, yyyy',
-                                firstDate: DateTime(2000),
-                                lastDate: DateTime(2100),
-                                icon: Icon(Icons.event),
-                                dateLabelText: 'End Date'.tr,
-                                style: Get.textTheme.bodyText1,
-                                timeLabelText: "Hour".tr,
-                                use24HourFormat: true,
-                                //locale: Locale('pt', 'BR'),
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 20, horizontal: 10),
+                                  decoration: BoxDecoration(
+                                      color: Get.theme.primaryColor,
+                                      borderRadius: BorderRadius.circular(10),
+                                      boxShadow: [
+                                        BoxShadow(
+                                            color: Get.theme.focusColor
+                                                .withOpacity(0.1),
+                                            blurRadius: 10,
+                                            offset: Offset(0, 5)),
+                                      ],
+                                      border: Border.all(
+                                          color: Get.theme.focusColor
+                                              .withOpacity(0.05))),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.stretch,
+                                    children: [
+                                      Text(
+                                        'End Date'.tr,
+                                        style: Get.textTheme.bodyText1,
+                                        textAlign: TextAlign.start,
+                                      ),
+                                      Row(
+                                        children: [
+                                          Icon(
+                                            Icons.event_available,
+                                            color: Get.theme.focusColor,
+                                          ).paddingOnly(right: 15),
+                                          Text(controller.tenders.value.work_end_at,
+                                          style: TextStyle(
+                                            fontSize: 12
+                                          ),),
+                                        ],
+                                      ).marginSymmetric(vertical: 10),
+                                    ],
+                                  ),
+                                ),
                               ),
                             ),
                           ],
@@ -380,30 +469,61 @@ class TaskModification extends GetView<CreateTasksController> {
                         Row(
                           children: [
                             Expanded(
-                              child: DateTimePicker(
-                                type: DateTimePickerType.dateTime,
-                                onSaved: (val) {
-                                  if (val.isNotEmpty) {
-                                    controller.tenders.value.deadline =
-                                        Format.parseDate(
-                                            val, Format.outputFormatDeadline);
-                                  }
+                              child: InkWell(
+                                onTap: () async {
+                                  DatePicker.showDateTimePicker(context,
+                                      showTitleActions: true,
+                                      minTime: DateTime(2018, 3, 5),
+                                      maxTime: DateTime(2030, 6, 7),
+                                      onChanged: (date) {
+
+                                      }, onConfirm: (date) {
+                                        controller.tenders.update((val) {
+                                          val.deadline = Format.parseDate(
+                                              date.toString(),
+                                              Format.outputFormatDeadline);
+                                        });
+                                      },
+                                      currentTime: DateTime.now(),
+                                      locale: LocaleType.ru);
                                 },
-                                dateMask: 'd.M.yyyy',
-                                firstDate: DateTime(2000),
-                                lastDate: DateTime(2100),
-                                initialValue:"",
-                                icon: Icon(Icons.event),
-                                validator: (val) {
-                                  print(val);
-                                  return null;
-                                },
-                                dateLabelText:
-                                    'Deadline of accepting applications'.tr,
-                                style: Get.textTheme.bodyText1,
-                                timeLabelText: "Hour".tr,
-                                use24HourFormat: true,
-                                //locale: Locale('pt', 'BR'),
+                                child: Container(
+                                  padding: EdgeInsets.all(20),
+                                  decoration: BoxDecoration(
+                                      color: Get.theme.primaryColor,
+                                      borderRadius: BorderRadius.circular(10),
+                                      boxShadow: [
+                                        BoxShadow(
+                                            color: Get.theme.focusColor
+                                                .withOpacity(0.1),
+                                            blurRadius: 10,
+                                            offset: Offset(0, 5)),
+                                      ],
+                                      border: Border.all(
+                                          color: Get.theme.focusColor
+                                              .withOpacity(0.05))),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.stretch,
+                                    children: [
+                                      Text(
+                                        'Deadline of accepting applications'.tr,
+                                        style: Get.textTheme.bodyText1,
+                                        textAlign: TextAlign.start,
+                                      ),
+                                      Row(
+                                        children: [
+                                          Icon(
+                                            Icons.event_available,
+                                            color: Get.theme.focusColor,
+                                          ).paddingOnly(right: 15),
+                                          Text(controller
+                                              .tenders.value.deadline),
+                                        ],
+                                      ).marginSymmetric(vertical: 10),
+                                    ],
+                                  ),
+                                ),
                               ),
                             ),
                           ],
