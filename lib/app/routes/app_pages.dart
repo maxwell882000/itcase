@@ -3,11 +3,11 @@ import 'package:itcase/app/modules/account/bindings/account_binding.dart';
 import 'package:itcase/app/modules/account/bindings/account_tender_bindings.dart';
 import 'package:itcase/app/modules/account/bindings/become_contractor_binding.dart';
 import 'package:itcase/app/modules/account/views/account_view.dart';
+import 'package:itcase/app/modules/account/views/become_constractor.dart';
 import 'package:itcase/app/modules/account/views/setttings_view.dart';
 import 'package:itcase/app/modules/auth/bindings/fill_account_bindings.dart';
 import 'package:itcase/app/modules/auth/bindings/verify_bindings.dart';
 import 'package:itcase/app/modules/auth/controllers/auth_controller.dart';
-import 'file:///C:/Projects/newest/itcase/lib/app/modules/account/views/become_constractor.dart';
 import 'package:itcase/app/modules/auth/views/register/become_consumer.dart';
 import 'package:itcase/app/modules/auth/views/register/after_registartion.dart';
 import 'package:itcase/app/modules/auth/views/register/fill_account.dart';
@@ -75,7 +75,7 @@ import 'package:itcase/common/dynamic_link.dart';
 part 'app_routes.dart';
 
 class AppPages {
-  static const INITIAL = Routes.LOGIN;
+  static const INITIAL = Routes.DYNAMIC_URL;
 
   static final routes = [
     GetPage(name: Routes.DYNAMIC_URL, page: () => DynamicLinks()),

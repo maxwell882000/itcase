@@ -1,9 +1,11 @@
+import 'dart:io';
+
 import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:itcase/app/global_widgets/circular_loading_widget.dart';
-import 'file:///C:/Projects/newest/itcase/lib/app/modules/auth/views/register/register_view.dart';
+
 import 'package:itcase/app/services/auth_service.dart';
 
 import '../../../../common/ui.dart';
@@ -199,8 +201,10 @@ class LoginView extends GetView<AuthController> {
   }
 
   deviceInfo() async {
+    if (Platform.isAndroid){
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-    return androidInfo.device;
-  }
+    return androidInfo.device;}
+    return "";
+  }/**/
 }

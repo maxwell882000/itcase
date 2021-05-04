@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/privacy_controller.dart';
 import '../../../services/global_service.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+
 
 class PrivacyView extends GetView<PrivacyController> {
   @override
@@ -24,10 +24,7 @@ class PrivacyView extends GetView<PrivacyController> {
         ),
         body: RefreshIndicator(
           onRefresh: () async {},
-          child: WebView(
-              initialUrl: "${Get.find<GlobalService>().baseUrl}privacy/index.html",
-              // initialUrl: "http://handyman.smartersvision.com/mock/privacy/",
-              javascriptMode: JavascriptMode.unrestricted),
+          child: SizedBox(),
         ));
   }
 }

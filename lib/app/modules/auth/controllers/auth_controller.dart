@@ -1,23 +1,20 @@
 import 'dart:convert';
 
 import 'package:date_time_picker/date_time_picker.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 import 'package:itcase/app/models/user_model.dart';
 import 'package:itcase/app/modules/auth/controllers/verify_controller.dart';
-import 'package:itcase/app/modules/auth/views/phone_verification_view.dart';
-import 'package:itcase/app/modules/auth/views/register/fill_account.dart';
-import 'package:itcase/app/modules/auth/views/register/after_registartion.dart';
+
 import 'package:itcase/app/providers/api.dart';
 import 'package:itcase/app/repositories/user_repository.dart';
 import 'package:itcase/app/routes/app_pages.dart';
 import 'package:itcase/app/services/auth_service.dart';
 import 'package:itcase/common/ui.dart';
-import 'package:intl/intl.dart';
-import 'package:url_launcher/url_launcher.dart';
+
 
 class AuthController extends GetxController {
   String confirm;
@@ -28,7 +25,7 @@ class AuthController extends GetxController {
   final tempKey = GlobalKey<FormState>().obs;
   final Map<String, dynamic> data = Map<String, dynamic>();
 
-  FirebaseMessaging firebaseMessaging;
+
 
   final UserRepository _userRepository = new UserRepository();
   var user = new User().obs;
@@ -42,7 +39,7 @@ class AuthController extends GetxController {
   @override
   void onInit() {
     user = Get.find<AuthService>().user;
-    firebaseMessaging = FirebaseMessaging.instance;
+
     super.onInit();
   }
 
@@ -73,8 +70,7 @@ class AuthController extends GetxController {
           });
          Get.showSnackbar(Ui.ErrorSnackBar(
             message:
-            "You are required to confirm your phone number. Window for confirmation of phone will open in 3 seconds".tr
-                .tr));
+            "You are required to confirm your phone number. Window for confirmation of phone will open in 3 seconds".tr));
          return false;
       }
     } catch (e) {

@@ -83,19 +83,21 @@ class TaskIntro extends StatelessWidget {
                               .merge(TextStyle(color: Get.theme.primaryColor))),
                     ),
                     SizedBox(height: 15.0),
-                    FlatButton(
-                      onPressed: () {
-                        Get.toNamed(Routes.BECOME_CONSTRUCTOR);
-                      },
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                      color: Get.theme.primaryColorDark,
-                      child: Text(currentUser.value.isContractor.value ? "Change categories".tr: "Become a contractor".tr,
-                          style: Get.textTheme.bodyText2
-                              .merge(TextStyle(color: Get.theme.primaryColor)
-                          )
+                    Obx(
+                   ()=> FlatButton(
+                        onPressed: () {
+                          Get.toNamed(Routes.BECOME_CONSTRUCTOR);
+                        },
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        color: Get.theme.primaryColorDark,
+                        child: Text(currentUser.value.isContractor.value ? "Change categories".tr: "Become a contractor".tr,
+                            style: Get.textTheme.bodyText2
+                                .merge(TextStyle(color: Get.theme.primaryColor)
+                            )
+                        ),
                       ),
                     ),
                   ],

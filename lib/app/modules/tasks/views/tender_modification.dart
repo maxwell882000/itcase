@@ -392,10 +392,12 @@ class TaskModification extends GetView<ModifyController> {
                                             Icons.event_available,
                                             color: Get.theme.focusColor,
                                           ).paddingOnly(right: 15),
-                                          Text(controller.tenders.value.work_start_at,
-                                            style: TextStyle(
-                                                fontSize: 12
-                                            ),),
+                                          Flexible(
+                                            child: Text(controller.tenders.value.work_start_at,
+                                              style: TextStyle(
+                                                  fontSize: 12
+                                              ),),
+                                          ),
                                         ],
                                       ).marginSymmetric(vertical: 10),
                                     ],
@@ -453,10 +455,12 @@ class TaskModification extends GetView<ModifyController> {
                                             Icons.event_available,
                                             color: Get.theme.focusColor,
                                           ).paddingOnly(right: 15),
-                                          Text(controller.tenders.value.work_end_at,
-                                          style: TextStyle(
-                                            fontSize: 12
-                                          ),),
+                                          Flexible(
+                                            child: Text(controller.tenders.value.work_end_at,
+                                            style: TextStyle(
+                                              fontSize: 12
+                                            ),),
+                                          ),
                                         ],
                                       ).marginSymmetric(vertical: 10),
                                     ],

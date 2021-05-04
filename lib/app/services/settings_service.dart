@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -23,6 +24,22 @@ class SettingsService extends GetxService {
     return this;
   }
 
+
+  CupertinoThemeData getThemeIos(){
+    return CupertinoThemeData(
+      primaryColor: Colors.white,
+      primaryContrastingColor: Colors.green,
+      barBackgroundColor: Colors.red,
+      textTheme: getCupertinoTextThemeData()
+    );
+  }
+
+  CupertinoTextThemeData getCupertinoTextThemeData(){
+    return CupertinoTextThemeData(
+      primaryColor: Ui.parseColor(setting.value.mainColor)
+    );
+  }
+
   ThemeData getLightTheme() {
     // TODO change font dynamically
     return ThemeData(
@@ -41,23 +58,28 @@ class SettingsService extends GetxService {
         colorScheme: ColorScheme.light(
           primary: Ui.parseColor(setting.value.mainColor),
         ),
-        textTheme: GoogleFonts.getTextTheme(
-          getLocale().toString().startsWith('ar') ? 'Cairo' : 'Poppins',
-          TextTheme(
-            headline6: GoogleFonts.montserrat(fontSize: 14.0, fontWeight: FontWeight.w700, color: Ui.parseColor(setting.value.mainColor), height: 1.3),
-            headline5: GoogleFonts.montserrat(fontSize: 18.0, fontWeight: FontWeight.w700, color: Ui.parseColor(setting.value.secondColor), height: 1.3),
-            headline4: GoogleFonts.montserrat(fontSize: 20.0, fontWeight: FontWeight.w400, color: Ui.parseColor(setting.value.secondColor), height: 1.3),
-            headline3: GoogleFonts.montserrat(fontSize: 22.0, fontWeight: FontWeight.w700, color: Ui.parseColor(setting.value.secondColor), height: 1.3),
-            headline2: GoogleFonts.montserrat(fontSize: 24.0, fontWeight: FontWeight.w700, color: Ui.parseColor(setting.value.mainColor), height: 1.4),
-            headline1: GoogleFonts.montserrat(fontSize: 26.0, fontWeight: FontWeight.w300, color: Ui.parseColor(setting.value.secondColor), height: 1.4),
-            subtitle2: GoogleFonts.montserrat(fontSize: 17.0, fontWeight: FontWeight.w600, color: Ui.parseColor(setting.value.secondColor), height: 1.2),
-            subtitle1: GoogleFonts.montserrat(fontSize: 15.0, fontWeight: FontWeight.w400, color: Ui.parseColor(setting.value.mainColor), height: 1.2),
-            bodyText2: GoogleFonts.montserrat(fontSize: 15.0, fontWeight: FontWeight.w600, color: Ui.parseColor(setting.value.secondColor), height: 1.2),
-            bodyText1: GoogleFonts.montserrat(fontSize: 14.0, fontWeight: FontWeight.w400, color: Ui.parseColor(setting.value.secondColor), height: 1.2),
-            caption: GoogleFonts.montserrat(fontSize: 16.0, fontWeight: FontWeight.w300, color: Ui.parseColor(setting.value.accentColor), height: 1.2),
-            button: GoogleFonts.montserrat(fontSize: 13.0, fontWeight: FontWeight.w300, color: Ui.parseColor(setting.value.link_color), height: 1.2),
-          ),
-        ));
+        textTheme: getTextTheme()
+    );
+  }
+
+  TextTheme getTextTheme(){
+    return GoogleFonts.getTextTheme(
+      getLocale().toString().startsWith('ar') ? 'Cairo' : 'Poppins',
+      TextTheme(
+        headline6: GoogleFonts.montserrat(fontSize: 14.0, fontWeight: FontWeight.w700, color: Ui.parseColor(setting.value.mainColor), height: 1.3),
+        headline5: GoogleFonts.montserrat(fontSize: 18.0, fontWeight: FontWeight.w700, color: Ui.parseColor(setting.value.secondColor), height: 1.3),
+        headline4: GoogleFonts.montserrat(fontSize: 20.0, fontWeight: FontWeight.w400, color: Ui.parseColor(setting.value.secondColor), height: 1.3),
+        headline3: GoogleFonts.montserrat(fontSize: 22.0, fontWeight: FontWeight.w700, color: Ui.parseColor(setting.value.secondColor), height: 1.3),
+        headline2: GoogleFonts.montserrat(fontSize: 24.0, fontWeight: FontWeight.w700, color: Ui.parseColor(setting.value.mainColor), height: 1.4),
+        headline1: GoogleFonts.montserrat(fontSize: 26.0, fontWeight: FontWeight.w300, color: Ui.parseColor(setting.value.secondColor), height: 1.4),
+        subtitle2: GoogleFonts.montserrat(fontSize: 17.0, fontWeight: FontWeight.w600, color: Ui.parseColor(setting.value.secondColor), height: 1.2),
+        subtitle1: GoogleFonts.montserrat(fontSize: 15.0, fontWeight: FontWeight.w400, color: Ui.parseColor(setting.value.mainColor), height: 1.2),
+        bodyText2: GoogleFonts.montserrat(fontSize: 15.0, fontWeight: FontWeight.w600, color: Ui.parseColor(setting.value.secondColor), height: 1.2),
+        bodyText1: GoogleFonts.montserrat(fontSize: 14.0, fontWeight: FontWeight.w400, color: Ui.parseColor(setting.value.secondColor), height: 1.2),
+        caption: GoogleFonts.montserrat(fontSize: 16.0, fontWeight: FontWeight.w300, color: Ui.parseColor(setting.value.accentColor), height: 1.2),
+        button: GoogleFonts.montserrat(fontSize: 13.0, fontWeight: FontWeight.w300, color: Ui.parseColor(setting.value.link_color), height: 1.2),
+      ),
+    );
   }
 
   ThemeData getDarkTheme() {

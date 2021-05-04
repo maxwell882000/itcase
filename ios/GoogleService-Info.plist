@@ -4,8 +4,8 @@
 <dict>
 	<key>CLIENT_ID</key>
 	<string>13802183234-cl2a0pqp5lpf4lelpj1f3mtijb8f76s6.apps.googleusercontent.com</string>
-	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.13802183234-cl2a0pqp5lpf4lelpj1f3mtijb8f76s6</string>
+    <key>REVERSED_CLIENT_ID</key>
+    <string>com.googleusercontent.apps.13802183234-cl2a0pqp5lpf4lelpj1f3mtijb8f76s6</string>
 	<key>API_KEY</key>
 	<string>AIzaSyAlbF6u8X4nvyISrs4yE5YCT9axdTmJ0nw</string>
 	<key>GCM_SENDER_ID</key>

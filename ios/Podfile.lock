@@ -50,19 +50,11 @@ PODS:
   - Firebase/DynamicLinks (7.11.0):
     - Firebase/CoreOnly
     - FirebaseDynamicLinks (~> 7.11.0)
-  - Firebase/Messaging (7.11.0):
-    - Firebase/CoreOnly
-    - FirebaseMessaging (~> 7.11.0)
-  - firebase_core (1.1.0):
-    - Firebase/CoreOnly (= 7.11.0)
+  - firebase_core (0.0.1):
+    - Firebase/Core
     - Flutter
-  - firebase_dynamic_links (2.0.2):
-    - Firebase/DynamicLinks (= 7.11.0)
-    - firebase_core
-    - Flutter
-  - firebase_messaging (9.1.3):
-    - Firebase/Messaging (= 7.11.0)
-    - firebase_core
+  - firebase_dynamic_links (0.1.0):
+    - Firebase/DynamicLinks
     - Flutter
   - FirebaseAnalytics (7.11.0):
     - FirebaseAnalytics/AdIdSupport (= 7.11.0)
@@ -107,19 +99,6 @@ PODS:
     - GoogleUtilities/Environment (~> 7.0)
     - GoogleUtilities/UserDefaults (~> 7.0)
     - PromisesObjC (~> 1.2)
-  - FirebaseInstanceID (7.11.0):
-    - FirebaseCore (~> 7.0)
-    - FirebaseInstallations (~> 7.0)
-    - GoogleUtilities/Environment (~> 7.0)
-    - GoogleUtilities/UserDefaults (~> 7.0)
-  - FirebaseMessaging (7.11.0):
-    - FirebaseCore (~> 7.0)
-    - FirebaseInstallations (~> 7.0)
-    - FirebaseInstanceID (~> 7.0)
-    - GoogleUtilities/AppDelegateSwizzler (~> 7.0)
-    - GoogleUtilities/Environment (~> 7.0)
-    - GoogleUtilities/Reachability (~> 7.0)
-    - GoogleUtilities/UserDefaults (~> 7.0)
   - Flutter (1.0.0)
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
@@ -179,8 +158,6 @@ PODS:
   - SwiftyGif (5.4.0)
   - url_launcher (0.0.1):
     - Flutter
-  - webview_flutter (0.0.1):
-    - Flutter
   - yandex_mapkit (0.0.1):
     - Flutter
     - YandexMapKit (= 3.5.0)
@@ -199,7 +176,6 @@ DEPENDENCIES:
   - Firebase/Analytics
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_dynamic_links (from `.symlinks/plugins/firebase_dynamic_links/ios`)
-  - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
   - Flutter (from `Flutter`)
   - geolocator (from `.symlinks/plugins/geolocator/ios`)
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
@@ -208,7 +184,6 @@ DEPENDENCIES:
   - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
   - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
-  - webview_flutter (from `.symlinks/plugins/webview_flutter/ios`)
   - yandex_mapkit (from `.symlinks/plugins/yandex_mapkit/ios`)
 
 SPEC REPOS:
@@ -224,8 +199,6 @@ SPEC REPOS:
     - FirebaseCoreDiagnostics
     - FirebaseDynamicLinks
     - FirebaseInstallations
-    - FirebaseInstanceID
-    - FirebaseMessaging
     - FMDB
     - GoogleAppMeasurement
     - GoogleDataTransport
@@ -247,8 +220,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_core/ios"
   firebase_dynamic_links:
     :path: ".symlinks/plugins/firebase_dynamic_links/ios"
-  firebase_messaging:
-    :path: ".symlinks/plugins/firebase_messaging/ios"
   Flutter:
     :path: Flutter
   geolocator:
@@ -265,8 +236,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/sqflite/ios"
   url_launcher:
     :path: ".symlinks/plugins/url_launcher/ios"
-  webview_flutter:
-    :path: ".symlinks/plugins/webview_flutter/ios"
   yandex_mapkit:
     :path: ".symlinks/plugins/yandex_mapkit/ios"
 
@@ -279,16 +248,13 @@ SPEC CHECKSUMS:
   DKPhotoGallery: fdfad5125a9fdda9cc57df834d49df790dbb4179
   file_picker: 3e6c3790de664ccf9b882732d9db5eaf6b8d4eb1
   Firebase: c121feb35e4126c0b355e3313fa9b487d47319fd
-  firebase_core: 84dcd80ac6d29c3d1039071b7306ee99688eb9c7
-  firebase_dynamic_links: e54ea29b74507402560461965d0483657dedf1b7
-  firebase_messaging: 7aecb08eada5e5cde85b10875141706a8d18b818
+  firebase_core: 335c02abd48672b7c83c683df833d0488a72e73e
+  firebase_dynamic_links: 6aa278fc5e6e8cca17d5aa4c7aa46283f2b94749
   FirebaseAnalytics: cd3bd84d722a24a8923918af8af8e5236f615d77
   FirebaseCore: 907447d8917a4d3eb0cce2829c5a0ad21d90b432
   FirebaseCoreDiagnostics: 68ad972f99206cef818230f3f3179d52ccfb7f8c
   FirebaseDynamicLinks: 07f101c20bb40fd39f6b3e5278a64a5f2f660dc1
   FirebaseInstallations: a58d4f72ec5861840b84df489f2668d970df558a
-  FirebaseInstanceID: ad5135045a498d7775903efd39762d2cdfa1be27
-  FirebaseMessaging: 163435fb6db065e3b6228f1e577b10ed2cc506d2
   Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   geolocator: f5e3de65e241caba7ce3e8a618803387bda73384
@@ -305,7 +271,6 @@ SPEC CHECKSUMS:
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
   SwiftyGif: 5d4af95df24caf1c570dbbcb32a3b8a0763bc6d7
   url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
-  webview_flutter: 9f491a9b5a66f2573946a389b2677987b0ff8c0b
   yandex_mapkit: 808e1857438445c61e2789a9e4374b230a0a97ca
   YandexMapKit: ecd4b78de34a35df63d066ac299e6fd0fe46d1ba
   YandexMapKitSearch: b46ddd1c80e2e35d006cdfc4ab88070a50cebeda

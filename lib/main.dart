@@ -1,7 +1,10 @@
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:itcase/app/global_widgets/platform_implementation/platfrom_material.dart';
 
 import 'app/routes/app_pages.dart';
 import 'app/services/auth_service.dart';
@@ -15,7 +18,7 @@ void initServices() async {
   await Get.putAsync(() => GlobalService().init());
   await Get.putAsync(() => AuthService().init());
   await Get.putAsync(() => SettingsService().init());
-  await Firebase.initializeApp();
+
 }
 
 void main() async {
@@ -27,7 +30,7 @@ void main() async {
       title: Get.find<SettingsService>().setting.value.appName,
       initialRoute: AppPages.INITIAL,
       getPages: AppPages.routes,
-      localizationsDelegates: [GlobalMaterialLocalizations.delegate],
+      localizationsDelegates: [GlobalMaterialLocalizations.delegate, GlobalCupertinoLocalizations.delegate],
       supportedLocales: Get.find<TranslationService>().supportedLocales(),
       translationsKeys: Get.find<TranslationService>().translations,
       locale: Get.find<SettingsService>().getLocale(),

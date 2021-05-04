@@ -56,6 +56,8 @@ class _DynamicLinksState extends State<DynamicLinks> {
         minimumVersion: 0,
       ),
       iosParameters: IosParameters(
+        appStoreId: "",
+
         bundleId: "com.goolge.aaa",
         minimumVersion: "0",
       ),

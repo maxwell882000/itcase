@@ -71,7 +71,7 @@ class TextFieldWidget extends StatelessWidget {
       margin: EdgeInsets.only(
           left: 20, right: 20, top: topMargin, bottom: bottomMargin),
       decoration: BoxDecoration(
-          color: Get.theme.primaryColor,
+            color: Get.theme.primaryColor,
           borderRadius: buildBorderRadius,
           boxShadow: [
             BoxShadow(
@@ -82,12 +82,15 @@ class TextFieldWidget extends StatelessWidget {
           border: Border.all(color: Get.theme.focusColor.withOpacity(0.05))),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            labelText ?? "",
-            style: Get.textTheme.bodyText1,
-            textAlign: textAlign ?? TextAlign.start,
-          ).marginOnly(bottom: height ?? 0),
+          Flexible(
+            child: Text(
+              labelText ?? "",
+              style: Get.textTheme.bodyText1,
+              textAlign: textAlign ?? TextAlign.start,
+            ).marginOnly(bottom: height ?? 0),
+          ),
           SizedBox(height: height ?? 0),
           widget
         ],
