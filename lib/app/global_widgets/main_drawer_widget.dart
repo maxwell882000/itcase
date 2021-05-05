@@ -54,22 +54,28 @@ class MainDrawerWidget extends StatelessWidget {
                         child:  ClipRRect(
                           borderRadius: BorderRadius.all(Radius.circular(100)),
                           child: Obx(
-                                () =>
-                                CachedNetworkImage(
-                                  height: 100,
-                                  width: 100,
-                                  fit: BoxFit.cover,
-                                  imageUrl: controller.currentUser.value.image_gotten,
-                                  placeholder: (context, url) =>
-                                      Image.asset(
-                                        'assets/img/loading.gif',
-                                        fit: BoxFit.cover,
-                                        width: double.infinity,
-                                        height: 100,
-                                      ),
-                                  errorWidget: (context, url, error) =>
-                                      Icon(Icons.error_outline),
-                                ),
+                                ()
+                                {
+                                  if (controller.currentUser.value
+                                      .image_gotten != null)
+                                   return  CachedNetworkImage(
+                                      height: 100,
+                                      width: 100,
+                                      fit: BoxFit.cover,
+                                      imageUrl: controller.currentUser.value
+                                          .image_gotten,
+                                      placeholder: (context, url) =>
+                                          Image.asset(
+                                            'assets/img/loading.gif',
+                                            fit: BoxFit.cover,
+                                            width: double.infinity,
+                                            height: 100,
+                                          ),
+                                      errorWidget: (context, url, error) =>
+                                          Icon(Icons.error_outline),
+                                    );
+                                  return SizedBox();
+                                }
                           ),
                         ),
                       ),

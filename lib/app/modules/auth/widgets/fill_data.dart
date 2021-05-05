@@ -205,11 +205,14 @@ class FillData extends StatelessWidget {
                 onSaved: (val) {
                   controller.tempUser.value.name = val;
                 },
-                validator: (val) => val.length == 0
+                validator: (val) {
+                 List list = val.split(RegExp(r"\s"));
+                 list.removeWhere((element) => element==null|| element=="");
+                  return val.length == 0
                     ? "Please, fill the field".tr
-                    : val.split(" ").length != 2
+                    : list.length != 2
                         ? "Enter your surname and name separated by a space".tr
-                        : null,
+                        : null;},
                 initialValue: controller.user.value.name,
                 iconData: Icons.person_outline,
                 isLast: false,
@@ -418,7 +421,7 @@ class FillData extends StatelessWidget {
                 iconData: Icons.info,
                 isLast: false,
                 isFirst: false,
-                keyboardType: TextInputType.multiline,
+
                 initialValue: controller.user.value.about_myself,
                 maxLine: 3,
                 height: 10,

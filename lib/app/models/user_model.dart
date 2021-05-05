@@ -286,8 +286,8 @@ class TempUser{
     data['user_role'] =this.user_role;
     String always  =  this.user_role + "_";
     String additional = modify ? "":this.user_role + "_";
-
-    List names = name.split(" ");
+    List names = name.split(RegExp(r"\s"));
+    names.removeWhere((element) => element==null|| element=="");
     data['${additional}first_name'] = names[0];
     data['${additional}last_name'] = names[1];
     data['${additional}phone_number'] = phone_number;

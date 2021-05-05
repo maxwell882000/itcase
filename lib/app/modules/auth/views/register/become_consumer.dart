@@ -55,6 +55,7 @@ class BecomeConsumer extends FillAccount {
                   customer(context),
                 ],
                 onChange: (index) {
+                  FocusScope.of(context).unfocus();
                   controller.tempUser.value.user_role = "customer";
                   controller.user.value.user_role = "customer";
                 },

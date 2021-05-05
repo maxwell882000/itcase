@@ -159,7 +159,7 @@ class TaskModification extends GetView<ModifyController> {
                                   hintText: "Write description".tr,
                                   iconData: Icons.description,
                                 ),
-                                keyboardType: TextInputType.multiline,
+
                               ),
                             ],
                           ),
@@ -200,7 +200,7 @@ class TaskModification extends GetView<ModifyController> {
                                       "Please enter additional information".tr,
                                   iconData: Icons.info,
                                 ),
-                                keyboardType: TextInputType.multiline,
+
                               ),
                             ],
                           ),
@@ -240,7 +240,7 @@ class TaskModification extends GetView<ModifyController> {
                                       "Please enter ways of communication".tr,
                                   iconData: Icons.info,
                                 ),
-                                keyboardType: TextInputType.multiline,
+
                               ),
                             ],
                           ),

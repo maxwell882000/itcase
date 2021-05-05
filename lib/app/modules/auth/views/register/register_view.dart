@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:itcase/app/global_widgets/block_button_widget.dart';
 import 'package:itcase/app/global_widgets/circular_loading_widget.dart';
@@ -81,26 +82,45 @@ class RegisterView extends GetView<RegisterController> {
                         alignment: AlignmentDirectional.bottomCenter,
                         children: [
                           Container(
-                              height: 120,
-                              width: Get.width,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage("assets/icon/itcase.jpg"),
-                                  fit: BoxFit.cover,
-                                ),
-                                color: Get.theme.accentColor,
-                                borderRadius: BorderRadius.vertical(
-                                    bottom: Radius.circular(10)),
-                                boxShadow: [
-                                  BoxShadow(
-                                      color:
-                                          Get.theme.focusColor.withOpacity(0.2),
-                                      blurRadius: 10,
-                                      offset: Offset(0, 5)),
-                                ],
+                            height: 80,
+                            width: Get.width,
+                            // decoration: BoxDecoration(
+                            //   color: Get.theme.accentColor,
+                            //   image: DecorationImage(
+                            //     image: AssetImage("assets/icon/itcase.jpg"),
+                            //     fit: BoxFit.cover,
+                            //   ),
+                            //   borderRadius:
+                            //       BorderRadius.vertical(bottom: Radius.circular(10)),
+                            //   boxShadow: [
+                            //     BoxShadow(
+                            //         color: Get.theme.focusColor.withOpacity(0.2),
+                            //         blurRadius: 10,
+                            //         offset: Offset(0, 5)),
+                            //   ],
+                            // ),
+                            margin: EdgeInsets.only(bottom: 50),
+                            child: Padding(
+                                padding: const EdgeInsets.all(20),
+                                child: SizedBox()
+                            ),
+                          ),
+                          Container(
+                            // decoration: Ui.getBoxDecoration(
+                            //   radius: 100,
+                            //   border:
+                            //       Border.all(width: 5, color: Get.theme.primaryColor),
+                            // ),
+                            child: ClipRRect(
+                              // borderRadius: BorderRadius.all(Radius.circular(100000000)),
+                              child: SvgPicture.asset(
+                                'assets/icon/logo_itcase_svg.svg',
+                                fit: BoxFit.cover,
+                                width: 100,
+                                height: 100,
                               ),
-                              margin: EdgeInsets.only(bottom: 10),
-                              child: SizedBox()),
+                            ),
+                          ),
                         ],
                       ),
                       Container(
@@ -132,11 +152,14 @@ class RegisterView extends GetView<RegisterController> {
                         hintText: "Enter name and surname".tr,
                         initialValue: controller.user.value.name,
                         onSaved: (val) => controller.user.value.name = val,
-                        validator: (val) => val.length == 0
-                            ? "Fill the field".tr
-                            : val.split(" ").length != 2
-                                ? "Enter name and surname separated by space".tr + " " + "(Алишер Хасанов)".tr
-                                : null,
+                        validator: (val) {
+                          List list = val.split(RegExp(r"\s"));
+                          list.removeWhere((element) => element==null|| element=="");
+                          return val.length == 0
+                              ? "Please, fill the field".tr
+                              : list.length != 2
+                              ? "Enter your surname and name separated by a space".tr
+                              : null;},
                         iconData: Icons.people_alt,
                         isLast: false,
                       ),
@@ -222,15 +245,29 @@ class RegisterView extends GetView<RegisterController> {
                         ),
                       ).paddingOnly(top: 15, bottom: 20, right: 20, left: 20),
                     ),
-                    TextButton(
-                      onPressed: () {
-                        Get.back();
-                      },
-                      child: Text(
-                        "You already have an account?".tr,
-                        style: Get.textTheme.button,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            Get.back();
+                          },
+                          child: Text(
+                            "You already have an account?".tr,
+                            style: Get.textTheme.button,
+                          ),
+                        ),
+                      SizedBox(
+                        width: Get.width*0.3,
                       ),
-                    ).paddingOnly(bottom: 10),
+                        TextButton(
+                          onPressed: () {
+                            Get.toNamed(Routes.SETTINGS_LANGUAGE);
+                          },
+                          child: Text("Change language".tr, style: Get.textTheme.button,),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ],

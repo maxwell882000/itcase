@@ -1,7 +1,7 @@
 {
   "success": true,
   "data": {
-    "app_name": "IT case",
+    "app_name": "itcase",
     "enable_stripe": "1",
     "default_tax": "10",
     "default_currency": "UZS",

@@ -17,7 +17,7 @@
 	<key>CFBundleShortVersionString</key>
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>
-	<string>????</string>
+	<string>itcase.com</string>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
@@ -27,7 +27,7 @@
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-   <string>This app needs access to location when open.</string>
+   <string>During creating task, person select location of execution of the job</string>
     <key>NSPhotoLibraryUsageDescription</key>
     <string>To get photo for avatar or other activities in app.</string>
     <key>NSCameraUsageDescription</key>
@@ -36,9 +36,9 @@
     <string>Do not need.</string>
 
    <key>NSLocationAlwaysUsageDescription</key>
-   <string>This app needs access to location when in the background.</string>
+   <string>Do not need in the background.</string>
    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-   <string>This app needs access to location when open and in the background.</string>
+   <string>Do not need during opening application and in the background</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
@@ -69,8 +69,7 @@
     		<string>Editor</string>
     		<key>CFBundleURLSchemes</key>
     		<array>
-    			<!-- TODO Replace this value: -->
-    			<!-- Copied from GoogleService-Info.plist key REVERSED_CLIENT_ID -->
+
     		    <string>com.googleusercontent.apps.13802183234-cl2a0pqp5lpf4lelpj1f3mtijb8f76s6</string>
     		</array>
     	</dict>

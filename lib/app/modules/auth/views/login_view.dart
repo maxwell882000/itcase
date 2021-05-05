@@ -179,14 +179,22 @@ class LoginView extends GetView<AuthController> {
                               .merge(TextStyle(color: Get.theme.primaryColor)),
                         ),
                       ).paddingSymmetric(vertical: 10, horizontal: 20),
+
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+
                         children: [
                           TextButton(
                             onPressed: () {
                               Get.toNamed(Routes.REGISTER);
                             },
                             child: Text("You do not have an account?".tr, style: Get.textTheme.button,),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Get.toNamed(Routes.SETTINGS_LANGUAGE);
+                            },
+                            child: Text("Change language".tr, style: Get.textTheme.button,),
                           ),
                         ],
                       ).paddingSymmetric(vertical: 20),

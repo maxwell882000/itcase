@@ -228,156 +228,179 @@ class BecomeConstructor extends GetView<BecomeContractorController> {
                 ),
                 elevation: 0,
               ),
-              body: Visibility(
-                visible: !controller.loading.value,
-                child: Form(
-                  child: Column(
-                    children: [
-                      Container(
-                        margin:
-                            EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                        child: Row(
-                          children: [
-                            getCategories(
-                                "Categories".tr,
-                                controller.categoriesDropDown.categoriesList
-                                    .map<String>((e) => e[0][0])
-                                    .toList(),
-                                storeCategories,
-                                controller.categoriesDropDown.categories),
-                            SizedBox(
-                              width: 50,
+              body: GestureDetector(
+                onTap: () {
+                  FocusScope.of(context).unfocus();
+                },
+                child: Visibility(
+                  visible: !controller.loading.value,
+                  child: Form(
+                    child: GestureDetector(
+                      onTap: () {
+                        FocusScope.of(context).unfocus();
+                      },
+                      child: Column(
+                        children: [
+                          Container(
+                            margin:
+                                EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                            child: Row(
+                              children: [
+                                getCategories(
+                                    "Categories".tr,
+                                    controller.categoriesDropDown.categoriesList
+                                        .map<String>((e) => e[0][0])
+                                        .toList(),
+                                    storeCategories,
+                                    controller.categoriesDropDown.categories),
+                                SizedBox(
+                                  width: 50,
+                                ),
+                                getCategories(
+                                    "SubCategories".tr,
+                                    controller.categoriesDropDown.subCategoriesList,
+                                    clickedSubCategories,
+                                    controller.categoriesDropDown.subCategories)
+                              ],
                             ),
-                            getCategories(
-                                "SubCategories".tr,
-                                controller.categoriesDropDown.subCategoriesList,
-                                clickedSubCategories,
-                                controller.categoriesDropDown.subCategories)
-                          ],
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(top: Get.height*0.04),
-                        child: Visibility(
-                          visible: controller.preLastSub.value != 0,
-                          child: Column(
-                            children: [
-                              Text("Cost of work".tr),
-                              Row(
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(top: Get.height*0.04),
+                            child: Visibility(
+                              visible: controller.preLastSub.value != 0,
+                              child: Column(
                                 children: [
-                                  Expanded(
-                                    child: TextFieldWidget(
-                                      controller: _textPriceFrom,
-                                      labelText: "Price from".tr,
-                                      hintText: "50 000".tr,
-                                      keyboardType: TextInputType.number,
-                                      suffixText: "UZS",
-                                      // onSaved: (val) => controller.priceFrom.value = val,
-                                      validator: (val) => val.isNotEmpty
-                                          ? null
-                                          : "Fill the field".tr,
-                                      // initialValue: controller.user.value.phone_number,
-                                      // onSaved: (val) => controller.user.value.phone_number = val,
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: TextFieldWidget(
-                                      controller: _textPriceTo,
-                                      labelText: "Price to".tr,
-                                      hintText: "100 000".tr,
-                                      suffixText: "UZS",
-                                      keyboardType: TextInputType.number,
-                                      // onSaved: (val) => controller.priceTo.value = val,
-                                      validator: (val) => val.isNotEmpty
-                                          ? null
-                                          : "Fill the field".tr,
-                                      // initialValue: controller.user.value.email,
-                                      // iconData: Icons.alternate_email,
-                                      // onSaved: (val) => controller.user.value.email = val,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              TextFieldWidget(
-                                controller: _textPricePer,
-                                labelText: "Price per hour".tr,
-                                hintText: "50 000".tr,
-                                suffixText: "UZS",
-                                keyboardType: TextInputType.number,
-                                // onSaved: (val) => controller.priceFrom.value = val,
-                                validator: (val) =>
-                                    val.isNotEmpty ? null : "Fill the field".tr,
-                                // initialValue: controller.user.value.phone_number,
-                                // onSaved: (val) => controller.user.value.phone_number = val,
-                              ),
-                              Stack(
-                                children: [
-                                  Visibility(
+                                  Text("Cost of work".tr),
+                                  GestureDetector(
+                                    onTap: () {
+                                      FocusScope.of(context).unfocus();
+                                    },
                                     child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
                                       children: [
-                                        BlockButtonWidget(
-                                          onPressed: () async {
-                                            storeElements();
-                                          },
-                                          color: Get.theme.accentColor,
-                                          text: Text(
-                                            "Change".tr,
-                                            style: Get.textTheme.headline6.merge(
-                                                TextStyle(
-                                                    color:
-                                                        Get.theme.primaryColor)),
+                                        Expanded(
+                                          child: TextFieldWidget(
+                                            controller: _textPriceFrom,
+                                            labelText: "Price from".tr,
+                                            hintText: "50 000".tr,
+                                            keyboardType: TextInputType.number,
+                                            suffixText: "UZS",
+                                            // onSaved: (val) => controller.priceFrom.value = val,
+                                            validator: (val) => val.isNotEmpty
+                                                ? null
+                                                : "Fill the field".tr,
+                                            // initialValue: controller.user.value.phone_number,
+                                            // onSaved: (val) => controller.user.value.phone_number = val,
                                           ),
-                                        ).paddingOnly(
-                                            top: 15,
-                                            bottom: 5,
-                                            right: 20,
-                                            left: 20),
-                                        BlockButtonWidget(
-                                          onPressed: () async {
-                                            removeElements();
-                                          },
-                                          color: Get.theme.accentColor,
-                                          text: Text(
-                                            "Remove".tr,
-                                            style: Get.textTheme.headline6.merge(
-                                                TextStyle(
-                                                    color:
-                                                        Get.theme.primaryColor)),
+                                        ),
+                                        Expanded(
+                                          child: TextFieldWidget(
+                                            controller: _textPriceTo,
+                                            labelText: "Price to".tr,
+                                            hintText: "100 000".tr,
+                                            suffixText: "UZS",
+                                            keyboardType: TextInputType.number,
+                                            // onSaved: (val) => controller.priceTo.value = val,
+                                            validator: (val) => val.isNotEmpty
+                                                ? null
+                                                : "Fill the field".tr,
+                                            // initialValue: controller.user.value.email,
+                                            // iconData: Icons.alternate_email,
+                                            // onSaved: (val) => controller.user.value.email = val,
                                           ),
-                                        ).paddingOnly(
-                                            top: 15,
-                                            bottom: 5,
-                                            right: 20,
-                                            left: 20),
+                                        ),
                                       ],
                                     ),
-                                    visible: controller.isChosen.value,
                                   ),
-                                  Visibility(
-                                    visible: !controller.isChosen.value,
-                                    child: BlockButtonWidget(
-                                      onPressed: () async {
-                                        storeElements();
-                                      },
-                                      color: Get.theme.accentColor,
-                                      text: Text(
-                                        "Add".tr,
-                                        style: Get.textTheme.headline6.merge(
-                                            TextStyle(
-                                                color: Get.theme.primaryColor)),
-                                      ),
-                                    ).paddingOnly(
-                                        top: 15, bottom: 5, right: 20, left: 20),
+                                  TextFieldWidget(
+                                    controller: _textPricePer,
+                                    labelText: "Price per hour".tr,
+                                    hintText: "50 000".tr,
+                                    suffixText: "UZS",
+                                    keyboardType: TextInputType.number,
+                                    // onSaved: (val) => controller.priceFrom.value = val,
+                                    validator: (val) =>
+                                        val.isNotEmpty ? null : "Fill the field".tr,
+                                    // initialValue: controller.user.value.phone_number,
+                                    // onSaved: (val) => controller.user.value.phone_number = val,
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      FocusScope.of(context).unfocus();
+                                    },
+                                    child: Stack(
+                                      children: [
+                                        Visibility(
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              BlockButtonWidget(
+                                                onPressed: () async {
+                                                  FocusScope.of(context).unfocus();
+                                                  storeElements();
+                                                },
+                                                color: Get.theme.accentColor,
+                                                text: Text(
+                                                  "Change".tr,
+                                                  style: Get.textTheme.headline6.merge(
+                                                      TextStyle(
+                                                          color:
+                                                              Get.theme.primaryColor)),
+                                                ),
+                                              ).paddingOnly(
+                                                  top: 15,
+                                                  bottom: 5,
+                                                  right: 20,
+                                                  left: 20),
+                                              BlockButtonWidget(
+                                                onPressed: () async {
+                                                  FocusScope.of(context).unfocus();
+                                                  removeElements();
+                                                },
+                                                color: Get.theme.accentColor,
+                                                text: Text(
+                                                  "Remove".tr,
+                                                  style: Get.textTheme.headline6.merge(
+                                                      TextStyle(
+                                                          color:
+                                                              Get.theme.primaryColor)),
+                                                ),
+                                              ).paddingOnly(
+                                                  top: 15,
+                                                  bottom: 5,
+                                                  right: 20,
+                                                  left: 20),
+                                            ],
+                                          ),
+                                          visible: controller.isChosen.value,
+                                        ),
+                                        Visibility(
+                                          visible: !controller.isChosen.value,
+                                          child: BlockButtonWidget(
+                                            onPressed: () async {
+                                              FocusScope.of(context).unfocus();
+                                              storeElements();
+                                            },
+                                            color: Get.theme.accentColor,
+                                            text: Text(
+                                              "Add".tr,
+                                              style: Get.textTheme.headline6.merge(
+                                                  TextStyle(
+                                                      color: Get.theme.primaryColor)),
+                                            ),
+                                          ).paddingOnly(
+                                              top: 15, bottom: 5, right: 20, left: 20),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ],
                               ),
-                            ],
+                            ),
                           ),
-                        ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
                 ),
               ),
