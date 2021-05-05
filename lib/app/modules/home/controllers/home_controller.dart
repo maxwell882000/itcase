@@ -120,7 +120,7 @@ class HomeController extends GetxController {
       if (difference > 0)
       snackBar(
           title: "Notifications".tr,
-          body: "You got new ".tr + " "+
+          body: "You got new".tr + " "+
               difference.toString() +
               " " +
               "notifications".tr,

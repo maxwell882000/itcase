@@ -89,7 +89,7 @@ class Category {
 
     position = json['position'].toString();
     color = Colors.white;
-    backGround = Colors.orangeAccent;
+    backGround = Get.theme.accentColor;
     lft = json['lft'].toString();
     rgt = json['rgt'].toString();
     parent_id = json['parent_id'].toString();

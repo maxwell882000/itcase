@@ -98,7 +98,7 @@ class User extends Model {
     String firstName = json['first_name'] ?? "";
     String lastName = json['last_name'] ?? "";
     name = firstName + " " +  lastName;
-    lastSeen = Format.parseDate(json['last_online_at'], Format.outputFormatLastSeen);
+      lastSeen = Format.parseDate(json['last_online_at'], Format.outputFormat);
     image_gotten = API().getLink(json['image'] ?? "");
     Map<String, dynamic> id = {
       'id': json['id'].toString()

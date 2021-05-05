@@ -111,7 +111,11 @@ class _ImgState extends State<Img> {
       body: Column(
         children: <Widget>[
           RaisedButton(
-            child: Text("Pick images".tr),
+            child: Text("Pick images".tr,
+            style: TextStyle(
+              color: Colors.white,
+            ),
+            ),
             onPressed: loadAssets,
           ),
           Expanded(

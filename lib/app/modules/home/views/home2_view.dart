@@ -44,7 +44,7 @@ class Home2View extends GetView<HomeController> {
                 centerTitle: true,
                 automaticallyImplyLeading: false,
                 leading: new IconButton(
-                  icon: new Icon(Icons.sort, color: Colors.black87),
+                  icon: new Icon(Icons.sort, color: Colors.white),
                   onPressed: () => {Scaffold.of(context).openDrawer()},
                 ),
                 bottom:  HomeSearchBarWidget(

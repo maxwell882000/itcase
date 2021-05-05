@@ -44,7 +44,7 @@ class BecomeContractorController extends GetxController {
           .saveProfessional(jsonEncode({'categories': submit}));
 
       await Get.showSnackbar(Ui.SuccessSnackBar(
-          message: result['message'] + " wipe to go next".tr));
+          message: result['message']));
       final currentUser = Get.find<AuthService>().user;
       final accountSee = Get.find<AccountController>().accountSee;
 

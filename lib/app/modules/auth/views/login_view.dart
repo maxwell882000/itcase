@@ -182,7 +182,6 @@ class LoginView extends GetView<AuthController> {
 
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
-
                         children: [
                           TextButton(
                             onPressed: () {
@@ -197,7 +196,7 @@ class LoginView extends GetView<AuthController> {
                             child: Text("Change language".tr, style: Get.textTheme.button,),
                           ),
                         ],
-                      ).paddingSymmetric(vertical: 20),
+                      ).paddingSymmetric(vertical: 20, horizontal: 20),
                     ],
                   ),
                 ),

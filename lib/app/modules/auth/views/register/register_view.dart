@@ -25,16 +25,16 @@ class RegisterView extends GetView<RegisterController> {
             context: context,
             builder: (context) {
               return AlertDialog(
-                content: Text('Are you sure you want to exit?'),
+                content: Text('Are you sure you want to exit?'.tr),
                 actions: <Widget>[
                   FlatButton(
-                    child: Text('No'),
+                    child: Text('No'.tr),
                     onPressed: () {
                       Navigator.of(context).pop(false);
                     },
                   ),
                   FlatButton(
-                    child: Text('Yes, exit'),
+                    child: Text('Yes, exit'.tr),
                     onPressed: () {
                       Navigator.of(context).pop(true);
                     },
@@ -258,7 +258,7 @@ class RegisterView extends GetView<RegisterController> {
                           ),
                         ),
                       SizedBox(
-                        width: Get.width*0.3,
+                        width: Get.width*0.2,
                       ),
                         TextButton(
                           onPressed: () {

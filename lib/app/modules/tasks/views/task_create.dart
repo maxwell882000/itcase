@@ -66,7 +66,7 @@ class TaskCreate extends GetView<CreateTasksController> {
   }
 
   Widget getCategories(
-      String text, List<String> input, Function onChanged, final controller) {
+      String text, List<String> input, Function onChanged, final controller, context) {
     return Expanded(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -130,6 +130,7 @@ class TaskCreate extends GetView<CreateTasksController> {
             value: controller.value.isEmpty ? null : controller.value,
             onChanged: (v) {
               // controller.te.value = v;
+              FocusScope.of(Get.context).unfocus();
               onChanged(v);
             },
             items: input.map((String value) {
@@ -271,13 +272,14 @@ class TaskCreate extends GetView<CreateTasksController> {
                                         ? "Should be more than 25 letters".tr
                                         : null,
                                 style: Get.textTheme.bodyText2,
+                                keyboardType : TextInputType.text,
                                 initialValue:
                                     controller.tenders.value.description,
                                 decoration: Ui.getInputDecoration(
                                   hintText: "Write description".tr,
                                   iconData: Icons.description,
                                 ),
-                                keyboardType: TextInputType.multiline,
+
                               ),
                             ],
                           ),
@@ -311,6 +313,7 @@ class TaskCreate extends GetView<CreateTasksController> {
                                         ? "Should be more than 25 letters".tr
                                         : null,
                                 style: Get.textTheme.bodyText2,
+                                keyboardType : TextInputType.text,
                                 initialValue:
                                     controller.tenders.value.additional_info,
                                 decoration: Ui.getInputDecoration(
@@ -318,7 +321,6 @@ class TaskCreate extends GetView<CreateTasksController> {
                                       "Please enter additional information".tr,
                                   iconData: Icons.info,
                                 ),
-                                keyboardType: TextInputType.multiline,
                               ),
                             ],
                           ),
@@ -351,6 +353,7 @@ class TaskCreate extends GetView<CreateTasksController> {
                                         ? "Should be more than 25 letters".tr
                                         : null,
                                 style: Get.textTheme.bodyText2,
+                                keyboardType : TextInputType.text,
                                 initialValue:
                                     controller.tenders.value.other_info,
                                 decoration: Ui.getInputDecoration(
@@ -358,7 +361,6 @@ class TaskCreate extends GetView<CreateTasksController> {
                                       "Please enter ways of communication".tr,
                                   iconData: Icons.info,
                                 ),
-                                keyboardType: TextInputType.multiline,
                               ),
                             ],
                           ),
@@ -393,7 +395,7 @@ class TaskCreate extends GetView<CreateTasksController> {
                         Row(children: [
                           Expanded(
                             child: Text(
-                              "Task can see only special people, after finish only you and he"
+                              "Work, which can be accomplished from distance".tr
                                   .tr,
                               style: TextStyle(
                                   color: Colors.black38,
@@ -457,12 +459,12 @@ class TaskCreate extends GetView<CreateTasksController> {
                               .map<String>((e) => e[0][0])
                               .toList(),
                           storeCategories,
-                          controller.categoriesDropDown.categories),
+                          controller.categoriesDropDown.categories,context),
                       getCategories(
                           "SubCategories".tr,
                           controller.categoriesDropDown.subCategoriesList,
                           storeSubCategories,
-                          controller.categoriesDropDown.subCategories)
+                          controller.categoriesDropDown.subCategories,context)
                     ],
                   )),
                   box(

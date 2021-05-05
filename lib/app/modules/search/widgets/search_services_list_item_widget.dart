@@ -23,7 +23,9 @@ class SearchServicesListItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.toNamed(Routes.E_SERVICE, arguments: _service);
+        if (_service.pivot.priceFrom != null) {
+          Get.toNamed(Routes.E_SERVICE, arguments: _service);
+        }
       },
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),

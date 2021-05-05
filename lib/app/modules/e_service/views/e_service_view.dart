@@ -293,9 +293,9 @@ class EServiceView extends GetView<EServiceController> {
                 ),
               ),
               Ui.getPrice(
-                _eService.pivot.priceFrom.toDouble(),
+           _eService.pivot == null ?0.0 :  _eService?.pivot?.priceFrom?.toDouble(),
                 style: Get.textTheme.headline3.merge(TextStyle(color: Get.theme.accentColor, fontSize: 12)),
-                unit: _eService.pivot.priceFrom != 'fixed' ? "/h".tr : null,
+                unit: _eService?.pivot?.priceFrom != 'fixed' ? "/h".tr : null,
               ),
             ],
           ),
