@@ -165,25 +165,25 @@ class ServicesListItemWidget extends StatelessWidget {
                       ),
                     ],
                   ),
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.place_outlined,
-                        size: 18,
-                        color: Get.theme.focusColor,
-                      ),
-                      SizedBox(width: 5),
-                      Flexible(
-                        child: Text(
-                          "PRICE".tr,
-                          maxLines: 1,
-                          overflow: TextOverflow.fade,
-                          softWrap: false,
-                          style: Get.textTheme.bodyText1,
-                        ),
-                      ),
-                    ],
-                  ),
+                  // Row(
+                  //   children: [
+                  //     Icon(
+                  //       Icons.place_outlined,
+                  //       size: 18,
+                  //       color: Get.theme.focusColor,
+                  //     ),
+                  //     SizedBox(width: 5),
+                  //     // Flexible(
+                  //     //   child: Text(
+                  //     //     "PRICE".tr,
+                  //     //     maxLines: 1,
+                  //     //     overflow: TextOverflow.fade,
+                  //     //     softWrap: false,
+                  //     //     style: Get.textTheme.bodyText1,
+                  //     //   ),
+                  //     // ),
+                  //   ],
+                  // ),
                   Divider(height: 8, thickness: 1),
                   Wrap(
                     spacing: 5,
