@@ -9,7 +9,7 @@ enum CategoriesLayout { GRID, LIST }
 class CategoriesController extends GetxController {
   CategoryRepository _categoryRepository;
 
-  final categories = [].obs;
+  final categories = <Category>[].obs;
   final layout = CategoriesLayout.LIST.obs;
 
   CategoriesController() {

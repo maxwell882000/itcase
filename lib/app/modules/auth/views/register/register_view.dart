@@ -220,7 +220,7 @@ class RegisterView extends GetView<RegisterController> {
                           style: Get.textTheme.headline6
                               .merge(TextStyle(color: Get.theme.primaryColor)),
                         ),
-                      ).paddingOnly(top: 15, bottom: 5, right: 20, left: 20),
+                      ).paddingOnly(top: 15, bottom: 20, right: 20, left: 20),
                     ),
                     TextButton(
                       onPressed: () {

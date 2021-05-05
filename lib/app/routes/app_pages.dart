@@ -11,6 +11,7 @@ import 'package:itcase/app/modules/auth/controllers/auth_controller.dart';
 import 'package:itcase/app/modules/auth/views/register/become_consumer.dart';
 import 'package:itcase/app/modules/auth/views/register/after_registartion.dart';
 import 'package:itcase/app/modules/auth/views/register/fill_account.dart';
+import 'package:itcase/app/modules/category/bindings/category_binding_single.dart';
 import 'package:itcase/app/modules/messages/bindings/message_bindings.dart';
 import 'package:itcase/app/modules/messages/views/messages_view.dart';
 import 'package:itcase/app/modules/profile/bindings/change_password_bindings.dart';
@@ -75,7 +76,7 @@ import 'package:itcase/common/dynamic_link.dart';
 part 'app_routes.dart';
 
 class AppPages {
-  static const INITIAL = Routes.DYNAMIC_URL;
+  static const INITIAL = Routes.LOGIN;
 
   static final routes = [
     GetPage(name: Routes.DYNAMIC_URL, page: () => DynamicLinks()),
@@ -147,7 +148,7 @@ class AppPages {
     GetPage(
         name: Routes.CATEGORY,
         page: () => CategoryView(),
-        binding: CategoryBinding()),
+        binding: CategoryBindingSingle()),
     GetPage(
         name: Routes.CATEGORIES,
         page: () => CategoriesView(),

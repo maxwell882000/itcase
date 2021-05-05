@@ -260,7 +260,10 @@ class FillData extends StatelessWidget {
                       Expanded(
                         child: RadioListTile(
                           title: Text("Individual".tr,
-                              style: TextStyle(color: Colors.black)),
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize:12
+                              )),
                           value: "individual",
                           groupValue: controller.type.value,
                           onChanged: (val) {
@@ -273,7 +276,8 @@ class FillData extends StatelessWidget {
                         child: RadioListTile(
                           title: Text(
                             "Legal Entity".tr,
-                            style: TextStyle(color: Colors.black),
+                            style: TextStyle(color: Colors.black,
+                                fontSize: 12),
                           ),
                           value: "legal_entity",
                           groupValue: controller.type.value,
@@ -300,7 +304,8 @@ class FillData extends StatelessWidget {
                                   child: RadioListTile(
                                     title: Text(
                                       "Male".tr,
-                                      style: TextStyle(color: Colors.black),
+                                      style: TextStyle(color: Colors.black,
+                                          fontSize: 12),
                                     ),
                                     value: "male",
                                     groupValue: controller.gender.value,
@@ -314,7 +319,8 @@ class FillData extends StatelessWidget {
                                   child: RadioListTile(
                                     title: Text(
                                       "Female".tr,
-                                      style: TextStyle(color: Colors.black),
+                                      style: TextStyle(color: Colors.black,
+                                          fontSize:12),
                                     ),
                                     value: "female",
                                     groupValue: controller.gender.value,
@@ -337,7 +343,7 @@ class FillData extends StatelessWidget {
                               firstDate: DateTime(1960),
                               lastDate: DateTime.now(),
                               dateFormat: "dd-MMMM-yyyy",
-                              locale: DateTimePickerLocale.en_us,
+                              locale: DateTimePickerLocale.ru,
                               looping: true,
                             );
                             if (datePicked != null) {

@@ -10,7 +10,7 @@ import '../../../repositories/notification_repository.dart';
 class NotificationsController extends GetxController {
   final notifications = <NotificationBase>[].obs;
   NotificationRepository _notificationRepository;
-
+  final loading = true.obs;
   NotificationsController() {
     _notificationRepository = new NotificationRepository();
   }
@@ -31,7 +31,9 @@ class NotificationsController extends GetxController {
 
   Future getNotifications() async {
     try {
+      loading.value = true;
       notifications.value = await _notificationRepository.getNotificationAll();
+      loading.value = false;
       notificationMarkAsRead();
     } catch (e) {
       Get.showSnackbar(Ui.ErrorSnackBar(message: e.toString()));

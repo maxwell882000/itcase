@@ -40,7 +40,7 @@ class CategoryView extends GetView<CategoryController> {
               leading: new IconButton(
                 icon: new Icon(Icons.arrow_back_ios,
                     color: Get.theme.primaryColor),
-                onPressed: () => {Get.back()},
+                onPressed: () => {controller.onClose(), Get.back()},
               ),
               flexibleSpace: FlexibleSpaceBar(
                   collapseMode: CollapseMode.parallax,
@@ -53,8 +53,8 @@ class CategoryView extends GetView<CategoryController> {
                         decoration: new BoxDecoration(
                           gradient: new LinearGradient(
                               colors: [
-                                Colors.amber.withOpacity(1),
-                                Colors.amber.withOpacity(0.2)
+                                controller.category.value.backGround.withOpacity(1),
+                                controller.category.value.backGround.withOpacity(0.2)
                               ],
                               begin: AlignmentDirectional.topStart,
                               //const FractionalOffset(1, 0),
@@ -70,7 +70,7 @@ class CategoryView extends GetView<CategoryController> {
                                 .endsWith('.svg')
                             ? SvgPicture.network(
                                 controller.category.value.image,
-                                color: Colors.amber,
+                                color: controller.category.value.color,
                               )
                             : CachedNetworkImage(
                                 fit: BoxFit.cover,
@@ -81,9 +81,9 @@ class CategoryView extends GetView<CategoryController> {
                                 ),
                                 errorWidget: (context, url, error) =>
                                     Icon(Icons.error_outline),
-                              )),
+                              )
+                        ),
                       ),
-                      AddressWidget().paddingOnly(bottom: 75),
                     ],
                   )).marginOnly(bottom: 42),
             ),

@@ -75,7 +75,7 @@ class SettingsService extends GetxService {
         subtitle2: GoogleFonts.montserrat(fontSize: 17.0, fontWeight: FontWeight.w600, color: Ui.parseColor(setting.value.secondColor), height: 1.2),
         subtitle1: GoogleFonts.montserrat(fontSize: 15.0, fontWeight: FontWeight.w400, color: Ui.parseColor(setting.value.mainColor), height: 1.2),
         bodyText2: GoogleFonts.montserrat(fontSize: 15.0, fontWeight: FontWeight.w600, color: Ui.parseColor(setting.value.secondColor), height: 1.2),
-        bodyText1: GoogleFonts.montserrat(fontSize: 14.0, fontWeight: FontWeight.w400, color: Ui.parseColor(setting.value.secondColor), height: 1.2),
+        bodyText1: GoogleFonts.montserrat(fontSize: 12.0, fontWeight: FontWeight.w400, color: Ui.parseColor(setting.value.secondColor), height: 1.2),
         caption: GoogleFonts.montserrat(fontSize: 16.0, fontWeight: FontWeight.w300, color: Ui.parseColor(setting.value.accentColor), height: 1.2),
         button: GoogleFonts.montserrat(fontSize: 13.0, fontWeight: FontWeight.w300, color: Ui.parseColor(setting.value.link_color), height: 1.2),
       ),

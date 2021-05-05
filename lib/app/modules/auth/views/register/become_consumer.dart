@@ -48,7 +48,7 @@ class BecomeConsumer extends FillAccount {
                 tabs: [
                   Padding(
                     padding: const EdgeInsets.all(15.0),
-                    child: Text('Consumer'),
+                    child: Text('Consumer'.tr),
                   )
                 ],
                 views: [

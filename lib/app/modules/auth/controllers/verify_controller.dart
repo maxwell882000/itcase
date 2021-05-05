@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -24,7 +25,11 @@ class VerifyController extends GetxController {
   }
 
   make_payment() async {
-    var get_response = await API().getData('account/create?dynamicUrl=true');
+    String url = "account/create";
+    if (Platform.isAndroid) {
+      url = "$url?dynamicUrl=true";
+    }
+    var get_response = await API().getData(url);
     var body_1 = jsonDecode(get_response.body);
     var site = body_1['paymentUrl'];
     print("PAYMENT URL");

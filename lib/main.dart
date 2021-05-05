@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:itcase/app/global_widgets/platform_implementation/platfrom_material.dart';
 
 import 'app/routes/app_pages.dart';
@@ -18,7 +19,7 @@ void initServices() async {
   await Get.putAsync(() => GlobalService().init());
   await Get.putAsync(() => AuthService().init());
   await Get.putAsync(() => SettingsService().init());
-
+  await GetStorage.init();
 }
 
 void main() async {

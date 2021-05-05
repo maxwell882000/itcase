@@ -66,43 +66,44 @@ class ChatMessageItem extends GetView<ChatController> {
   }
 
   Widget myLayout({Widget child = const SizedBox()}) {
-    return new Flexible(
-      child: new Row(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: <Widget>[
-          Flexible(
-            child: new Container(
-              margin: const EdgeInsets.only(top: 5.0),
-              child: new Text(message.text),
-            ),
-          ),
-          Align(
-            heightFactor: 2,
-            child: SizedBox(
-              height: 5,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Obx(
-                    () => Text(
-                      !message.isSend.value
-                          ? ""
-                          : Format.parseDate(message.whenSended.value,
-                              Format.outputFormatMessages),
-                      textAlign: TextAlign.start,
-                      overflow: TextOverflow.visible,
-                      style: Get.textTheme.bodyText1
-                          .merge(TextStyle(fontSize: 10)),
-                    ),
-                  ),
-                ],
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        new Row(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Flexible(
+              child: new Container(
+
+                margin: const EdgeInsets.only(top: 5.0,bottom: 5.0),
+                child: new Text(message.text,
+                textAlign: TextAlign.left,),
               ),
             ),
+            child,
+          ],
+        ),
+        Container(
+          child: Align(
+            child: Obx(
+                  () => Text(
+                !message.isSend.value
+                    ? ""
+                    : Format.parseDate(
+                    message.whenSended.value, Format.outputFormatMessages),
+                textAlign: TextAlign.start,
+                overflow: TextOverflow.visible,
+                style: Get.textTheme.bodyText1.merge(TextStyle(fontSize: 10)),
+              ),
+            ),
+            widthFactor: 0.0,
+            heightFactor: 0.0,
           ),
-          child,
-        ],
-      ),
+        margin: EdgeInsets.only(left: 12),
+        ),
+      ],
     );
   }
 
@@ -118,29 +119,22 @@ class ChatMessageItem extends GetView<ChatController> {
                 bottomRight: Radius.circular(15))),
         padding: EdgeInsets.symmetric(vertical: 7, horizontal: 17),
         margin: EdgeInsets.symmetric(vertical: 5),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            myLayout(
-              child: Align(
-                heightFactor: 0.05,
-                child: Obx(
-                  () => !message.isSend.value
-                      ? Icon(Icons.refresh, size: 12)
-                      : !message.isRead.value
-                          ? Icon(Icons.check, size: 12)
-                          : SvgPicture.asset(
-                              "assets/icon/messages/double_check.svg",
-                              height: Get.height*0.015,
-                              width: Get.width*0.015,
-                              color: Get.theme.accentColor,
-                            ),
-                ),
-              ),
-            )
-          ],
+        child: myLayout(
+          child: Align(
+            heightFactor: 0.05,
+            child: Obx(
+              () => !message.isSend.value
+                  ? Icon(Icons.refresh, size: 12)
+                  : !message.isRead.value
+                      ? Icon(Icons.check, size: 12)
+                      : SvgPicture.asset(
+                          "assets/icon/messages/double_check.svg",
+                          height: Get.height * 0.01,
+                          width: Get.width * 0.01,
+                          color: Get.theme.accentColor,
+                        ),
+            ),
+          ),
         ),
       ),
     );

@@ -27,6 +27,7 @@ class TextFieldWidget extends StatelessWidget {
     this.textAlign,
     this.height,
     this.controller,
+    this.suffixText
   }) : super(key: key);
 
   final FormFieldSetter<String> onSaved;
@@ -44,7 +45,7 @@ class TextFieldWidget extends StatelessWidget {
   final bool obscureText;
   final bool isFirst;
   final bool isLast;
-
+  final String suffixText;
   final Widget suffixIcon;
 
   widget(){
@@ -62,6 +63,7 @@ class TextFieldWidget extends StatelessWidget {
         hintText: hintText ?? '',
         iconData: iconData,
         suffixIcon: suffixIcon,
+
       ),
     );
   }
@@ -92,7 +94,17 @@ class TextFieldWidget extends StatelessWidget {
             ).marginOnly(bottom: height ?? 0),
           ),
           SizedBox(height: height ?? 0),
-          widget
+          suffixText == null ? widget:
+          Row(
+            children: [
+              Expanded(child: widget),
+              Align(
+                alignment: Alignment.centerRight,
+                child: Text(suffixText,
+                  style: Get.textTheme.bodyText1,),
+              ),
+            ],
+          )
         ],
       ),
     );

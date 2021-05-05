@@ -110,48 +110,53 @@ class ProfileView extends FillAccount{
                         SizedBox(
                           height: 10,
                         ),
-                        Container(
-                          margin: EdgeInsets.symmetric(horizontal: 20),
-                          child: Row(
-                            children: [
-                              InkWell(
-                                onTap: () {},
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                                  child: CachedNetworkImage(
-                                    height: 80,
-                                    width: 80,
-                                    fit: BoxFit.cover,
-                                    imageUrl: "https://d1nhio0ox7pgb.cloudfront.net/_img/o_collection_png/green_dark_grey/512x512/plain/user.png",
-                                    placeholder: (context, url) => Image.asset(
-                                      'assets/img/loading.gif',
-                                      fit: BoxFit.cover,
-                                      width: double.infinity,
-                                      height: 100,
+                        Wrap(
+                          direction: Axis.horizontal,
+                          children: [
+                            Container(
+                              margin: EdgeInsets.symmetric(horizontal: 20),
+                              child: Row(
+                                children: [
+                                  InkWell(
+                                    onTap: () {},
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                                      child: CachedNetworkImage(
+                                        height: 80,
+                                        width: 80,
+                                        fit: BoxFit.cover,
+                                        imageUrl: "https://d1nhio0ox7pgb.cloudfront.net/_img/o_collection_png/green_dark_grey/512x512/plain/user.png",
+                                        placeholder: (context, url) => Image.asset(
+                                          'assets/img/loading.gif',
+                                          fit: BoxFit.cover,
+                                          width: double.infinity,
+                                          height: 100,
+                                        ),
+                                        errorWidget: (context, url, error) =>
+                                            Icon(Icons.error_outline),
+                                      ),
                                     ),
-                                    errorWidget: (context, url, error) =>
-                                        Icon(Icons.error_outline),
                                   ),
-                                ),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                  FlatButton(
+                                    onPressed: () {
+                                      upload_image();
+                                      // controller.saveProfileForm(_profileForm);
+                                    },
+                                    padding: EdgeInsets.symmetric(horizontal: 30, vertical: 12),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10)),
+                                    color: Get.theme.accentColor,
+                                    child: Text("Upload resume".tr,
+                                        style: Get.textTheme.bodyText2
+                                            .merge(TextStyle(color: Get.theme.primaryColor))),
+                                  ),
+                                ],
                               ),
-                              SizedBox(
-                                width: 20,
-                              ),
-                              FlatButton(
-                                onPressed: () {
-                                  upload_image();
-                                  // controller.saveProfileForm(_profileForm);
-                                },
-                                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 12),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10)),
-                                color: Get.theme.accentColor,
-                                child: Text("Upload resume".tr,
-                                    style: Get.textTheme.bodyText2
-                                        .merge(TextStyle(color: Get.theme.primaryColor))),
-                              ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                         Text("Social Media".tr, style: Get.textTheme.headline3)
                             .paddingOnly(top: 25, bottom: 0, right: 22, left: 22),

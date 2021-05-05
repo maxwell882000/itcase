@@ -15,9 +15,23 @@ import '../widgets/account_link_widget.dart';
 
 class AccountView extends GetView<AccountController> {
   Widget text(String text) {
-    return Text(
-      text,
-      style: Get.textTheme.headline6,
+    return Container(
+      width: Get.width*0.9,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Flexible(
+            child: Text(
+              text,
+              style: Get.textTheme.bodyText1.merge(TextStyle(
+                fontSize: 14
+
+              )),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -52,9 +66,9 @@ class AccountView extends GetView<AccountController> {
     if (currentUser.value.emailConfirmed != null && currentUser.value.emailConfirmed) {
       widget.add(row(Icons.email, "Email".tr));
     }
-    if (currentUser.value.passportConfirmed != null && currentUser.value.passportConfirmed) {
-      widget.add(row(Icons.description, "Passport".tr));
-    }
+    // if (currentUser.value.passportConfirmed != null && currentUser.value.passportConfirmed) {
+    //   widget.add(row(Icons.description, "Passport".tr));
+    // }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: widget,

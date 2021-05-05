@@ -32,7 +32,8 @@ class CategoriesCarouselWidget extends GetWidget<HomeController> {
                   padding: EdgeInsets.symmetric(vertical: 10),
                   decoration: new BoxDecoration(
                     gradient: new LinearGradient(
-                        colors: [_category.color.withOpacity(1), _category.color.withOpacity(0.1)],
+                        colors: [ _category.backGround.withOpacity(1),
+                          _category.backGround.withOpacity(0.2)],
                         begin: AlignmentDirectional.topStart, //const FractionalOffset(1, 0),
                         end: AlignmentDirectional.bottomEnd,
                         stops: [0.1, 0.9],
@@ -43,7 +44,7 @@ class CategoriesCarouselWidget extends GetWidget<HomeController> {
                     alignment: AlignmentDirectional.topStart,
                     children: [
                       Padding(
-                        padding: EdgeInsetsDirectional.only(start: 30, top: 30),
+                        padding: EdgeInsetsDirectional.only(start: 30, top: 50),
                         child: ClipRRect(
                           borderRadius: BorderRadius.all(Radius.circular(10)),
                           child: (_category.image.toLowerCase().endsWith('.svg')

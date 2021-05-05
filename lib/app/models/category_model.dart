@@ -32,6 +32,7 @@ class Category {
   String title, description;
   List<SubCategory> categories;
   Color color;
+  Color backGround;
   int id;
   Pivot pivot;
   final choose = false.obs;
@@ -87,7 +88,8 @@ class Category {
 
 
     position = json['position'].toString();
-    color = Colors.orangeAccent;
+    color = Colors.white;
+    backGround = Colors.orangeAccent;
     lft = json['lft'].toString();
     rgt = json['rgt'].toString();
     parent_id = json['parent_id'].toString();

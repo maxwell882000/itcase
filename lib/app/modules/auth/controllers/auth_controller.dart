@@ -15,7 +15,6 @@ import 'package:itcase/app/routes/app_pages.dart';
 import 'package:itcase/app/services/auth_service.dart';
 import 'package:itcase/common/ui.dart';
 
-
 class AuthController extends GetxController {
   String confirm;
   GetStorage _box;
@@ -25,8 +24,6 @@ class AuthController extends GetxController {
   final tempKey = GlobalKey<FormState>().obs;
   final Map<String, dynamic> data = Map<String, dynamic>();
 
-
-
   final UserRepository _userRepository = new UserRepository();
   var user = new User().obs;
 
@@ -34,51 +31,67 @@ class AuthController extends GetxController {
 
   final hidePassword = true.obs;
 
-  final loading = false.obs;
+  final loading = true.obs;
 
   @override
-  void onInit() {
+  void onInit() async {
     user = Get.find<AuthService>().user;
+    await startingPoint();
+    Future.delayed(Duration(seconds: 2)).then((value) => loading.value = false);
 
     super.onInit();
   }
 
+  Future startingPoint() async {
+    print("SOMETHING");
+    if (currentUser.value.auth != null && currentUser.value.auth == true) {
+      print("AUTHORIZED");
+      await getAccount();
+      Get.offAllNamed(Routes.ROOT);
+    }
+  }
+
+  Future getAccount() async {
+    Map body = await _userRepository.getAccount();
+    body['user']['password'] = user.value.password;
+    currentUser.value.fromJson(body['user']);
+    currentUser.value.password = user.value.password;
+  }
+
   validate() async {
     try {
-      Map body = await _userRepository.getAccount();
-      body['user']['password'] = user.value.password;
-      print(body);
-      currentUser.value.fromJson(body['user']);
-      currentUser.value.password = user.value.password;
+      await getAccount();
+      final prefs = Get.find<AuthService>().prefs;
+      prefs.setString('token', currentUser.value.token);
       if (currentUser.value.phoneConfirmed) {
         if (currentUser.value.account_paid == null) {
           Future.delayed(Duration(seconds: 5))
               .then((value) => VerifyController().make_payment());
           Get.showSnackbar(Ui.ErrorSnackBar(
               message:
-                  "You did not pay for your account. Please make payment at first. Web site for making payment will open in 5 seconds".tr
-                      .tr)
-          );
+                  "You did not pay for your account. Please make payment at first. Web site for making payment will open in 5 seconds"
+                      .tr
+                      .tr));
           return false;
         }
       } else {
-          _userRepository.resendPhoneCode().then((value) {
-            if(value){
-
-              Get.toNamed(Routes.PHONE_VERIFICATION);
-            }
-          });
-         Get.showSnackbar(Ui.ErrorSnackBar(
+        _userRepository.resendPhoneCode().then((value) {
+          if (value) {
+            Get.toNamed(Routes.PHONE_VERIFICATION);
+          }
+        });
+        Get.showSnackbar(Ui.ErrorSnackBar(
             message:
-            "You are required to confirm your phone number. Window for confirmation of phone will open in 3 seconds".tr));
-         return false;
+                "You are required to confirm your phone number. Window for confirmation of phone will open in 3 seconds"
+                    .tr));
+        return false;
       }
     } catch (e) {
       if (e == 401) {
-
         await Get.showSnackbar(Ui.ErrorSnackBar(
             message:
-                "You are required at first fill your data. Window for filling data will open in 3 seconds".tr
+                "You are required at first fill your data. Window for filling data will open in 3 seconds"
+                    .tr
                     .tr));
         currentUser.value.phone_number = "";
         Get.toNamed(Routes.BECOME_CONSUMER, arguments: currentUser.value);
@@ -103,12 +116,17 @@ class AuthController extends GetxController {
         print(response.statusCode);
         if (response.statusCode == 200) {
           var body = jsonDecode(response.body);
-          currentUser.value.auth = true;
-          currentUser.value.token = body['token'];
-          print(currentUser.value.token);
-          currentUser.value.password = user.value.password;
+          // OLD METHOD
+          // currentUser.value.auth = true;
+          // currentUser.value.token = body['token'];
+          // currentUser.value.password = user.value.password;
+          currentUser.update((val) {
+            val.auth = true;
+            val.token = body['token'];
+            val.password = user.value.password;
+          });
+
           if (await validate()) {
-            _box.write('current_user', jsonEncode(user));
             Get.offAllNamed(Routes.ROOT);
           }
         } else {
@@ -118,20 +136,15 @@ class AuthController extends GetxController {
         }
       } else {
         Get.showSnackbar(Ui.ErrorSnackBar(
-            message: "There are errors in some fields please correct them!"
-                .tr));
+            message:
+                "There are errors in some fields please correct them!".tr));
       }
-    }
-    catch(e){
-      Get.showSnackbar(Ui.ErrorSnackBar(
-          message: "Try again please"
-              .tr));
-    }
-    finally{
+    } catch (e) {
+      Get.showSnackbar(Ui.ErrorSnackBar(message: "Try again please".tr));
+    } finally {
       loading.value = false;
       update();
     }
-
   }
 
   modify_passwords() {}

@@ -75,11 +75,11 @@ class TasksListWidget extends StatelessWidget {
                         Icon(Icons.error_outline),
                   ),
                 ),
-                Text(!_task.published && _task.opened.value
+                Text(!_task.published && _task.opened.value && (_task.delete_reason == null || _task.delete_reason.isEmpty)
                     ? "Moderating".tr
-                    : _task.opened.value
-                        ? "Opened".tr
-                        : "Closed".tr),
+                    : _task.opened.value && (_task.delete_reason == null || _task.delete_reason.isEmpty)
+                    ? "Opened".tr
+                        : _task.delete_reason == null || _task.delete_reason.isEmpty ? "Closed".tr : "Deleted".tr),
               ],
             ),
             SizedBox(width: 20),

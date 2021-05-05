@@ -42,10 +42,13 @@ class NotificationsView extends GetView<NotificationsController> {
   Widget notificationsList() {
     return Obx(() {
       if (!controller.notifications.isNotEmpty) {
+        if (controller.loading.value)
         return CircularLoadingWidget(
           height: 300,
           onCompleteText: "Notification List is Empty".tr,
         );
+        else
+          return SizedBox();
       } else {
         var _notifications = controller.notifications;
         return ListView.separated(

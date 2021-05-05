@@ -208,6 +208,7 @@ class User extends Model {
     data['image'] = this.image_gotten;
     data['city'] = this.city;
     data['language'] = this.language;
+    data['token'] = this.token;
     return data;
   }
 
@@ -283,7 +284,7 @@ class TempUser{
   Map<String, dynamic> toJson({modify = false}) {
     final Map<String, dynamic> data = Map<String, dynamic>();
     data['user_role'] =this.user_role;
-
+    String always  =  this.user_role + "_";
     String additional = modify ? "":this.user_role + "_";
 
     List names = name.split(" ");
@@ -297,9 +298,9 @@ class TempUser{
     if (gender != null) data['gender'] = gender;
 
     data['${additional}about_myself'] = about_myself;
-    data['${additional}type'] = type;
+    data['${always}type'] = type;
 
-    if (birthday != null) data['${user_role}_birthday_date'] = birthday;
+    if (birthday != null) data['${additional}birthday_date'] = birthday;
     data['im'] = image?.path;
     data['agree_personal_data_processing'] = agree_personal_data;
 

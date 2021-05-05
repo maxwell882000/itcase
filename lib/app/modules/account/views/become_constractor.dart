@@ -16,58 +16,63 @@ class BecomeConstructor extends GetView<BecomeContractorController> {
   TextEditingController _textPricePer = new TextEditingController();
 
   storeCategories(String text) {
-      controller.preLastSub.value = 0;
-      controller.categoriesDropDown.id.clear();
-      controller.categoriesDropDown.subCategoriesList.clear();
-      controller.categoriesDropDown.categories.value = text;
-      controller.categoriesDropDown.categoriesList
-          .where((element) => element[0][0] == text)
-          .forEach((e) {
-        e[1].forEach((e) {
-          controller.categoriesDropDown.id.add(e[1]);
-          controller.categoriesDropDown.subCategoriesList.add(e[0]);
-        });
+    controller.preLastSub.value = 0;
+    controller.categoriesDropDown.id.clear();
+    controller.categoriesDropDown.subCategoriesList.clear();
+    controller.categoriesDropDown.categories.value = text;
+    controller.categoriesDropDown.categoriesList
+        .where((element) => element[0][0] == text)
+        .forEach((e) {
+      e[1].forEach((e) {
+        controller.categoriesDropDown.id.add(e[1]);
+        controller.categoriesDropDown.subCategoriesList.add(e[0]);
       });
-      controller.categoriesDropDown.subCategories.value = "";
+    });
+    controller.categoriesDropDown.subCategories.value = "";
   }
 
-  void storeCategory(){
-    if (controller.preLastCat.value != 0){
-      controller.category.where((element) => element[0] == controller.preLastCat).forEach((element) {
+  void storeCategory() {
+    if (controller.preLastCat.value != 0) {
+      controller.category
+          .where((element) => element[0] == controller.preLastCat)
+          .forEach((element) {
         element[1] = controller.submit;
       });
       controller.preLastCat.value = 0;
     }
   }
+
   void storeElements({index = 0}) {
     print(controller.submit);
-    if ( controller.current.length > 4){
-      return  error(message: "You cannot choose more than four category".tr);
+    if (controller.current.length > 4) {
+      return error(message: "You cannot choose more than four category".tr);
     }
     if (controller.preLastSub.value != 0 && checkValidateForm()) {
       controller.current.add(controller.preLastSub.value);
-      Map body = controller.submit.firstWhere((element) => element['id'] == controller.preLastSub.value, orElse: (){
-        controller.submit.add({'id':controller.preLastSub.value});
+      Map body = controller.submit
+          .firstWhere((element) => element['id'] == controller.preLastSub.value,
+              orElse: () {
+        controller.submit.add({'id': controller.preLastSub.value});
         return controller.submit.last;
       });
-      body['price_to'] =  _textPriceTo.text;
-      body['price_from'] =  _textPriceFrom.text;
-      body['price_per_hour'] =  _textPricePer.text;
-     controller.isChosen.value = true;
-     success();
-    }
-    else{
+      body['price_to'] = _textPriceTo.text;
+      body['price_from'] = _textPriceFrom.text;
+      body['price_per_hour'] = _textPricePer.text;
+      controller.isChosen.value = true;
+      success();
+    } else {
       error();
     }
   }
-  success(){
-    Get.showSnackbar(Ui.SuccessSnackBar(
-        message: "You added category".tr));
+
+  success() {
+    Get.showSnackbar(Ui.SuccessSnackBar(message: "You added category".tr));
   }
-  remove(){
-    Get.showSnackbar(Ui.SuccessSnackBar(
-        message: "You removed category".tr));
+
+  remove() {
+    Get.showSnackbar(Ui.SuccessSnackBar(message: "You removed category".tr));
   }
+
   void clean() {
     _textPricePer.text = "";
     _textPriceFrom.text = "";
@@ -82,21 +87,23 @@ class BecomeConstructor extends GetView<BecomeContractorController> {
   }
 
   error({String message = ""}) {
-    if (message.isEmpty){
+    if (message.isEmpty) {
       message = "Please fill correctly all fields or remove your choice".tr;
     }
-    Get.showSnackbar(Ui.ErrorSnackBar(
-        message:message ));
+    Get.showSnackbar(Ui.ErrorSnackBar(message: message));
   }
-  void fillData (Map body){
+
+  void fillData(Map body) {
     _textPricePer.text = body['price_per_hour'];
     _textPriceFrom.text = body['price_from'];
     _textPriceTo.text = body['price_to'];
   }
+
   clickedSubCategories(String text) {
     int index = getChosen(text);
     if (checkChosen(text)) {
-      Map chosen = controller.submit.firstWhere((element) => element['id'] == index);
+      Map chosen =
+          controller.submit.firstWhere((element) => element['id'] == index);
       fillData(chosen);
       controller.isChosen.value = true;
     } else {
@@ -107,23 +114,23 @@ class BecomeConstructor extends GetView<BecomeContractorController> {
     controller.categoriesDropDown.subCategories.value = text;
   }
 
-
   void removeElements() {
-        controller.current.remove(controller.preLastSub.value);
-        controller.submit.removeWhere((element) => element['id'] == controller.preLastSub.value);
-        clean();
-        controller.preLastSub.value = 0;
-        remove();
+    controller.current.remove(controller.preLastSub.value);
+    controller.submit
+        .removeWhere((element) => element['id'] == controller.preLastSub.value);
+    clean();
+    controller.preLastSub.value = 0;
+    remove();
   }
-
-
 
   bool regExpressionNumber(String text) {
     return text.isNotEmpty && new RegExp(r'^\d*$').hasMatch(text);
   }
-  bool regTextPricePer(String text){
+
+  bool regTextPricePer(String text) {
     return regExpressionNumber(text) && text.length < 9;
   }
+
   bool checkValidateForm() {
     return regTextPricePer(_textPricePer.text) &&
         regExpressionNumber(_textPriceTo.text) &&
@@ -151,13 +158,13 @@ class BecomeConstructor extends GetView<BecomeContractorController> {
         children: [
           Text(
             text,
-            style: Get.textTheme.bodyText1,
           ),
           DropdownButton<String>(
             style: Get.textTheme.bodyText2,
             icon: Icon(Icons.arrow_drop_down),
             isExpanded: true,
-            hint: Text(controller.value),
+            hint: Text(controller.value,
+                style: Get.textTheme.bodyText1),
             onChanged: (v) {
               // controller.te.value = v;
               onChanged(v);
@@ -169,7 +176,9 @@ class BecomeConstructor extends GetView<BecomeContractorController> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Flexible(child: Text(value)),
+                    Flexible(child: Text(
+                      value,
+                    style: Get.textTheme.bodyText1)),
                     Visibility(
                       visible: choosen,
                       child: Icon(
@@ -225,7 +234,8 @@ class BecomeConstructor extends GetView<BecomeContractorController> {
                   child: Column(
                     children: [
                       Container(
-                        margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        margin:
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                         child: Row(
                           children: [
                             getCategories(
@@ -246,108 +256,127 @@ class BecomeConstructor extends GetView<BecomeContractorController> {
                           ],
                         ),
                       ),
-                      Visibility(
-                        visible: controller.preLastSub.value != 0,
-                        child: Column(
-                          children: [
-                            Text("Cost of work".tr),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: TextFieldWidget(
-                                    controller: _textPriceFrom,
-                                    labelText: "Price from".tr,
-                                    hintText: "50 000".tr,
-                                    iconData: Icons.monetization_on,
-                                    keyboardType: TextInputType.number,
-                                    // onSaved: (val) => controller.priceFrom.value = val,
-                                    validator: (val) =>
-                                    val.isNotEmpty ? null : "Fill the field".tr,
-                                    // initialValue: controller.user.value.phone_number,
-                                    // onSaved: (val) => controller.user.value.phone_number = val,
-                                  ),
-                                ),
-                                Expanded(
-                                  child: TextFieldWidget(
-                                    controller: _textPriceTo,
-                                    labelText: "Price to".tr,
-                                    iconData: Icons.monetization_on_outlined,
-                                    hintText: "100 000".tr,
-                                    keyboardType: TextInputType.number,
-                                    // onSaved: (val) => controller.priceTo.value = val,
-                                    validator: (val) =>
-                                    val.isNotEmpty ? null : "Fill the field".tr,
-                                    // initialValue: controller.user.value.email,
-                                    // iconData: Icons.alternate_email,
-                                    // onSaved: (val) => controller.user.value.email = val,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            TextFieldWidget(
-                              controller: _textPricePer,
-                              labelText: "Price per hour".tr,
-                              hintText: "50 000".tr,
-                              iconData: Icons.monetization_on,
-                              keyboardType: TextInputType.number,
-                              // onSaved: (val) => controller.priceFrom.value = val,
-                              validator: (val) => val.isNotEmpty ? null : "Fill the field".tr,
-                              // initialValue: controller.user.value.phone_number,
-                              // onSaved: (val) => controller.user.value.phone_number = val,
-                            ),
-                            Stack(
-                              children: [
-                                Visibility(
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      BlockButtonWidget(
-                                        onPressed: () async {
-                                          removeElements();
-                                        },
-                                        color: Get.theme.accentColor,
-                                        text: Text(
-                                          "Remove".tr,
-                                          style: Get.textTheme.headline6
-                                              .merge(TextStyle(color: Get.theme.primaryColor)),
-                                        ),
-                                      ).paddingOnly(top: 15, bottom: 5, right: 20, left: 20),
-                                      BlockButtonWidget(
-                                        onPressed: () async {
-                                          storeElements();
-                                        },
-                                        color: Get.theme.accentColor,
-                                        text: Text(
-                                          "Change".tr,
-                                          style: Get.textTheme.headline6
-                                              .merge(TextStyle(color: Get.theme.primaryColor)),
-                                        ),
-                                      ).paddingOnly(top: 15, bottom: 5, right: 20, left: 20),
-                                    ],
-                                  ),
-                                  visible: controller.isChosen.value,
-                                ),
-                                Visibility(
-                                  visible: !controller.isChosen.value,
-                                  child: BlockButtonWidget(
-                                    onPressed: () async {
-                                      storeElements();
-                                    },
-                                    color: Get.theme.accentColor,
-                                    text: Text(
-                                      "Add To Category".tr,
-                                      style: Get.textTheme.headline6
-                                          .merge(TextStyle(color: Get.theme.primaryColor)),
+                      Container(
+                        margin: EdgeInsets.only(top: Get.height*0.04),
+                        child: Visibility(
+                          visible: controller.preLastSub.value != 0,
+                          child: Column(
+                            children: [
+                              Text("Cost of work".tr),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: TextFieldWidget(
+                                      controller: _textPriceFrom,
+                                      labelText: "Price from".tr,
+                                      hintText: "50 000".tr,
+                                      keyboardType: TextInputType.number,
+                                      suffixText: "UZS",
+                                      // onSaved: (val) => controller.priceFrom.value = val,
+                                      validator: (val) => val.isNotEmpty
+                                          ? null
+                                          : "Fill the field".tr,
+                                      // initialValue: controller.user.value.phone_number,
+                                      // onSaved: (val) => controller.user.value.phone_number = val,
                                     ),
-                                  ).paddingOnly(top: 15, bottom: 5, right: 20, left: 20),
-                                ),
-                          ],
-                        ),
-
-                          ],
+                                  ),
+                                  Expanded(
+                                    child: TextFieldWidget(
+                                      controller: _textPriceTo,
+                                      labelText: "Price to".tr,
+                                      hintText: "100 000".tr,
+                                      suffixText: "UZS",
+                                      keyboardType: TextInputType.number,
+                                      // onSaved: (val) => controller.priceTo.value = val,
+                                      validator: (val) => val.isNotEmpty
+                                          ? null
+                                          : "Fill the field".tr,
+                                      // initialValue: controller.user.value.email,
+                                      // iconData: Icons.alternate_email,
+                                      // onSaved: (val) => controller.user.value.email = val,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              TextFieldWidget(
+                                controller: _textPricePer,
+                                labelText: "Price per hour".tr,
+                                hintText: "50 000".tr,
+                                suffixText: "UZS",
+                                keyboardType: TextInputType.number,
+                                // onSaved: (val) => controller.priceFrom.value = val,
+                                validator: (val) =>
+                                    val.isNotEmpty ? null : "Fill the field".tr,
+                                // initialValue: controller.user.value.phone_number,
+                                // onSaved: (val) => controller.user.value.phone_number = val,
+                              ),
+                              Stack(
+                                children: [
+                                  Visibility(
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        BlockButtonWidget(
+                                          onPressed: () async {
+                                            storeElements();
+                                          },
+                                          color: Get.theme.accentColor,
+                                          text: Text(
+                                            "Change".tr,
+                                            style: Get.textTheme.headline6.merge(
+                                                TextStyle(
+                                                    color:
+                                                        Get.theme.primaryColor)),
+                                          ),
+                                        ).paddingOnly(
+                                            top: 15,
+                                            bottom: 5,
+                                            right: 20,
+                                            left: 20),
+                                        BlockButtonWidget(
+                                          onPressed: () async {
+                                            removeElements();
+                                          },
+                                          color: Get.theme.accentColor,
+                                          text: Text(
+                                            "Remove".tr,
+                                            style: Get.textTheme.headline6.merge(
+                                                TextStyle(
+                                                    color:
+                                                        Get.theme.primaryColor)),
+                                          ),
+                                        ).paddingOnly(
+                                            top: 15,
+                                            bottom: 5,
+                                            right: 20,
+                                            left: 20),
+                                      ],
+                                    ),
+                                    visible: controller.isChosen.value,
+                                  ),
+                                  Visibility(
+                                    visible: !controller.isChosen.value,
+                                    child: BlockButtonWidget(
+                                      onPressed: () async {
+                                        storeElements();
+                                      },
+                                      color: Get.theme.accentColor,
+                                      text: Text(
+                                        "Add".tr,
+                                        style: Get.textTheme.headline6.merge(
+                                            TextStyle(
+                                                color: Get.theme.primaryColor)),
+                                      ),
+                                    ).paddingOnly(
+                                        top: 15, bottom: 5, right: 20, left: 20),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-
                     ],
                   ),
                 ),
@@ -369,10 +398,10 @@ class BecomeConstructor extends GetView<BecomeContractorController> {
                           color: Get.theme.accentColor,
                           text: Text(
                             "Save".tr,
-                            style: Get.textTheme.headline6
-                                .merge(TextStyle(color: Get.theme.primaryColor)),
+                            style: Get.textTheme.headline6.merge(
+                                TextStyle(color: Get.theme.primaryColor)),
                           ),
-                        ).paddingOnly(top: 15, bottom: 5, right: 20, left: 20),
+                        ).paddingOnly(top: 15, bottom: 20, right: 20, left: 20),
                       ),
                     ],
                   ),

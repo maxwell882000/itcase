@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/address_model.dart';
 import '../models/user_model.dart';
@@ -11,35 +12,37 @@ class AuthService extends GetxService {
   final user = User().obs;
   final address = Address().obs;
   // final curUser;
-  GetStorage _box;
+  GetStorage box;
+  SharedPreferences prefs;
 
   UserRepository _usersRepo;
 
   AuthService() {
     _usersRepo = new UserRepository();
-    _box = new GetStorage();
+    box = new GetStorage();
     // curUser = ;
   }
 
   Future<AuthService> init() async {
-    // TODO Complete version
-    if (user.value.auth == null && _box.hasData('current_user')) {
-      user.value = User.fromJson(jsonDecode(await _box.read('current_user')));
-      user.value.auth = true;
+    prefs = await SharedPreferences.getInstance();
+    print("AUTH VALUE :::: ");
+    print(user.value.auth);
+    print(box.hasData('current_user'));
+    String token = prefs.getString('token') ?? "";
+    if ( token.isNotEmpty) {
+        user.update((val) {
+          val.auth = true;
+          val.token = token;
+        });
     } else {
-      user.value.auth = false;
+      user.update((val) {
+        val.auth = false;
+      });
     }
 
     // user.value = await _usersRepo.login();
     // user.value.auth = true;
 
-    address.listen((Address _address) {
-      _box.write('current_address', _address);
-    });
-
-    if (_box.hasData('current_address')) {
-      address.value = Address.fromJson(await _box.read('current_address'));
-    }
     return this;
   }
 

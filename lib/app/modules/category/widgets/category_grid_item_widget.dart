@@ -31,7 +31,8 @@ class CategoryGridItemWidget extends StatelessWidget {
               padding: EdgeInsets.symmetric(vertical: 10),
               decoration: new BoxDecoration(
                 gradient: new LinearGradient(
-                    colors: [category.color.withOpacity(1), category.color.withOpacity(0.1)],
+                    colors: [ category.backGround.withOpacity(1),
+                      category.backGround.withOpacity(0.2)],
                     begin: AlignmentDirectional.topStart, //const FractionalOffset(1, 0),
                     end: AlignmentDirectional.bottomEnd,
                     stops: [0.1, 0.9],
@@ -61,7 +62,7 @@ class CategoryGridItemWidget extends StatelessWidget {
                 children: <Widget>[
                   Text(
                     category.title ?? '',
-                    style: Theme.of(context).textTheme.bodyText2,
+                    style: Get.textTheme.bodyText2.merge(TextStyle(color: Get.theme.primaryColor)),
                     softWrap: false,
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,

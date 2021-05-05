@@ -36,7 +36,7 @@ class CategoryController extends GetxController {
   }
 
   @override
-  Future<void> onInit() async {
+  void onInit()  {
     category.value = Get.arguments as Category;
     selected.value = category.value.id;
     caregoryFilter.value.setChoices([category.value.id, "All".tr]);
@@ -46,18 +46,18 @@ class CategoryController extends GetxController {
           e.title,
         ]));
 
-    print("IS ACTIVTED");
     pagination.addingListener(controller: this);
-    await refreshEServices(showMessage: true);
+    refreshEServices(showMessage: true);
 
     super.onInit();
   }
 
+
   Future refreshEServices({bool showMessage}) async {
     await getEServicesOfCategory(refresh: showMessage);
     if (showMessage == true) {
-      Get.showSnackbar(Ui.SuccessSnackBar(
-          message: "List of contractors refreshed successfully".tr));
+      // Get.showSnackbar(Ui.SuccessSnackBar(
+      //     message: "List of contractors refreshed successfully".tr));
     }
   }
 

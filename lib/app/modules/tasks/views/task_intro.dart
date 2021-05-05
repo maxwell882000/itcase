@@ -22,7 +22,7 @@ class TaskIntro extends StatelessWidget {
           ? null
           : AppBar(
               title: Text(
-                "Select your choice".tr,
+                "Additional".tr,
                 style: context.textTheme.headline6,
               ),
               centerTitle: true,
@@ -37,7 +37,7 @@ class TaskIntro extends StatelessWidget {
       body: ListView(
         primary: true,
         children: [
-          Text("Profile details".tr, style: Get.textTheme.headline5)
+          Text("Choose action".tr, style: Get.textTheme.headline5)
               .paddingOnly(top: 25, bottom: 0, right: 22, left: 22),
           Text("Change the following details and save them".tr,
                   style: Get.textTheme.caption)

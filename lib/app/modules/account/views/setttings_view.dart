@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:itcase/app/models/setting_model.dart';
+import 'package:itcase/app/models/user_model.dart';
 import 'package:itcase/app/services/settings_service.dart';
 
 import '../../../../common/ui.dart';
@@ -89,18 +90,21 @@ class SettingsProfileView extends GetView<AccountController> {
                   decoration: Ui.getBoxDecoration(),
                   child: Column(
                     children: [
-                      AccountLinkWidget(
-                        icon: Icon(Icons.support_outlined,
-                            color: Get.theme.accentColor),
-                        text: Text("Help & FAQ".tr),
-                        onTap: (e) {
-                          Get.toNamed(Routes.HELP);
-                        },
-                      ),
+                      // AccountLinkWidget(
+                      //   icon: Icon(Icons.support_outlined,
+                      //       color: Get.theme.accentColor),
+                      //   text: Text("Help & FAQ".tr),
+                      //   onTap: (e) {
+                      //     Get.toNamed(Routes.HELP);
+                      //   },
+                      // ),
                       AccountLinkWidget(
                         icon: Icon(Icons.logout, color: Get.theme.accentColor),
                         text: Text("Logout".tr),
                         onTap: (e) {
+                          final prefs = Get.find<AuthService>().prefs;
+                          prefs.remove('token');
+                          controller.currentUser(new User());
                           Get.offAllNamed(Routes.LOGIN);
                         },
                       ),

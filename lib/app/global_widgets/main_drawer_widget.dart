@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:itcase/app/models/user_model.dart';
+import 'package:itcase/app/services/auth_service.dart';
 import 'package:itcase/common/ui.dart';
 
 
@@ -46,33 +47,29 @@ class MainDrawerWidget extends StatelessWidget {
                   ),
                   Row(
                     children: [
-                      Container(
-                        decoration: Ui.getBoxDecoration(
-                          radius: 14,
-                          border: Border.all(width: 5, color: Get.theme
-                              .primaryColor),
-                        ),
-                        child: InkWell(
-                          onTap: () { Get.back();
-                          Get.find<RootController>().changePage(3);
-                          },
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                            child: CachedNetworkImage(
-                              height: 100,
-                              width: 100,
-                              fit: BoxFit.cover,
-                              imageUrl: controller.currentUser.value.image_gotten,
-                              placeholder: (context, url) =>
-                                  Image.asset(
-                                    'assets/img/loading.gif',
-                                    fit: BoxFit.cover,
-                                    width: double.infinity,
-                                    height: 100,
-                                  ),
-                              errorWidget: (context, url, error) =>
-                                  Icon(Icons.error_outline),
-                            ),
+                      GestureDetector(
+                        onTap: () { Get.back();
+                        Get.find<RootController>().changePage(3);
+                        },
+                        child:  ClipRRect(
+                          borderRadius: BorderRadius.all(Radius.circular(100)),
+                          child: Obx(
+                                () =>
+                                CachedNetworkImage(
+                                  height: 100,
+                                  width: 100,
+                                  fit: BoxFit.cover,
+                                  imageUrl: controller.currentUser.value.image_gotten,
+                                  placeholder: (context, url) =>
+                                      Image.asset(
+                                        'assets/img/loading.gif',
+                                        fit: BoxFit.cover,
+                                        width: double.infinity,
+                                        height: 100,
+                                      ),
+                                  errorWidget: (context, url, error) =>
+                                      Icon(Icons.error_outline),
+                                ),
                           ),
                         ),
                       ),
@@ -114,29 +111,29 @@ class MainDrawerWidget extends StatelessWidget {
                           ),
                           shape: StadiumBorder(),
                         ),
-                        FlatButton(
-                          color: Get.theme.focusColor.withOpacity(0.2),
-                          height: 40,
-                          onPressed: () {
-                            Get.offAllNamed(Routes.REGISTER);
-                          },
-                          child: Wrap(
-                            runAlignment: WrapAlignment.center,
-                            crossAxisAlignment: WrapCrossAlignment.center,
-                            spacing: 9,
-                            children: [
-                              Icon(Icons.person_add_outlined,
-                                  color: Get.theme.hintColor, size: 24),
-                              Text(
-                                "Register".tr,
-                                style: Get.textTheme.subtitle1
-                                    .merge(
-                                    TextStyle(color: Get.theme.hintColor)),
-                              ),
-                            ],
-                          ),
-                          shape: StadiumBorder(),
-                        ),
+                        // FlatButton(
+                        //   color: Get.theme.focusColor.withOpacity(0.2),
+                        //   height: 40,
+                        //   onPressed: () {
+                        //     Get.offAllNamed(Routes.REGISTER);
+                        //   },
+                        //   child: Wrap(
+                        //     runAlignment: WrapAlignment.center,
+                        //     crossAxisAlignment: WrapCrossAlignment.center,
+                        //     spacing: 9,
+                        //     children: [
+                        //       Icon(Icons.person_add_outlined,
+                        //           color: Get.theme.hintColor, size: 24),
+                        //       Text(
+                        //         "Register".tr,
+                        //         style: Get.textTheme.subtitle1
+                        //             .merge(
+                        //             TextStyle(color: Get.theme.hintColor)),
+                        //       ),
+                        //     ],
+                        //   ),
+                        //   shape: StadiumBorder(),
+                        // ),
                       ],
                     ),
                 ],
@@ -156,7 +153,7 @@ class MainDrawerWidget extends StatelessWidget {
             icon: Icons.folder_special_outlined,
             text: "Categories".tr,
             onTap: (e) {
-              Get.offAndToNamed(Routes.CATEGORIES);
+              Get.toNamed(Routes.CATEGORIES);
             },
           ),
           DrawerLinkWidget(
@@ -171,7 +168,7 @@ class MainDrawerWidget extends StatelessWidget {
             icon: Icons.notifications_none_outlined,
             text: "Notifications",
             onTap: (e) {
-              Get.offAndToNamed(Routes.NOTIFICATIONS);
+              Get.toNamed(Routes.NOTIFICATIONS);
             },
           ),
           DrawerLinkWidget(
@@ -222,39 +219,41 @@ class MainDrawerWidget extends StatelessWidget {
             icon: Icons.translate_outlined,
             text: "Languages",
             onTap: (e) {
-              Get.offAndToNamed(Routes.SETTINGS_LANGUAGE);
+              Get.toNamed(Routes.SETTINGS_LANGUAGE);
             },
           ),
 
-          ListTile(
-            dense: true,
-            title: Text(
-              "Help & Privacy".tr,
-              style: Get.textTheme.caption,
-            ),
-            trailing: Icon(
-              Icons.remove,
-              color: Get.theme.focusColor.withOpacity(0.3),
-            ),
-          ),
-          DrawerLinkWidget(
-            icon: Icons.help_outline,
-            text: "Help & FAQ".tr,
-            onTap: (e) {
-              Get.offAndToNamed(Routes.HELP);
-            },
-          ),
-          DrawerLinkWidget(
-            icon: Icons.privacy_tip_outlined,
-            text: "Privacy Policy".tr,
-            onTap: (e) {
-              Get.offAndToNamed(Routes.PRIVACY);
-            },
-          ),
+          // ListTile(
+          //   dense: true,
+          //   title: Text(
+          //     "Help & Privacy".tr,
+          //     style: Get.textTheme.caption,
+          //   ),
+          //   trailing: Icon(
+          //     Icons.remove,
+          //     color: Get.theme.focusColor.withOpacity(0.3),
+          //   ),
+          // ),
+          // DrawerLinkWidget(
+          //   icon: Icons.help_outline,
+          //   text: "Help & FAQ".tr,
+          //   onTap: (e) {
+          //     Get.toNamed(Routes.HELP);
+          //   },
+          // ),
+          // DrawerLinkWidget(
+          //   icon: Icons.privacy_tip_outlined,
+          //   text: "Privacy Policy".tr,
+          //   onTap: (e) {
+          //     Get.toNamed(Routes.PRIVACY);
+          //   },
+          // ),
           DrawerLinkWidget(
             icon: Icons.logout,
             text: "Logout".tr,
             onTap: (e) {
+              final prefs = Get.find<AuthService>().prefs;
+              prefs.remove('token');
               controller.currentUser(new User());
               Get.offAllNamed(Routes.LOGIN);
             },

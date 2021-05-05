@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:itcase/app/modules/category/controllers/category_controller.dart';
 
 import '../../../../common/ui.dart';
 import '../../../models/category_model.dart';
@@ -19,15 +20,17 @@ class CategoryListItemWidget extends StatelessWidget {
       highlightColor: Colors.transparent,
       splashColor: Theme.of(context).accentColor.withOpacity(0.08),
       onTap: () {
+        print(category.title);
+        // print(Get.find<CategoryController>());
         Get.toNamed(Routes.CATEGORY, arguments: category);
-        //Navigator.of(context).pushNamed('/Details', arguments: RouteArgument(id: '0', param: market.id, heroTag: heroTag));
       },
       child: Container(
         padding: EdgeInsets.all(12),
         margin: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
         decoration: Ui.getBoxDecoration(
             gradient: new LinearGradient(
-                colors: [category.color.withOpacity(0.6), category.color.withOpacity(0.1)],
+                colors: [ category.backGround.withOpacity(1),
+                  category.backGround.withOpacity(0.2)],
                 begin: AlignmentDirectional.topStart, //const FractionalOffset(1, 0),
                 end: AlignmentDirectional.topEnd,
                 stops: [0.0, 0.5],
@@ -60,7 +63,7 @@ class CategoryListItemWidget extends StatelessWidget {
                 category.title,
                 overflow: TextOverflow.fade,
                 softWrap: false,
-                style: Get.textTheme.bodyText2,
+                style: Get.textTheme.bodyText2.merge(TextStyle(color: Get.theme.primaryColor)),
               ),
             ),
 

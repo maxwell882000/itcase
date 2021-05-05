@@ -4,6 +4,7 @@ import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:itcase/app/global_widgets/format.dart';
 
 import 'package:itcase/app/models/user_model.dart';
 import 'package:itcase/app/modules/auth/controllers/verify_controller.dart';
@@ -54,16 +55,16 @@ class AuthFillController extends GetxController {
     }
     if (user.value.user_role != null) {
       role.value = user.value.user_role;
-      if (role.value == TypeUser.constractor) {
-
+      if (role.value == TypeUser.constractor && user.value.contractor_type != null) {
+          type.value = user.value.contractor_type;
       }
-    }
-    if (user.value.customer_type != null) {
-      type.value = user.value.customer_type;
+      else if (role.value == TypeUser.customer || user.value.contractor_type == null) {
+        type.value = user.value.customer_type;
+      }
     }
 
     if (user.value.birthday_date != null) {
-      birthday.value = user.value.birthday_date;
+      birthday.value = Format.parseDate(user.value.birthday_date, Format.outputFormatDeadline);
       tempUser.value.birthday = birthday.value;
     }
   }

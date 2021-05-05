@@ -33,7 +33,7 @@ class CategoriesView extends GetView<CategoriesController> {
           child: ListView(
             primary: true,
             children: [
-              SearchView().buildSearchBar(heroTag: false, onSubmit: controller.searchCategory),
+              // SearchView().buildSearchBar(heroTag: false, onSubmit: controller.searchCategory),
               Padding(
                 padding: const EdgeInsets.only(left: 20, right: 10),
                 child: Row(children: [
@@ -45,64 +45,64 @@ class CategoriesView extends GetView<CategoriesController> {
                       style: Theme.of(context).textTheme.headline5,
                     ),
                   ),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      IconButton(
-                        onPressed: () {
-                          controller.layout.value = CategoriesLayout.LIST;
-                        },
-                        icon: Obx(() {
-                          return Icon(
-                            Icons.format_list_bulleted,
-                            color:
-                                controller.layout.value == CategoriesLayout.LIST
-                                    ? Get.theme.accentColor
-                                    : Get.theme.focusColor,
-                          );
-                        }),
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          controller.layout.value = CategoriesLayout.GRID;
-                        },
-                        icon: Obx(() {
-                          return Icon(
-                            Icons.apps,
-                            color:
-                                controller.layout.value == CategoriesLayout.GRID
-                                    ? Get.theme.accentColor
-                                    : Get.theme.focusColor,
-                          );
-                        }),
-                      )
-                    ],
-                  ),
+                  // Row(
+                  //   mainAxisSize: MainAxisSize.min,
+                  //   children: <Widget>[
+                  //     IconButton(
+                  //       onPressed: () {
+                  //         controller.layout.value = CategoriesLayout.LIST;
+                  //       },
+                  //       icon: Obx(() {
+                  //         return Icon(
+                  //           Icons.format_list_bulleted,
+                  //           color:
+                  //               controller.layout.value == CategoriesLayout.LIST
+                  //                   ? Get.theme.accentColor
+                  //                   : Get.theme.focusColor,
+                  //         );
+                  //       }),
+                  //     ),
+                  //     IconButton(
+                  //       onPressed: () {
+                  //         controller.layout.value = CategoriesLayout.GRID;
+                  //       },
+                  //       icon: Obx(() {
+                  //         return Icon(
+                  //           Icons.apps,
+                  //           color:
+                  //               controller.layout.value == CategoriesLayout.GRID
+                  //                   ? Get.theme.accentColor
+                  //                   : Get.theme.focusColor,
+                  //         );
+                  //       }),
+                  //     )
+                  //   ],
+                  // ),
                 ]),
               ),
-              Obx(() {
-                return Offstage(
-                  offstage: controller.layout.value != CategoriesLayout.GRID,
-                  child: StaggeredGridView.countBuilder(
-                    primary: false,
-                    shrinkWrap: true,
-                    crossAxisCount: 4,
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    itemCount: controller.categories.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return CategoryGridItemWidget(
-                          category: controller.categories.elementAt(index),
-                          heroTag: "heroTag");
-                    },
-                    staggeredTileBuilder: (int index) => new StaggeredTile.fit(
-                        Get.mediaQuery.orientation == Orientation.portrait
-                            ? 2
-                            : 4),
-                    mainAxisSpacing: 15.0,
-                    crossAxisSpacing: 15.0,
-                  ),
-                );
-              }),
+              // Obx(() {
+              //   return Visibility(
+              //     visible: controller.layout.value != CategoriesLayout.GRID,
+              //     child: StaggeredGridView.countBuilder(
+              //       primary: false,
+              //       shrinkWrap: true,
+              //       crossAxisCount: 4,
+              //       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              //       itemCount: controller.categories.length,
+              //       itemBuilder: (BuildContext context, int index) {
+              //         return CategoryGridItemWidget(
+              //             category: controller.categories[index],
+              //             heroTag: "heroTag");
+              //       },
+              //       staggeredTileBuilder: (int index) => new StaggeredTile.fit(
+              //           Get.mediaQuery.orientation == Orientation.portrait
+              //               ? 2
+              //               : 4),
+              //       mainAxisSpacing: 15.0,
+              //       crossAxisSpacing: 15.0,
+              //     ),
+              //   );
+              // }),
               Obx(() {
                 return Offstage(
                   offstage: controller.layout.value != CategoriesLayout.LIST,
@@ -117,7 +117,7 @@ class CategoriesView extends GetView<CategoriesController> {
                     itemBuilder: (context, index) {
                       return CategoryListItemWidget(
                         heroTag: 'favorites_list',
-                        category: controller.categories.elementAt(index),
+                        category: controller.categories[index],
                       );
                     },
                   ),
