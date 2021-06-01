@@ -34,6 +34,7 @@ import 'package:itcase/app/modules/tasks/views/task_create.dart';
 import 'package:itcase/app/modules/tasks/views/tasks_view.dart';
 import 'package:itcase/app/modules/tasks/views/tender_modification.dart';
 import 'package:itcase/app/modules/tasks/views/tender_view.dart';
+import 'package:itcase/common/notification_test.dart';
 import '../modules/account/views/image_upload.dart';
 
 import '../modules/help_privacy/bindings/help_privacy_binding.dart';
@@ -79,7 +80,7 @@ class AppPages {
   static const INITIAL = Routes.LOGIN;
 
   static final routes = [
-    GetPage(name: Routes.DYNAMIC_URL, page: () => DynamicLinks()),
+    GetPage(name: Routes.DYNAMIC_URL, page: () => NotificationTest()),
     GetPage(name: Routes.ROOT, page: () => RootView(), binding: RootBinding()),
     GetPage(
         name: Routes.TASK_MODIFY,

@@ -1,4 +1,4 @@
-package com.example.itcase
+package com.itcase.itcase
 
 import androidx.annotation.NonNull; 
 import io.flutter.embedding.android.FlutterActivity; 

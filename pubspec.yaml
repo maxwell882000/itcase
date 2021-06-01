@@ -46,9 +46,10 @@ dependencies:
   shared_preferences: ^2.0.5
   flutter_launcher_icons: ^0.8.1
   flutter_datetime_picker: ^1.5.1
-  firebase_core: ^0.4.5
+  firebase_core:
   permission_handler:
-
+  firebase_messaging: ^10.0.0
+  awesome_notifications: any
   flutter:
     sdk: flutter
   flutter_localizations:

@@ -48,7 +48,7 @@ class TaskRepository {
         return response;
       } catch (e) {
         print(e);
-        print("sddasdsa");
+        print(body);
         List<Tenders> result = [];
         body['tenders']['data']
             .forEach((key, obj) => result.add(Tenders.fromJson(obj)));

@@ -29,7 +29,7 @@ class _DynamicLinksState extends State<DynamicLinks> {
           if (deepLink != null) {
             print(deepLink.queryParameters['page']);
             print("DDDDDDDDDDDDDDYNAMINC");
-            Navigator.pushNamed(context, deepLink.path);
+            // Navigator.pushNamed(context, deepLink.path);
           }
         }, onError: (OnLinkErrorException e) async {
       print('onLinkError');
@@ -49,10 +49,10 @@ class _DynamicLinksState extends State<DynamicLinks> {
     });
     print("Inside");
     final DynamicLinkParameters parameters = DynamicLinkParameters(
-      uriPrefix: "http://itcase.page.link",
-      link: Uri.parse("http://itcase.page.link/authorized/select_unit"),
+      uriPrefix: "https://itcasecom.page.link",
+      link: Uri.parse("https://itcasecom.page.link"),
       androidParameters: AndroidParameters(
-        packageName: "com.example.itcase",
+        packageName: "com.itcase.itcase",
         minimumVersion: 0,
       ),
       iosParameters: IosParameters(

@@ -1,4 +1,5 @@
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -6,6 +7,8 @@ import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:itcase/app/global_widgets/platform_implementation/platfrom_material.dart';
+import 'package:itcase/app/services/firebase_messaging_service.dart';
+import 'package:itcase/app/services/notification_service.dart';
 
 import 'app/routes/app_pages.dart';
 import 'app/services/auth_service.dart';
@@ -19,12 +22,15 @@ void initServices() async {
   await Get.putAsync(() => GlobalService().init());
   await Get.putAsync(() => AuthService().init());
   await Get.putAsync(() => SettingsService().init());
+  await Get.putAsync(() => FireBaseService().init());
+  await Get.putAsync(() => NotificationService().init());
   await GetStorage.init();
 }
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initServices();
+  FirebaseMessaging.onBackgroundMessage(FireBaseService.backGroundTasks);
 
   runApp(
     GetMaterialApp(

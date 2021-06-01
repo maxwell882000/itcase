@@ -114,6 +114,7 @@ class ChatRepository {
   Future<void> sendMessage(String json, final message) async {
     final response = await API().post(json, 'messages');
     final body = jsonDecode(response.body);
+    print(body);
     if (response.statusCode == 200) {
        message.fromJsonSend(body);
        return;

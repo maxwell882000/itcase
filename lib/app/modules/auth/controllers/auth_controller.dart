@@ -13,6 +13,7 @@ import 'package:itcase/app/providers/api.dart';
 import 'package:itcase/app/repositories/user_repository.dart';
 import 'package:itcase/app/routes/app_pages.dart';
 import 'package:itcase/app/services/auth_service.dart';
+import 'package:itcase/app/services/firebase_messaging_service.dart';
 import 'package:itcase/common/ui.dart';
 
 class AuthController extends GetxController {
@@ -127,6 +128,7 @@ class AuthController extends GetxController {
           });
 
           if (await validate()) {
+            Get.find<FireBaseService>().sendOrMissToken();
             Get.offAllNamed(Routes.ROOT);
           }
         } else {
